@@ -1,19 +1,25 @@
 <!DOCTYPE html>
-<html ng-app="exampleApp" >
+<html ng-app="bookreadings">
 <head>
-    <title>AngularJS Demo</title>
+    <title>Bookreadings</title>
+    <script src="angular.js"></script>
+    <script src="https://cdn.firebase.com/js/client/1.0.15/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/0.7.1/angularfire.min.js"></script>
+    <script src='https://cdn.firebase.com/js/simple-login/1.5.0/firebase-simple-login.js'></script>
     <link href="bootstrap.css" rel="stylesheet" />
     <link href="bootstrap-theme.css" rel="stylesheet" />
-    <script src="angular.js"></script>
     <script>
+        angular.module("bookreadings", ["firebase", "ng"])
+        .config(function() {
+
+
         });
     </script>
+    <script src="controllers/bookreadings.js"></script>
 </head>
-<body>
-    <div class="panel" ng-controller="dayCtrl">
-        <div class="page-header">
-            <h3>AngularJS App</h3>
-        </div>
+<body ng-controller="bookreadingsCtrl">
+    <div class="navbar navbar-inverse">
+        <a class="navbar-brand" href="#">bookreadin.gs</a>
     </div>
 </body>
 </html>
