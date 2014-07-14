@@ -6,20 +6,32 @@
     <script src="https://cdn.firebase.com/js/client/1.0.15/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/angularfire/0.7.1/angularfire.min.js"></script>
     <script src='https://cdn.firebase.com/js/simple-login/1.5.0/firebase-simple-login.js'></script>
+    <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
     <link href="bootstrap.css" rel="stylesheet" />
     <link href="bootstrap-theme.css" rel="stylesheet" />
     <script>
-        angular.module("bookreadings", ["firebase", "ng"])
-        .config(function() {
+        angular.module("bookreadings", ["firebase", "ng", "ngRoute"])
+        .config(function($routeProvider) {
 
+            $routeProvider.when("/upload", {
+                templateUrl: "/views/upload.html"
+            });
+
+            $routeProvider.otherwise({
+                templateUrl: "/views/bookreadingsindex.html"
+            });
 
         });
     </script>
     <script src="controllers/bookreadings.js"></script>
+    <script src="controllers/upload.js"></script>
+    <script src="ngmodules/angular-route.js"></script>
+    <script src="ngmodules/angular-resource.js"></script>
 </head>
 <body ng-controller="bookreadingsCtrl">
     <div class="navbar navbar-inverse">
         <a class="navbar-brand" href="#">bookreadin.gs</a>
     </div>
+    <ng-view />
 </body>
 </html>
