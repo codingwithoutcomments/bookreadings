@@ -1,18 +1,37 @@
 <div class="container-fluid" ng-controller="uploadCtrl">
 	<div class="row">
-	  	<div class="col-xs-4 col-sm-4 col-sm-offset-4 panel panel-default">
-	  		<h3>Upload to bookreadin.gs</h3>
-	  		<p><button ng-click="upload_file(readingsRef)" type="button" class="btn btn-primary btn-outline">Choose File To Upload</button></p>
+	  	<div class="col-xs-10 col-xs-offset-1">
+	  		<div class="panel panel-default">
+	  			<div class="panel-body">
+			  		<h3>Upload to bookreadin.gs</h3>
+			  		<p><button ng-click="upload_audio_file()" type="button" class="btn btn-primary btn-outline">Choose File To Upload</button></p>
+			  	</div>
+		  	</div>
 	  	</div>
 	 </div>
-	 <div class="row">
-	 	<div class="col-xs-8 col-xs-offset-2">
+	 <!-- <div ng-show="data.audioUploaded" class="row"> -->
+	 <div class="row"> 
+	 	<div class="col-xs-10 col-xs-offset-1">
 	 		<div class="panel panel-default">
 		 		<div class="panel-heading">
 		 			We need a little more information.  Click 'Save' to post this reading.
 		 		</div>
 		 		<div class="panel-body">
 		 			<div class="row">
+		 				<div class="col-xs-5">
+		 					<div class="row">
+		 						<div class="col-xs-12">
+				 					<img src="http://placehold.it/340/340">
+				 				</div>
+			 				</div>
+			 				<div class="row" style="margin-top:5px;">
+		 						<div class="col-xs-12">
+				 					<button type="button" class="btn btn-default btn-xs center-block btn-block" ng-click="upload_cover_image(reading)">Choose New Image</button>
+				 				</div>
+			 				</div>
+		 				</div>
+		 				<div class="col-xs-7">
+		 				</div>
 		 			</div>
 		 		</div>
 		 	</div>

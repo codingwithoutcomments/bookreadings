@@ -6,7 +6,7 @@ angular.module("bookreadings")
 
 		$scope.readingsRef = new Firebase(readingsURL);
 
-		$scope.upload_audio_file = function(readingsRef){
+		$scope.upload_audio_file = function(){
 
 			filepicker.pickAndStore(
 				{
@@ -21,16 +21,61 @@ angular.module("bookreadings")
 		        	for(var i = 0; i < InkBlobs.length; i++) {
 
 			        	reading = {
-			        		"url" : InkBlobs[i].url,
-			        		"filename" : InkBlobs[i].filename,
-			        		"mimetype" : InkBlobs[i].mimetype,
-			        		"size" : InkBlobs[i].size,
-			        		"key" : InkBlobs[i].key
+			        		"audio_url" : InkBlobs[i].url,
+			        		"audio_filename" : InkBlobs[i].filename,
+			        		"audio_mimetype" : InkBlobs[i].mimetype,
+			        		"audio_size" : InkBlobs[i].size,
+			        		"audio_key" : InkBlobs[i].key
 			        	}
 
-			        	var uploaded_file_ref = readingsRef.push();
-			        	uploaded_file_ref.set(reading);
-			        	$scope.uploaded_file_ref = uploaded_file_ref
+			        	//var uploaded_file_ref = readingsRef.push();
+			        	//uploaded_file_ref.set(reading);
+			        	$scope.$apply(function(){
+
+				        	$scope.reading = reading
+
+				        	$scope.data = {}
+				        	$scope.data.audioUploaded = true;
+
+			        	});
+
+			        }
+
+			});
+
+		};
+
+		$scope.upload_cover_image = function(reading){
+
+			filepicker.pickAndStore(
+				{
+					extensions: ['.jpg, .png, .jpeg'],
+				},
+		        {
+		        	location:"S3",
+		        	path: 'cover_images/',
+		        }, 
+		        function(InkBlobs){
+
+		        	for(var i = 0; i < InkBlobs.length; i++) {
+
+			        	reading["cover_image_url"] = InkBlobs[i].url;
+			        	reading["cover_image_filename"] = InkBlobs[i].filename;
+			        	reading["cover_image_mimetype"] = InkBlobs[i].mimetype;
+			        	reading["cover_image_size"] = InkBlobs[i].size;
+			        	reading["cover_image_key"] = InkBlobs[i].key;
+
+			        	//var uploaded_file_ref = readingsRef.push();
+			        	//uploaded_file_ref.set(reading);
+			        	$scope.$apply(function(){
+
+				        	$scope.reading = reading
+
+				        	//$scope.data = {}
+				        	//$scope.data.audioUploaded = true;
+
+			        	});
+
 			        }
 
 			});

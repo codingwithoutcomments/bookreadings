@@ -29,9 +29,16 @@
     <script src="ngmodules/angular-resource.js"></script>
 </head>
 <body ng-controller="bookreadingsCtrl">
-    <div class="navbar navbar-inverse">
-        <a class="navbar-brand" href="#">bookreadin.gs</a>
-    </div>
+    <nav class="navbar navbar-inverse">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">bookreadin.gs</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#/upload">Upload</a></li>
+            </ul>
+        </div>
+    </nav>
     <ng-view />
 </body>
 </html>
