@@ -6,6 +6,8 @@ angular.module("bookreadings")
 
 		$scope.readingsRef = new Firebase(readingsURL);
 
+		$scope.reading_cover_photo = "http://placehold.it/950/950"
+
 		$scope.upload_audio_file = function(){
 
 			filepicker.pickAndStore(
@@ -47,6 +49,8 @@ angular.module("bookreadings")
 
 		$scope.upload_cover_image = function(reading){
 
+			this.reading = reading
+
 			filepicker.pickAndStore(
 				{
 					extensions: ['.jpg, .png, .jpeg'],
@@ -56,6 +60,8 @@ angular.module("bookreadings")
 		        	path: 'cover_images/',
 		        }, 
 		        function(InkBlobs){
+
+		        	var reading = this.reading
 
 		        	for(var i = 0; i < InkBlobs.length; i++) {
 
@@ -70,10 +76,8 @@ angular.module("bookreadings")
 			        	$scope.$apply(function(){
 
 				        	$scope.reading = reading
-
-				        	//$scope.data = {}
-				        	//$scope.data.audioUploaded = true;
-
+				        	var filepicker = "https://www.filepicker.io/api/file/" + InkBlobs[i].key + "/convert?w=950&height=950"
+				        	$scope.reading_cover_photo = InkBlobs[i].url
 			        	});
 
 			        }

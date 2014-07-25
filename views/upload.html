@@ -1,10 +1,10 @@
-<div class="container-fluid" ng-controller="uploadCtrl">
+<div class="container" ng-controller="uploadCtrl">
 	<div class="row">
 	  	<div class="col-xs-10 col-xs-offset-1">
 	  		<div class="panel panel-default">
 	  			<div class="panel-body">
 			  		<h3>Upload to bookreadin.gs</h3>
-			  		<p><button ng-click="upload_audio_file()" type="button" class="btn btn-primary btn-outline">Choose File To Upload</button></p>
+			  		<p><button ng-click="upload_audio_file()" type="button" class="btn btn-primary btn-outline">Choose Mp3 File To Upload</button></p>
 			  	</div>
 		  	</div>
 	  	</div>
@@ -18,19 +18,14 @@
 		 		</div>
 		 		<div class="panel-body">
 		 			<div class="row">
-		 				<div class="col-xs-5">
-		 					<div class="row">
-		 						<div class="col-xs-12">
-				 					<img src="http://placehold.it/340/340">
-				 				</div>
+		 				<div class="col-xs-12">
+		 					<img class="center-block img-responsive" ng-src="{{reading_cover_photo}}">
+			 			</div>
+			 		</div>
+			 		<div class="row">
+	 						<div class="col-xs-12">
+			 					<button type="button" class="btn btn-default btn-xs btn-block" ng-click="upload_cover_image(reading)">Choose New Image</button>
 			 				</div>
-			 				<div class="row" style="margin-top:5px;">
-		 						<div class="col-xs-12">
-				 					<button type="button" class="btn btn-default btn-xs center-block btn-block" ng-click="upload_cover_image(reading)">Choose New Image</button>
-				 				</div>
-			 				</div>
-		 				</div>
-		 				<div class="col-xs-7">
 		 				</div>
 		 			</div>
 		 		</div>
