@@ -2,6 +2,8 @@ angular.module("bookreadings")
 	.constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
 	.controller("uploadCtrl", function ($scope, $firebase, $http, $location, readingsURL) {
 
+		$("#tags").tagsinput('items');
+
 		filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
 		$scope.readingsRef = new Firebase(readingsURL);
@@ -17,7 +19,7 @@ angular.module("bookreadings")
 		        {
 		        	location:"S3",
 		        	path: 'readings/',
-		        }, 
+		        },
 		        function(InkBlobs){
 
 		        	for(var i = 0; i < InkBlobs.length; i++) {
@@ -58,7 +60,7 @@ angular.module("bookreadings")
 		        {
 		        	location:"S3",
 		        	path: 'cover_images/',
-		        }, 
+		        },
 		        function(InkBlobs){
 
 		        	var reading = this.reading
