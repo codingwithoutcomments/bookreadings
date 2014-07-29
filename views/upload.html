@@ -17,18 +17,20 @@
 		 			We need a little more information.  Click 'Save' to post this reading.
 		 		</div>
 		 		<div class="panel-body">
-		 			<form role="form">
-		 				<div class="form-group">
-		 					<label for="Title">Title</label>
-							<input class="form-control"	placeholder="Enter Title" id="ReadingTitle">
+		 			<form role="form" name="newReadingForm" ng-submit="addReading(newReading, reading)" novalidate>
+		 				<div class="form-group" ng-class="newReadingForm.readingTitle.$invalid && newReadingForm.readingTitle.$dirty ? 'has-error has-feedback' : ''">
+		 					<label for="Title">Title <span style="color:red;">*Required</span></label>
+		 					<label ng-show="newReadingForm.readingTitle.$invalid && newReadingForm.readingTitle.$dirty" class="control-label">(Please provide a title)</label>
+							<input name="readingTitle" class="form-control"	placeholder="" id="ReadingTitle" required ng-model="newReading.title">
+							<span ng-show="newReadingForm.readingTitle.$invalid && newReadingForm.readingTitle.$dirty" class="glyphicon glyphicon-remove form-control-feedback"></span>
 		 				</div>
 		 				<div class="form-group">
 		 					<label for="Description">Description</label>
-							<input class="form-control"	placeholder="Enter Description" id="ReadingDescription">
+							<textarea name="readingDescription" class="form-control"	placeholder="Some details about the reading" id="ReadingDescription" rows="3" ng-model="newReading.description"></textarea>
 		 				</div>
 		 				<div class="form-group">
 		 					<label for="Tags">Tags</label>
-							<input type="text" class="form-control"	data-role="tagsinput" id="tags">
+							<input type="text" class="form-control"	data-role="tagsinput" id="tags" ng-model="newReading.tags">
 		 				</div>
 		 				<div class="form-group">
 		 					<label for="coverimage">Cover image</label>
@@ -38,12 +40,18 @@
 					 			</div>
 					 		</div>
 					 		<div class="row">
-			 						<div class="col-xs-12">
-					 					<button type="button" class="btn btn-default btn-xs btn-block" ng-click="upload_cover_image(reading)">Choose New Image</button>
-					 				</div>
+		 						<div class="col-xs-12">
+				 					<button type="button" class="btn btn-default btn-xs btn-block" ng-click="upload_cover_image(reading)">Choose New Image</button>
 				 				</div>
-				 			</div>
-				 		</div>
+			 				</div>
+			 			</div>
+		 				<div class="form-group" ng-class="newReadingForm.readingPurchaseLink.$invalid ? 'has-error has-feedback' : ''">
+		 					<label for="PurchaseLink">Book Purchase Link</label>
+		 					<label ng-show="newReadingForm.readingPurchaseLink.$invalid" class="control-label">(Please provide a valid url)</label>
+							<input name="readingPurchaseLink" type="url" class="form-control" placeholder="http://www.amazon.com/gp/product/0374534144/" id="ReadingPurchaseLink" ng-model="newReading.purchaseLink">
+							<span ng-show="newReadingForm.readingPurchaseLink.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+		 				</div>
+		 				<button type="submit" class="btn btn-primary btn-block" ng-disabled="newReadingForm.$invalid">Save</button>
 			 		</form>
 		 		</div>
 		 	</div>

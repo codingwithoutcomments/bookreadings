@@ -10,6 +10,23 @@ angular.module("bookreadings")
 
 		$scope.reading_cover_photo = "http://placehold.it/950/950"
 
+		$scope.addReading = function(newReading, reading) {
+
+			this.reading["title"] = newReading.title
+			this.reading["description"] = newReading.description
+			this.reading["purchaseLink"] = newReading.purchaseLink
+
+			var tags = $("#tags").val();
+
+			var i = tags;
+
+        	//var uploaded_file_ref = readingsRef.push();
+        	//uploaded_file_ref.set(reading);
+
+
+
+		}
+
 		$scope.upload_audio_file = function(){
 
 			filepicker.pickAndStore(
