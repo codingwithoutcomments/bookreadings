@@ -14,7 +14,7 @@
     <link href="bootstrap-theme.css" rel="stylesheet" />
     <link href="bootstrap-tagsinput.css" rel="stylesheet" />
     <script>
-        angular.module("bookreadings", ["firebase", "ng", "ngRoute"])
+        angular.module("bookreadings", ["firebase", "ng", "ngRoute", "string_manipulation"])
         .config(function($routeProvider) {
 
             $routeProvider.when("/upload", {
@@ -29,6 +29,7 @@
     </script>
     <script src="controllers/bookreadings.js"></script>
     <script src="controllers/upload.js"></script>
+    <script src="components/string/string_manipulation.js"></script>
     <script src="ngmodules/angular-route.js"></script>
     <script src="ngmodules/angular-resource.js"></script>
 </head>

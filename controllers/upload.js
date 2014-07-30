@@ -1,6 +1,6 @@
 angular.module("bookreadings")
 	.constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
-	.controller("uploadCtrl", function ($scope, $firebase, $http, $location, readingsURL) {
+	.controller("uploadCtrl", function ($scope, $firebase, $http, $location, readingsURL, string_manipulation) {
 
 		$("#tags").tagsinput('items');
 
@@ -13,17 +13,23 @@ angular.module("bookreadings")
 		$scope.addReading = function(newReading, reading) {
 
 			this.reading["title"] = newReading.title
+			this.reading["slug"] = string_manipulation.slugify(newReading.title)
+
 			this.reading["description"] = newReading.description
 			this.reading["purchaseLink"] = newReading.purchaseLink
 
-			var tags = $("#tags").val();
+			var tag_array = $("#tags").val().split(",")
+			this.reading["tags"] = tag_array
 
-			var i = tags;
-
-        	//var uploaded_file_ref = readingsRef.push();
-        	//uploaded_file_ref.set(reading);
+			this.reading["created"] = Firebase.ServerValue.TIMESTAMP;
+			this.reading["modified"] = Firebase.ServerValue.TIMESTAMP;
 
 
+        	var uploaded_file_ref = $scope.readingsRef.push();
+        	uploaded_file_ref.set(reading);
+
+        	var path = "/reading/" + uploaded_file_ref + "/" + this.reading.slug;
+        	$location.path(path)
 
 		}
 
