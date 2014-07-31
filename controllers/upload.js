@@ -63,6 +63,8 @@ angular.module("bookreadings")
 
 				        	$scope.data = {}
 				        	$scope.data.audioUploaded = true;
+				        	$scope.newReading = {}
+				        	$scope.newReading.title = reading.audio_filename;
 
 			        	});
 
@@ -103,6 +105,7 @@ angular.module("bookreadings")
 				        	$scope.reading = reading
 				        	var filepicker = "https://www.filepicker.io/api/file/" + InkBlobs[i].key + "/convert?w=950&height=950"
 				        	$scope.reading_cover_photo = InkBlobs[i].url
+				        	$scope.reading_cover_photo_uploaded = true;
 			        	});
 
 			        }

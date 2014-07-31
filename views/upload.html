@@ -5,7 +5,7 @@
 	  			<div class="panel-body">
 			  		<h3>Upload to bookreadin.gs</h3>
 			  		<p><button ng-click="upload_audio_file()" type="button" class="btn btn-primary btn-outline">Choose Mp3 File To Upload</button></p>
-			  		<p ng-show="data.audioUploaded">{{reading.audio_filename}}</p>
+			  		<p ng-show="data.audioUploaded"><h1><span class="label label-success">{{reading.audio_filename}}</span></h1></p>
 			  	</div>
 		  	</div>
 	  	</div>
@@ -20,7 +20,7 @@
 		 		<div class="panel-body">
 		 			<form role="form" name="newReadingForm" ng-submit="addReading(newReading, reading)" novalidate>
 		 				<div class="form-group" ng-class="newReadingForm.readingTitle.$invalid && newReadingForm.readingTitle.$dirty ? 'has-error has-feedback' : ''">
-		 					<label for="Title">Title <span style="color:red;">*Required</span></label>
+		 					<label for="Title">Title <span style="color:red;">*</span></label>
 		 					<label ng-show="newReadingForm.readingTitle.$invalid && newReadingForm.readingTitle.$dirty" class="control-label">(Please provide a title)</label>
 							<input name="readingTitle" class="form-control"	placeholder="" id="ReadingTitle" required ng-model="newReading.title">
 							<span ng-show="newReadingForm.readingTitle.$invalid && newReadingForm.readingTitle.$dirty" class="glyphicon glyphicon-remove form-control-feedback"></span>
@@ -35,7 +35,7 @@
 		 				</div>
 		 				<div class="form-group">
 		 					<label for="coverimage">Cover image</label>
-				 			<div class="row">
+				 			<div ng-show="reading_cover_photo_uploaded" class="row">
 				 				<div class="col-xs-12">
 				 					<img class="center-block img-responsive" ng-src="{{reading_cover_photo}}">
 					 			</div>
