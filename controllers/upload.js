@@ -15,10 +15,23 @@ angular.module("bookreadings")
 			this.reading["title"] = newReading.title
 			this.reading["slug"] = string_manipulation.slugify(newReading.title)
 
-			this.reading["description"] = newReading.description
-			this.reading["purchaseLink"] = newReading.purchaseLink
+			var description = null;
+			if(newReading.description) {
+				description = newReading.description
+			}
+			this.reading["description"] = description;
 
-			var tag_array = $("#tags").val().split(",")
+			var purchaseLink = null;
+			if(newReading.purchaseLink) {
+				this.reading["purchaseLink"] = newReading.purchaseLink
+			}
+			this.reading["purchaseLink"] = purchaseLink;
+
+			var tag_string = $("#tags").val();
+			var tag_array = null;
+			if(tag_string.length > 0) {
+				tag_array = tag_string.split(',');
+			}
 			this.reading["tags"] = tag_array
 
 			this.reading["created"] = Firebase.ServerValue.TIMESTAMP;
@@ -28,8 +41,8 @@ angular.module("bookreadings")
         	var uploaded_file_ref = $scope.readingsRef.push();
         	uploaded_file_ref.set(reading);
 
-        	var path = "/reading/" + uploaded_file_ref + "/" + this.reading.slug;
-        	$location.path(path)
+        	var path = "reading/" + uploaded_file_ref.name() + "/" + this.reading.slug;
+        	$location.path(path);
 
 		}
 

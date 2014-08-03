@@ -21,6 +21,10 @@
                 templateUrl: "/views/upload.html"
             });
 
+            $routeProvider.when("/reading/:id/:slug", {
+                templateUrl: "/views/reading.html"
+            });
+
             $routeProvider.otherwise({
                 templateUrl: "/views/bookreadingsindex.html"
             });
@@ -29,6 +33,7 @@
     </script>
     <script src="controllers/bookreadings.js"></script>
     <script src="controllers/upload.js"></script>
+    <script src="controllers/reading.js"></script>
     <script src="components/string/string_manipulation.js"></script>
     <script src="ngmodules/angular-route.js"></script>
     <script src="ngmodules/angular-resource.js"></script>
