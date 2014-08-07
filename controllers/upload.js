@@ -77,7 +77,10 @@ angular.module("bookreadings")
 				        	$scope.data = {}
 				        	$scope.data.audioUploaded = true;
 				        	$scope.newReading = {}
-				        	$scope.newReading.title = reading.audio_filename;
+				        	var audio_filename = reading.audio_filename;
+				        	audio_filename = audio_filename.replace(/_/g, " ");
+				        	audio_filename = audio_filename.replace(/\.[^/.]+$/, "");
+				        	$scope.newReading.title = audio_filename;
 
 			        	});
 
