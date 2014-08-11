@@ -74,7 +74,7 @@ function ThreeSixtyPlayer() {
     circleRadius: null,
     animDuration: 500,
     animTransition: window.Animator.tx.bouncy, // http://www.berniecode.com/writing/animator.html
-    showHMSTime: false, // hours:minutes:seconds vs. seconds-only
+    showHMSTime: true, // hours:minutes:seconds vs. seconds-only
     scaleFont: true,  // also set the font size (if possible) while animating the circle
 
     // optional: spectrum or EQ graph in canvas (not supported in IE <9, too slow via ExCanvas)
@@ -486,7 +486,7 @@ function ThreeSixtyPlayer() {
         fontSize: 1,
         fontSizeMax: self.config.fontSizeMax,
         scaleFont: (has_vis && self.config.scaleFont),
-        showHMSTime: has_vis,
+        showHMSTime: true,
         amplifier: (has_vis && self.config.usePeakData?0.9:1), // TODO: x1 if not being used, else use dynamic "how much to amplify by" value
         radiusMax: diameter*0.175, // circle radius
         width:0,
@@ -742,6 +742,15 @@ function ThreeSixtyPlayer() {
 
     if (!noClear) {
       self.clearCanvas(canvas);
+
+      oCanvas.beginPath();
+      oCanvas.arc(0, 0, 24, 0, 2 * Math.PI, false);
+      oCanvas.fillStyle = '#EEEEEE';
+      oCanvas.fill();
+      oCanvas.lineWidth = 1;
+      oCanvas.strokeStyle = '#999999';
+      oCanvas.stroke();
+
     }
     // ctx.restore();
 
@@ -1105,17 +1114,17 @@ function ThreeSixtyPlayer() {
         oCanvasCTX.translate(radius, radius);
         oCanvasCTX.rotate(self.deg2rad(-90)); // compensate for arc starting at EAST // http://stackoverflow.com/questions/319267/tutorial-for-html-canvass-arc-function
 
-      var centerX = oCanvasCTX.width / 2;
-      var centerY = oCanvasCTX.height / 2;
-      var radius = 70;
+        var centerX = oCanvasCTX.width / 2;
+        var centerY = oCanvasCTX.height / 2;
+        var radius = 70;
 
-      oCanvasCTX.beginPath();
-      oCanvasCTX.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-      oCanvasCTX.fillStyle = 'green';
-      oCanvasCTX.fill();
-      oCanvasCTX.lineWidth = 5;
-      oCanvasCTX.strokeStyle = '#003300';
-      oCanvasCTX.stroke();
+        oCanvasCTX.beginPath();
+        oCanvasCTX.arc(0, 0, 24, 0, 2 * Math.PI, false);
+        oCanvasCTX.fillStyle = '#EEEEEE';
+        oCanvasCTX.fill();
+        oCanvasCTX.lineWidth = 1;
+        oCanvasCTX.strokeStyle = '#DDDDDD';
+        oCanvasCTX.stroke();
 
         //self.drawSolidArc(oCanvasCTX,"#eee",92,40,6.28,0,true);
 

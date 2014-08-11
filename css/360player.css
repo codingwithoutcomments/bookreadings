@@ -7,13 +7,13 @@
 
 .ui360,
 .sm2-360ui {
- min-width:50px; /* should always be at least this. */
- min-height:50px;
+ min-width:75px; /* should always be at least this. */
+ min-height:75px;
 }
 
 .sm2-360ui {
- width:50px;
- height:50px;
+ width:75px;
+ height:75px;
 }
 
 .ui360,
@@ -84,7 +84,7 @@
  font:11px "helvetica neue",helvetica,monaco,lucida,terminal,monospace;
  color:#666;
  text-align:center;
- line-height:50px;
+ line-height:75px;
 }
 
 .ui360 .sm2-timing.alignTweak {
