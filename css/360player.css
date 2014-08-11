@@ -148,10 +148,35 @@
 .ui360,
 .ui360 .sm2-360btn-default,
 .ui360 .sm2-360ui.sm2_paused .sm2-360btn {
- background:transparent url(360-button-play.png) no-reoeat;
- background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAABoUlEQVR42sWVu2oCQRhGU/s8gpVYJeQJNkZSbiH4QNuLlQZS21sJayGYaOEFVFDxNiremj9zig2uzk5YQpKFg8PMd75ZZle9E5Ff4e+Ll8tlQuNoPI2vUcCYOdbIxCmm9F5T0YgNMmS/LebSwWdNa7VayXq9ls1mI9vtVna7nQBj5lgjQxYHN7KY3QkiUbDf7+V4PMrpdArBHGtkyOJc3/n1mVaUUl+F5/PZSrABDi4dpmKH3QkixQEHlw5TsccZmsRCoSD1et1ajkuHqdg/HA5GKZPJCOTzeanVasYMLh2mYsXDIGAoDuG6rlSr1WCdBxrcsTIWazgrQiHS6bSRYJ3XDzeq2O/3+9Ltdm9IpVIhstmslEqlUAY36ii8ZrMpjUbjhmQyKeA4jhSLRWMGN+rhOZ1Oh8ANuVxOyuUy40hwo163RK/XeyPQbrdjgYNr/ILAYDB41Gf1wZnFAQfX+iM0HA5fxuPx+2g0Ej22QoYsDq61mGsymTxMp9NX/Sk2yJDFsRZfXpzXbDZ7WiwW3nw+9zUKGDPHGpkL5V//mn7OJyJZApyzeUS5AAAAAElFTkSuQmCC);
- *background-image: url(360-button-play.png);
+ background:transparent url(glyphicons_173_play.png) no-repeat;
+ background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
+bWFnZVJlYWR5ccllPAAAA/FpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdp
+bj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6
+eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1
+MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJo
+dHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlw
+dGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEu
+MC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVz
+b3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5z
+OmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1wTU06T3JpZ2luYWxEb2N1
+bWVudElEPSJ1dWlkOjY1RTYzOTA2ODZDRjExREJBNkUyRDg4N0NFQUNCNDA3IiB4bXBNTTpEb2N1
+bWVudElEPSJ4bXAuZGlkOkFGMEJBNUJCREI3QzExRTI4NzQwRDYwMzM5MTI3NkRGIiB4bXBNTTpJ
+bnN0YW5jZUlEPSJ4bXAuaWlkOkFGMEJBNUJBREI3QzExRTI4NzQwRDYwMzM5MTI3NkRGIiB4bXA6
+Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDQyAoTWFjaW50b3NoKSI+IDx4bXBNTTpEZXJp
+dmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjM4ZWRmZThjLWZhZTMtNDQyMi1iOThk
+LTg1NjQyMmU4ZWQ5MiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowMjgwMTE3NDA3MjA2ODEx
+ODA4Mzg2RTU3M0Y3MUMzNiIvPiA8ZGM6dGl0bGU+IDxyZGY6QWx0PiA8cmRmOmxpIHhtbDpsYW5n
+PSJ4LWRlZmF1bHQiPmdseXBoaWNvbnM8L3JkZjpsaT4gPC9yZGY6QWx0PiA8L2RjOnRpdGxlPiA8
+L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0i
+ciI/PjhIAoUAAABoSURBVHjaYmBgYCgAYoH///8zkINBAER+AOIGcgyCGfAfyaACSgyA4QdAnECJ
+AUQbRMgAZIMcKDEAhg+gG0SqARgGMUIFyAUbmRioACjyAt0C8QK50Uh2QiI7KZOdmSjKzhQVKAAB
+BgCp6ufdzEAGbQAAAABJRU5ErkJggg==);
+ *background-image: url(glyphicons_173_play.png);
  background-repeat: no-repeat;
+}
+
+.ui360 .sm2-360ui.sm2_paused .sm2-360btn {
+left:52%;
 }
 
 .ui360 {
@@ -159,14 +184,14 @@
   "fake" button shown before SM2 has started, non-JS/non-SM2 case etc.
   background image will be removed via JS, in threeSixyPlayer.init()
  */
- background-position: 14px 50%;
- _background:transparent url(360-button-play.gif) no-repeat 14px 50%; /* IE 6-only: special crap GIF */
+ background-position: 52% 50%;
+ _background:transparent url(glyphicons_173_play.gif) no-repeat 52% 50%; /* IE 6-only: special crap GIF */
 }
 
 .ui360 .sm2-360btn-default,
 .ui360 .sm2-360ui.sm2_paused .sm2-360btn {
- background-position:50% 50%;
- _background:transparent url(360-button-play.gif) no-repeat 50% 50%; /* IE 6-only: special crap GIF */
+ background-position:52% 50%;
+ _background:transparent url(glyphicons_173_play.gif) no-repeat 52% 50%; /* IE 6-only: special crap GIF */
 }
 
 .ui360 .sm2-360btn-default,
@@ -176,16 +201,18 @@
 
 .ui360 .sm2-360btn-default:hover,
 .ui360 .sm2-360ui.sm2_paused .sm2-360btn:hover {
- background:transparent url(360-button-play-light.png) no-repeat 50% 50%;
- _background:transparent url(360-button-play.gif) no-repeat 50% 50%;
+ background:transparent url(glyphicons_173_play.png) no-repeat 50% 50%;
+ _background:transparent url(glyphicons_173_play.gif) no-repeat 50% 50%;
  cursor:pointer;
+ left:52%;
 }
 
 .ui360 .sm2-360ui.sm2_playing .sm2-360btn:hover,
 .ui360 .sm2-360btn-playing:hover {
- background:transparent url(360-button-pause-light.png) no-repeat 50% 50%;
- _background:transparent url(360-button-pause-light.gif) no-repeat 50% 50%;
+ background:transparent url(glyphicons_174_pause.png) no-repeat 50% 50%;
+ _background:transparent url(glyphicons_174_pause.gif) no-repeat 50% 50%;
  cursor:pointer;
+ left:50%;
 }
 
 .ui360 .sm2-360ui.sm2_playing .sm2-timing {
