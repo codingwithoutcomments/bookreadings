@@ -10,8 +10,9 @@ angular.module("bookreadings")
         var readingRef = new Firebase(readingsURL + "/" + reading_id);
 
         readingRef.on('value', function (snapshot) {
-          console.log(snapshot.val());
 
+            console.log(snapshot.val());
+            $scope.reading = snapshot.val()
             $scope.audio_link = S3ReadingsPath + snapshot.val().audio_key;
             $scope.$digest();
 
@@ -19,11 +20,6 @@ angular.module("bookreadings")
               url: 'sfw/',
               onready: function() {
                 threeSixtyPlayer.init();
-                /*var mySound = soundManager.createSound({
-                  id: 'aSound',
-                  url: 'https://s3-us-west-2.amazonaws.com/bookreadings/readings/1QSZm7KnTsKHxiZZFIrp_track12.mp3'
-                });
-                mySound.play(); */
               },
               ontimeout: function() {
                 // Hrmm, SM2 could not start. Missing SWF? Flash blocked? Show an error, etc.?

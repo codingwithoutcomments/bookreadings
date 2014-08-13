@@ -62,9 +62,7 @@
 
 .ui360 a:hover,
 .ui360 a:focus {
- background:#eee;
- border-radius:3px;
- outline:none;
+	text-decoration: none;
 }
 
 .ui360 .sm2-canvas {
