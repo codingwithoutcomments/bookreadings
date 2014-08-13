@@ -1,15 +1,35 @@
+<link href="css/reading.css" rel="stylesheet" />
+
 <div class="container" ng-controller="readingCtrl" style="background-color:#FFFFFF;">
 	<div class="row">
-		<div class="col-xs-12" style="overflow:hidden;">
-		    <div class="ui360 sm2_playing" style="float:left; width:75px;">
+		<div class="col-xs-12" style="overflow:hidden;padding-left:5px;">
+		    <div class="ui360 sm2_playing ui360reading">
 		     	<a ng-href="{{audio_link}}" class="norewrite exclude button-exclude inline-exclude"></a>
 		    </div>
-		    <div style="overflow:hidden;margin-top:15px;">
-		    	<h1 style="margin-top:0px;background-color:white;color:black;text-decoration:none;">{{reading.title}}</h1>
+		    <div class="readingTitle">
+		    	<h1 style="">{{reading.title}}</h1>
 		    </div>
 		</div>
 	</div>
+	<div class="row" style="margin-top:20px;">
+		<div class="col-xs-6">
+			<button type="button" class="btn btn-default btn-xs">
+				<span class="glyphicon glyphicon-heart"></span> Like
+			</button>	
+			<button type="button" class="btn btn-default btn-xs">
+				<span class="glyphicon glyphicon-fire"></span> Buy Book
+			</button>	
+			<button type="button" class="btn btn-default btn-xs">
+				<span class="glyphicon glyphicon-save"></span> Download
+			</button>	
+		</div>
+		<div class="col-xs-6" style='height:30px;text-align:right;'>
+			<span style="line-height:30px;color:#999;"><span class="glyphicon glyphicon-play"></span> 76,000 | <span class="glyphicon glyphicon-heart"></span> 67,000 | <span class="glyphicon glyphicon-heart"></span> 23,000</span>
+		</div>
+	</div>
 	<div class="row">
-
+		<div class="col-xs-12">
+			<hr>
+		</div>
 	</div>
 </div>

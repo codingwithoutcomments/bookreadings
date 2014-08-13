@@ -1,0 +1,17 @@
+.ui360reading {
+
+	float:left;
+	width:75px;
+}
+
+.readingTitle {
+	overflow:hidden;
+	margin-top:17px;
+}
+
+.readingTitle h1 {
+	margin-top:0px;
+	background-color:white;
+	color:black;
+	text-decoration:none;
+}
