@@ -16,20 +16,71 @@
 			<button type="button" class="btn btn-default btn-xs">
 				<span class="glyphicon glyphicon-heart"></span> Like
 			</button>	
-			<button type="button" class="btn btn-default btn-xs">
+			<a role="button" ng-show="reading.purchase_link" href="{{reading.purchase_link}}" class="btn btn-default btn-xs">
 				<span class="glyphicon glyphicon-fire"></span> Buy Book
-			</button>	
+			</a>	
 			<button type="button" class="btn btn-default btn-xs">
 				<span class="glyphicon glyphicon-save"></span> Download
 			</button>	
 		</div>
-		<div class="col-xs-6" style='height:30px;text-align:right;'>
-			<span style="line-height:30px;color:#999;"><span class="glyphicon glyphicon-play"></span> 76,000 | <span class="glyphicon glyphicon-heart"></span> 67,000 | <span class="glyphicon glyphicon-heart"></span> 23,000</span>
+		<div class="col-xs-6 reading-stats">
+			<span><span class="glyphicon glyphicon-play"></span> 76,000 | <span class="glyphicon glyphicon-heart"></span> 67,000 | <span class="glyphicon glyphicon-comment"></span> 23,000</span>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-xs-12">
-			<hr>
+			<hr style='margin-top:0px;'>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-4">
+			<img class="center-block img-responsive img-thumbnail" ng-src="{{reading.cover_image_url_converted}}">
+		</div>
+		<div class="col-xs-8">
+			<div class="row">
+				<div class="col-xs-12">
+					<p>{{reading.description}}</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<button ng-repeat="tag in reading.tags" type="button" class="btn btn-primary btn-xs" style="margin-right:4px;">
+						#{{tag}}
+					</button>	
+				</div>
+			</div>
+			<div class="row reading-comment-header">
+				<div class="col-xs-9">
+					<span class="glyphicon glyphicon-comment"></span> 0 Comments
+					<hr style='margin-top:0px;'>
+					<div style="overflow:hidden;">
+						<div style="float:left;">
+							<img ng-src="http://placekitten.com/g/34/34">
+						</div>
+						<div style="overflow:hidden;margin-left:5px;">
+							<input class='form-control non-rounded-corner-input' placeholder="Enter Comment...">
+						</div>
+					</div>
+					<div class="media">
+						<a class="pull-left" href="#">
+					    <img class="media-object" src="http://placekitten.com/g/64/64" alt="...">
+					  </a>
+					  <div class="media-body">
+					    <h6 class="media-heading">Media heading - 2 minutes ago</h6>
+					    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+					  </div>
+					</div>
+					<div class="media">
+					  <a class="pull-left" href="#">
+					    <img class="media-object" src="http://placekitten.com/g/64/64" alt="...">
+					  </a>
+					  <div class="media-body">
+					    <h6 class="media-heading">Media heading</h6>
+					    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+					  </div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

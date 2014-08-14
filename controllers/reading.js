@@ -14,6 +14,7 @@ angular.module("bookreadings")
             console.log(snapshot.val());
             $scope.reading = snapshot.val()
             $scope.audio_link = S3ReadingsPath + snapshot.val().audio_key;
+            $scope.reading["cover_image_url_converted"] = $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
             $scope.$digest();
 
             soundManager.setup({
