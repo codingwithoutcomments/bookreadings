@@ -5,9 +5,9 @@
     <script src="angular.js"></script>
     <script src="jquery-2.1.1.js"></script>
     <script src="bootstrap-tagsinput.js"></script>
-    <script src="https://cdn.firebase.com/js/client/1.0.15/firebase.js"></script>
-    <script src="https://cdn.firebase.com/libs/angularfire/0.7.1/angularfire.min.js"></script>
-    <script src='https://cdn.firebase.com/js/simple-login/1.5.0/firebase-simple-login.js'></script>
+    <script src="https://cdn.firebase.com/js/client/1.0.17/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/0.8.0/angularfire.js"></script>
+    <script src='https://cdn.firebase.com/js/simple-login/1.6.2/firebase-simple-login.js'></script>
     <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
     <!-- sound manager 2 -->
     <!-- Apache-licensed animation library -->
@@ -63,6 +63,11 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a ng-click="socialLogin()">
+                            Login
+                        </a>
+                    </li>
                     <li>
                         <a href="#/upload">
                             <span class="glyphicon glyphicon-cloud-upload"></span> 

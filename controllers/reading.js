@@ -7,24 +7,28 @@ angular.module("bookreadings")
 
         var reading_id = $routeParams.id;
 
-        var readingRef = new Firebase(readingsURL + "/" + reading_id);
+        var readingFirebase = new Firebase(readingsURL + "/" + reading_id);
+        var readingRef = $firebase(readingFirebase);
 
-        readingRef.on('value', function (snapshot) {
+        var readingRecord = readingRef.$asObject();
+        readingRecord.$loaded().then(function () {
 
-            console.log(snapshot.val());
-            $scope.reading = snapshot.val()
-            $scope.audio_link = S3ReadingsPath + snapshot.val().audio_key;
+            $scope.reading = readingRecord
+            $scope.audio_link = S3ReadingsPath + $scope.reading.audio_key;
             $scope.reading["cover_image_url_converted"] = $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
-            $scope.$digest();
 
-            soundManager.setup({
-              url: 'sfw/',
-              onready: function() {
-                threeSixtyPlayer.init();
-              },
-              ontimeout: function() {
-                // Hrmm, SM2 could not start. Missing SWF? Flash blocked? Show an error, etc.?
-              }
+            $scope.$watch('reading', function(newValue, oldValue){
+
+              soundManager.setup({
+                url: 'sfw/',
+                onready: function() {
+                  threeSixtyPlayer.init();
+                },
+                ontimeout: function() {
+                  // Hrmm, SM2 could not start. Missing SWF? Flash blocked? Show an error, etc.?
+                }
+              });
+              
             });
 
         }, function (errorObject) {
