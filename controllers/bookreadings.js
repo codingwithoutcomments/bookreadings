@@ -17,15 +17,13 @@ angular.module("bookreadings")
 		        userRecord.$loaded().then(function () {
 
 			    	//user exists
-				    $scope.user = userRecord;
-				    $scope.profile_picture = "http://graph.facebook.com/" + $scope.user.provider_id + "/picture";
+			    	setUser(userRecord);
 
 				});
 
 			} else {
 
-				$scope.user = null;
-				$scope.profile_picture = "";
+		    	setUser(null);
 			}
 		});
 
@@ -34,7 +32,7 @@ angular.module("bookreadings")
 			if(user) {
 
 				//user exists
-				$scope.user = userRecord;
+				$scope.user = user;
 				$scope.profile_picture = "http://graph.facebook.com/" + $scope.user.provider_id + "/picture";
 
 			} else {
@@ -63,8 +61,7 @@ angular.module("bookreadings")
 		        	if(userRecord.displayName) {
 
 				    	//user exists
-					    $scope.user = userRecord;
-					    $scope.profile_picture = "http://graph.facebook.com/" + $scope.user.provider_id + "/picture";
+				    	setUser(userRecord);
 
 					 } else {
 
@@ -77,8 +74,8 @@ angular.module("bookreadings")
 					    this.newUser = newUser;
 					    this.userRef.$set(newUser).then(function(ref){
 
-						    $scope.user = newUser;
-						    $scope.profile_picture = "http://graph.facebook.com/" + $scope.user.provider_id + "/picture";
+					    	setUser(userRecord);
+
 					    });
 					 }
 				});

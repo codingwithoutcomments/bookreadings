@@ -75,7 +75,7 @@
                         <li><a href="" ng-click="loginObj.$logout()">Logout</a></li>
                       </ul>
                     </li>
-                    <li>
+                    <li ng-show="loginObj.user">
                         <a href="#/upload">
                             <span class="glyphicon glyphicon-cloud-upload"></span> 
                             Upload
