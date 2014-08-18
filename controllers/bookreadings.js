@@ -1,45 +1,40 @@
 angular.module("bookreadings")
 	.constant("firebaseURL", "https://bookreadings.firebaseio.com")
 	.constant("firebaseAuthenticatedURL", "https://bookreadings.firebaseio.com/.info/authenticated")
-	.controller("bookreadingsCtrl", function ($scope, $firebase, $http, $location, firebaseURL, firebaseAuthenticatedURL) {
+	.controller("bookreadingsCtrl", function ($scope, $firebase, $http, $location, $firebaseSimpleLogin, firebaseURL, firebaseAuthenticatedURL) {
+
+		var firebaseRef = new Firebase(firebaseURL);
+	    $scope.loginObj = $firebaseSimpleLogin(firebaseRef);
 
 		var authRef = new Firebase(firebaseAuthenticatedURL);
 			authRef.on("value", function(snap) {
 			  if (snap.val() === true) {
 			  	//if logged in, then silently log in the user via facebook
 
-			  	
+
 			  } else {
-			  	$scope.user = null;
 			  }
 		});
 
 		$scope.socialLogin = function() {
 
-			var firebaseRef = new Firebase(firebaseURL);
-			var auth = new FirebaseSimpleLogin(firebaseRef, function(error, user) {
+			$scope.loginObj.$login("facebook", {
+				rememberMe: true, 
+				scope: 'email'
+			}).then(function(user) {
 
-			  if (error) {
-			    // an error occurred while attempting login
-			    console.log(error);
+				var userFirebase = new Firebase(firebaseURL + "/users/" + user.uid);
+		        var userRef = $firebase(userFirebase);
 
-			  } else if (user) {
+		        var userRecord = userRef.$asObject();
+		        userRecord.$loaded().then(function () {
 
-			  	this.user = user;
-			    firebaseRef.child('users').child(user.uid).once('value', function(snapshot) {
-
-			    	var user = this.user;
-
-				    var userExists = (snapshot.val() !== null);
-				    if(userExists) {
-
-			    		console.log("Existing user logged in");
+		        	if(userRecord.displayName) {
 
 				    	//user exists
-					    $scope.user = snapshot.val();
-					    $scope.$digest();
+					    $scope.user = userRecord;
 
-				    } else {
+					 } else {
 
 				    	var newUser = {}
 				    	newUser["displayName"] = user.displayName;
@@ -48,8 +43,8 @@ angular.module("bookreadings")
 				    	newUser["email"] = user.thirdPartyUserData.email;
 
 				    	if(user.provider == "facebook") {
-					    	var isSilouette = user.thirdPartyUserData.picture.data.is_silouette;
-					    	if(isSilouette == false) {
+					    	var isSilhouette = user.thirdPartyUserData.picture.data.is_silhouette;
+					    	if(isSilhouette == false) {
 					    		newUser["profile_picture"] = user.thirdPartyUserData.picture.data.url;
 					    	}
 					    }
@@ -59,21 +54,12 @@ angular.module("bookreadings")
 					    	if(!error) {
 					    		console.log("New User logged in using facebook");
 							    $scope.user = newUser;
-							    $scope.$digest();
 					    	}
 					    });
-				    }
+					 }
 				});
-
-			  } else {
-
-			  	$scope.user = null;
-			  	$scope.$digest();
-			    // user is logged out
-			  }
 			});
 
-			auth.login('facebook', {rememberMe: true, scope: 'email'});
 		}
 
 	});
