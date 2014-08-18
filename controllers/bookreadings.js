@@ -6,15 +6,44 @@ angular.module("bookreadings")
 		var firebaseRef = new Firebase(firebaseURL);
 	    $scope.loginObj = $firebaseSimpleLogin(firebaseRef);
 
-		var authRef = new Firebase(firebaseAuthenticatedURL);
-			authRef.on("value", function(snap) {
-			  if (snap.val() === true) {
-			  	//if logged in, then silently log in the user via facebook
+        $scope.loginObj.$getCurrentUser().then(function(user) {
 
+        	if(user){
 
-			  } else {
-			  }
+				var userFirebase = new Firebase(firebaseURL + "/users/" + user.uid);
+		        var userRef = $firebase(userFirebase);
+
+		        var userRecord = userRef.$asObject();
+		        userRecord.$loaded().then(function () {
+
+			    	//user exists
+				    $scope.user = userRecord;
+				    $scope.profile_picture = "http://graph.facebook.com/" + $scope.user.provider_id + "/picture";
+
+				});
+
+			} else {
+
+				$scope.user = null;
+				$scope.profile_picture = "";
+			}
 		});
+
+		function setUser(user) {
+
+			if(user) {
+
+				//user exists
+				$scope.user = userRecord;
+				$scope.profile_picture = "http://graph.facebook.com/" + $scope.user.provider_id + "/picture";
+
+			} else {
+
+				$scope.user = null;
+				$scope.profile_picture = "";
+			}
+
+		}
 
 		$scope.socialLogin = function() {
 
@@ -26,6 +55,8 @@ angular.module("bookreadings")
 				var userFirebase = new Firebase(firebaseURL + "/users/" + user.uid);
 		        var userRef = $firebase(userFirebase);
 
+		        this.userRef = userRef;
+
 		        var userRecord = userRef.$asObject();
 		        userRecord.$loaded().then(function () {
 
@@ -33,6 +64,7 @@ angular.module("bookreadings")
 
 				    	//user exists
 					    $scope.user = userRecord;
+					    $scope.profile_picture = "http://graph.facebook.com/" + $scope.user.provider_id + "/picture";
 
 					 } else {
 
@@ -42,19 +74,11 @@ angular.module("bookreadings")
 				    	newUser["provider_id"] = user.id;
 				    	newUser["email"] = user.thirdPartyUserData.email;
 
-				    	if(user.provider == "facebook") {
-					    	var isSilhouette = user.thirdPartyUserData.picture.data.is_silhouette;
-					    	if(isSilhouette == false) {
-					    		newUser["profile_picture"] = user.thirdPartyUserData.picture.data.url;
-					    	}
-					    }
-
 					    this.newUser = newUser;
-					    firebaseRef.child('users').child(user.uid).set(newUser, function(error){
-					    	if(!error) {
-					    		console.log("New User logged in using facebook");
-							    $scope.user = newUser;
-					    	}
+					    this.userRef.$set(newUser).then(function(ref){
+
+						    $scope.user = newUser;
+						    $scope.profile_picture = "http://graph.facebook.com/" + $scope.user.provider_id + "/picture";
 					    });
 					 }
 				});
