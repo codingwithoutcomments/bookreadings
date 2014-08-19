@@ -35,17 +35,35 @@
         .config(function($routeProvider) {
 
             $routeProvider.when("/upload", {
-                templateUrl: "/views/upload.html"
+                templateUrl: "/views/upload.html",
+                auth: function (user) {
+                  return user 
+                }
             });
 
             $routeProvider.when("/reading/:id/:slug", {
-                templateUrl: "/views/reading.html"
+                templateUrl: "/views/reading.html",
+                auth: function (user) {
+                  return true
+                }
             });
 
             $routeProvider.otherwise({
-                templateUrl: "/views/bookreadingsindex.html"
+                templateUrl: "/views/bookreadingsindex.html",
+                auth: function (user) {
+                  return true
+                }
             });
 
+        })
+        .run(function ($rootScope, $location) {
+          $rootScope.$on('$routeChangeStart', function (ev, next, curr) {
+            if (next.$$route) {
+              var user = $rootScope.user
+              var auth = next.$$route.auth
+              if (auth && !auth(user)) { $location.path('/') }
+            }
+          });
         });
     </script>
     <script src="controllers/bookreadings.js"></script>
@@ -70,9 +88,11 @@
                         </a>
                     </li>
                     <li class="dropdown" ng-show="loginObj.user">
-                      <a class="dropdown-toggle" data-toggle="dropdown" style="padding-bottom:0px;padding-top:15px;"><img ng-src="{{profile_picture}}" style="height:25px;width:25px;margin-right:5px;"> Chris <span class="caret"></span></a>
+                      <a class="dropdown-toggle" data-toggle="dropdown" style="padding-bottom:0px;padding-top:15px;">
+                        <img ng-src="{{profile_picture}}" style="height:25px;width:25px;margin-right:5px;"> {{firstName}} <span class="caret"></span>
+                     </a>
                       <ul class="dropdown-menu" role="menu">
-                        <li><a href="" ng-click="loginObj.$logout()">Logout</a></li>
+                        <li><a href="" ng-click="logout()">Logout</a></li>
                       </ul>
                     </li>
                     <li ng-show="loginObj.user">

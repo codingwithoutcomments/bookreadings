@@ -1,7 +1,7 @@
 angular.module("bookreadings")
 	.constant("firebaseURL", "https://bookreadings.firebaseio.com")
 	.constant("firebaseAuthenticatedURL", "https://bookreadings.firebaseio.com/.info/authenticated")
-	.controller("bookreadingsCtrl", function ($scope, $firebase, $http, $location, $firebaseSimpleLogin, firebaseURL, firebaseAuthenticatedURL) {
+	.controller("bookreadingsCtrl", function ($scope, $rootScope, $firebase, $http, $location, $firebaseSimpleLogin, firebaseURL, firebaseAuthenticatedURL) {
 
 		var firebaseRef = new Firebase(firebaseURL);
 	    $scope.loginObj = $firebaseSimpleLogin(firebaseRef);
@@ -33,11 +33,14 @@ angular.module("bookreadings")
 
 				//user exists
 				$scope.user = user;
+				$rootScope.user = user;
+				$scope.firstName = user.displayName.split(' ')[0];
 				$scope.profile_picture = "http://graph.facebook.com/" + $scope.user.provider_id + "/picture";
 
 			} else {
 
 				$scope.user = null;
+				$rootScope.user = null;
 				$scope.profile_picture = "";
 			}
 
@@ -81,6 +84,11 @@ angular.module("bookreadings")
 				});
 			});
 
+		}
+
+		$scope.logout = function() {
+			$scope.loginObj.$logout();
+			$location.path('/');
 		}
 
 	});
