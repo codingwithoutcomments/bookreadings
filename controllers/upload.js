@@ -6,8 +6,6 @@ angular.module("bookreadings")
 
 		filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
-		$scope.readingsRef = new Firebase(readingsURL);
-
 		$scope.reading_cover_photo = "http://placehold.it/950/950"
 
 		$scope.addReading = function(newReading, reading) {
@@ -37,12 +35,17 @@ angular.module("bookreadings")
 			this.reading["created"] = Firebase.ServerValue.TIMESTAMP;
 			this.reading["modified"] = Firebase.ServerValue.TIMESTAMP;
 
+			var user = $scope.loginObj.user;
+			this.reading["created_by"] = user.uid;
 
-        	var uploaded_file_ref = $scope.readingsRef.push();
-        	uploaded_file_ref.set(reading);
+			var readingsRef = new Firebase(readingsURL);
+			var _readingRef = $firebase(readingsRef);
+			_readingRef.$push(reading).then(function(ref){
 
-        	var path = "reading/" + uploaded_file_ref.name() + "/" + this.reading.slug;
-        	$location.path(path);
+	        	var path = "reading/" + ref.name() + "/" + reading.slug;
+	        	$location.path(path);
+
+			});
 
 		}
 
