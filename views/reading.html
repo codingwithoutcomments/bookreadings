@@ -13,7 +13,7 @@
 	</div>
 	<div class="row" style="margin-top:20px;">
 		<div class="col-xs-6">
-			<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading_id)">
+			<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading_id)" ng-class="{ 'active' : reading_liked }">
 				<span class="glyphicon glyphicon-heart"></span> Like
 			</button>	
 			<a role="button" ng-show="reading.purchase_link" href="{{reading.purchase_link}}" class="btn btn-default btn-xs">

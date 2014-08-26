@@ -2,8 +2,9 @@ angular.module("bookreadings")
     .constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
     .constant("likesURL", "https://bookreadings.firebaseio.com/likes")
     .constant("usersURL", "https://bookreadings.firebaseio.com/users")
+    .constant("firebaseURL", "https://bookreadings.firebaseio.com")
     .constant("S3ReadingsPath", "https://s3-us-west-2.amazonaws.com/bookreadings/")
-    .controller("readingCtrl", function ($scope, $firebase, $http, $location, $routeParams, readingsURL, likesURL, usersURL, S3ReadingsPath) {
+    .controller("readingCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath) {
 
         threeSixtyPlayer.init();
 
@@ -37,13 +38,29 @@ angular.module("bookreadings")
           console.log('The read failed: ' + errorObject.code);
         });
 
-        //see if logged in user
-        //if yes, then see if user liked the reading
-        if($scope.loginObj.user) {
-          var usersFirebase = new Firebase(usersURL + "/" + $scope.loginObj.user.uid + "/likes/" + likeName);
-          var usersRef = $firebase(usersFirebase);
+        $scope.$watch('loginObj.user', function(newValue, oldValue) {
 
-        }
+          if($scope.loginObj.user){
+
+            var readingLikesByUserFirebase = new Firebase(readingsURL + "/" + $scope.reading_id + "/likes_by_user/" + $scope.loginObj.user.uid);
+            var readingLikesByUserRef = $firebase(readingLikesByUserFirebase);
+            var userRecord = readingLikesByUserRef.$asObject();
+            userRecord.$loaded().then(function(data){
+
+              if(data.$value != null) {
+
+                $scope.reading_liked = true;
+                console.log("Like Exists");
+              }
+
+            }, function(errorObject) {
+
+              console.log("Error retrieving like");
+
+            });
+          };
+
+        });
 
         $scope.likeReading = function(reading_id) {
 
@@ -54,26 +71,48 @@ angular.module("bookreadings")
 
             //make sure like doesn't already exist
             //if already exists then remove like
+            var readingLikesByUserFirebase = new Firebase(readingsURL + "/" + $scope.reading_id + "/likes_by_user/" + $scope.loginObj.user.uid);
+            var readingLikesByUserRef = $firebase(readingLikesByUserFirebase);
+            var userRecord = readingLikesByUserRef.$asObject();
+            userRecord.$loaded().then(function(data){
 
-            //if doesn't exist
-            //add like to general like object
-            var like_object = {}
-            like_object["type"] = "reading";
-            like_object["created_by"] = $scope.loginObj.user.uid;
-            like_object["created"] = Firebase.ServerValue.TIMESTAMP;
-            like_object["object_id"] = reading_id;
-            like_object["value"] = 1;
-            likesRef.$push(like_object).then(function(ref){
+              if(data.$value != null) {
+                //remove like
+                var i = 0;
 
-              //add like to reading object
-              var likeName = ref.name();
-              var readingFirebase = new Firebase(readingsURL + "/" + reading_id + "/likes/" + likeName);
-              var readingRef = $firebase(readingFirebase);
-              readingRef.$set(true)
+              } else {
 
-              var readingLikesByUserFirebase = new Firebase(readingsURL + "/" + reading_id + "/likes_by_user/" + $scope.loginObj.user.uid);
-              var readingLikesByUserRef = $firebase(readingLikesByUserFirebase);
-              readingLikesByUserRef.$set(true)
+                //if doesn't exist
+                //add like to general like object
+                var like_object = {}
+                like_object["type"] = "reading";
+                like_object["created_by"] = $scope.loginObj.user.uid;
+                like_object["created"] = Firebase.ServerValue.TIMESTAMP;
+                like_object["object_id"] = reading_id;
+                like_object["value"] = 1;
+                likesRef.$push(like_object).then(function(ref){
+
+                  //add like to reading object
+                  var likeName = ref.name();
+                  var readingFirebase = new Firebase(readingsURL + "/" + reading_id + "/likes/" + likeName);
+                  var readingRef = $firebase(readingFirebase);
+                  readingRef.$set(true)
+
+                  var readingLikesByUserFirebase = new Firebase(readingsURL + "/" + reading_id + "/likes_by_user/" + $scope.loginObj.user.uid);
+                  var readingLikesByUserRef = $firebase(readingLikesByUserFirebase);
+                  readingLikesByUserRef.$set(true)
+
+                  $scope.reading_liked = true;
+
+                }, function (errorObject) {
+                  console.log('Adding like failed: ' + errorObject.code);
+                });
+
+              }
+
+            }, function(errorObject) {
+
+              console.log("Error retrieving like");
 
             });
 
