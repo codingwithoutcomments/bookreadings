@@ -21,7 +21,7 @@ angular.module("bookreadings")
 
 			var purchaseLink = null;
 			if(newReading.purchaseLink) {
-				this.reading["purchaseLink"] = newReading.purchaseLink
+				purchaseLink = newReading.purchaseLink
 			}
 			this.reading["purchaseLink"] = purchaseLink;
 

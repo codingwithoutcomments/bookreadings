@@ -3,7 +3,7 @@
 <div class="container" ng-controller="readingCtrl" style="background-color:#FFFFFF;">
 	<div class="row">
 		<div class="col-xs-12" style="overflow:hidden;padding-left:5px;">
-		    <div class="ui360 sm2_playing ui360reading">
+		    <div class="ui360 sm2_playing ui360reading" ng-click="readingPlayed(reading_id)">
 		     	<a ng-href="{{audio_link}}" class="norewrite exclude button-exclude inline-exclude"></a>
 		    </div>
 		    <div class="readingTitle">
@@ -16,15 +16,15 @@
 			<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading_id)" ng-class="{ 'active' : reading_liked }">
 				<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : reading_liked }"></span> {{ like_text }}
 			</button>	
-			<a role="button" ng-show="reading.purchase_link" href="{{reading.purchase_link}}" class="btn btn-default btn-xs">
+			<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}" class="btn btn-default btn-xs">
 				<span class="glyphicon glyphicon-fire"></span> Buy Book
 			</a>	
-			<button type="button" class="btn btn-default btn-xs">
+			<a ng-href="{{audio_link}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs">
 				<span class="glyphicon glyphicon-save"></span> Download
-			</button>	
+			</a>	
 		</div>
 		<div class="col-xs-6 reading-stats">
-			<span><span class="glyphicon glyphicon-play"></span> 76,000 | <span class="glyphicon glyphicon-heart"></span> {{reading.like_count}} | <span class="glyphicon glyphicon-comment"></span> 23,000</span>
+			<span><span class="glyphicon glyphicon-play"></span> {{ reading.play_count }} | <span class="glyphicon glyphicon-heart"></span> {{reading.like_count}} | <span class="glyphicon glyphicon-comment"></span> 23,000</span>
 		</div>
 	</div>
 	<div class="row">

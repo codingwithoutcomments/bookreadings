@@ -10,6 +10,7 @@ angular.module("bookreadings")
 
         $scope.reading_id = $routeParams.id;
         $scope.like_text = "Like";
+        $scope.reading_played = false;
 
         var readingFirebase = new Firebase(readingsURL + "/" + $scope.reading_id);
         var readingRef = $firebase(readingFirebase);
@@ -18,6 +19,7 @@ angular.module("bookreadings")
         readingRecord.$loaded().then(function () {
 
             $scope.reading = readingRecord
+            console.log($scope.reading);
             $scope.audio_link = S3ReadingsPath + $scope.reading.audio_key;
             $scope.reading["cover_image_url_converted"] = $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
 
@@ -95,6 +97,33 @@ angular.module("bookreadings")
 
           var readingLikeLikeCounterFirebase = new Firebase(readingsURL + "/" + reading_id + "/like_count");
           return $firebase(readingLikeLikeCounterFirebase);
+
+        }
+
+        $scope.readingPlayed = function(reading_id) {
+
+          if(!$scope.reading_played) {
+            
+            $scope.reading_played = true;
+
+            var readingPlayCounterFirebase = new Firebase(readingsURL + "/" + reading_id + "/play_count");
+            var play_count = $firebase(readingPlayCounterFirebase);
+
+            play_count.$transaction(function(currentCount) {
+              if (!currentCount) return 1;   // Initial value for counter.
+              if (currentCount < 0) return;  // Return undefined to abort transaction.
+              return currentCount + 1;       // Increment the count by 1.
+            }).then(function(snapshot) {
+              if (!snapshot) {
+                // Handle aborted transaction.
+              } else {
+                // Do something.
+              }
+            }, function(err) {
+              // Handle the error condition.
+            });
+
+          }
 
         }
 
@@ -191,7 +220,7 @@ angular.module("bookreadings")
                     }
                   }, function(err) {
                     // Handle the error condition.
-                  k2});
+                  });
 
                 }, function (errorObject) {
                   console.log('Adding like failed: ' + errorObject.code);
