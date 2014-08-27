@@ -14,7 +14,7 @@
 	<div class="row" style="margin-top:20px;">
 		<div class="col-xs-6">
 			<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading_id)" ng-class="{ 'active' : reading_liked }">
-				<span class="glyphicon glyphicon-heart"></span> Like
+				<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : reading_liked }"></span> {{ like_text }}
 			</button>	
 			<a role="button" ng-show="reading.purchase_link" href="{{reading.purchase_link}}" class="btn btn-default btn-xs">
 				<span class="glyphicon glyphicon-fire"></span> Buy Book
@@ -24,7 +24,7 @@
 			</button>	
 		</div>
 		<div class="col-xs-6 reading-stats">
-			<span><span class="glyphicon glyphicon-play"></span> 76,000 | <span class="glyphicon glyphicon-heart"></span> 67,000 | <span class="glyphicon glyphicon-comment"></span> 23,000</span>
+			<span><span class="glyphicon glyphicon-play"></span> 76,000 | <span class="glyphicon glyphicon-heart"></span> {{reading.like_count}} | <span class="glyphicon glyphicon-comment"></span> 23,000</span>
 		</div>
 	</div>
 	<div class="row">

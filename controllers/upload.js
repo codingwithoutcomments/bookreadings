@@ -38,6 +38,11 @@ angular.module("bookreadings")
 			var user = $scope.loginObj.user;
 			this.reading["created_by"] = user.uid;
 
+			//add counts
+			this.reading["like_count"] = 0
+			this.reading["play_count"] = 0
+			this.reading["comment_count"] = 0
+
 			var readingsRef = new Firebase(readingsURL);
 			var _readingRef = $firebase(readingsRef);
 			_readingRef.$push(reading).then(function(ref){
