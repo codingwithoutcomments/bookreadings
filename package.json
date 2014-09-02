@@ -1,0 +1,7 @@
+{
+    "name":"bookreadings",
+    "description":"...",
+    "author":"Chris Reath",
+    "dependencies": {},
+    "engine":"node >= 0.10.28"
+}
