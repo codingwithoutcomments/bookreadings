@@ -1,6 +1,7 @@
 angular.module("bookreadings")
 	.constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
-	.controller("uploadCtrl", function ($scope, $firebase, $http, $location, readingsURL, string_manipulation) {
+	.constant("tagsURL", "https://bookreadings.firebaseio.com/tags")
+	.controller("uploadCtrl", function ($scope, $firebase, $http, $location, readingsURL, tagsURL, string_manipulation) {
 
 		$("#tags").tagsinput('items');
 
@@ -51,8 +52,14 @@ angular.module("bookreadings")
 	        	$location.path(path);
 
 			});
-
 		}
+
+        function getFirebaseTagReference(tagsURL, tag_name, tag_id) {
+
+          var tagFirebase = new Firebase(tagsURL + "/" + tag_name + "/" + tag_id);
+          return $firebase(tagFirebase);
+
+        }
 
 		$scope.upload_audio_file = function(){
 

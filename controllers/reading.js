@@ -214,6 +214,8 @@ angular.module("bookreadings")
             var comment_object = {}
             comment_object["type"] = "reading";
             comment_object["created_by"] = $scope.loginObj.user.uid;
+            comment_object["picture"] = "http://graph.facebook.com/" + user.id + "/picture";
+            comment_object["display_name"] = user.displayName;
             comment_object["created"] = Firebase.ServerValue.TIMESTAMP;
             comment_object["object_id"] = reading_id;
             comment_object["content"] = comment.comment;

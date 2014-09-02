@@ -65,10 +65,10 @@
 					</div>
 					<div class="media" ng-repeat="comment in comments" style="margin-bottom:10px;">
 						<a class="pull-left" href="#">
-					    <img class="media-object" src="http://placekitten.com/g/64/64" alt="...">
+					    <img class="media-object" ng-src="{{comment.picture}}" alt="...">
 					  </a>
 					  <div class="media-body">
-					    <h6 class="media-heading">Media heading - 2 minutes ago</h6>
+					    <h6 class="media-heading">{{comment.display_name}} - 2 minutes ago</h6>
 					    {{ comment.content }}
 					  </div>
 					</div>
