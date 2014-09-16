@@ -3,7 +3,7 @@
     "description":"...",
     "author":"Chris Reath",
     "dependencies": {
-	    "node-static": "0.x.x",
+	    "node-static": "0.x.x"
 	  },
     "engine":"node >= 0.10.28"
 }
