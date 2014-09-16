@@ -3,7 +3,13 @@
     "description":"...",
     "author":"Chris Reath",
     "dependencies": {
-	    "node-static": "0.x.x"
+	    "node-static": "0.x.x",
+	    "elasticsearchclient" : "0.5.3",
+	    "firebase" : "1.0.21",
+	    "websocket-driver" : "0.3.5",
+	    "colors" : "0.6.2",
+	    "elasticsearch": "2.4.2",
+	    "JQDeferred": "2.1.0"
 	  },
     "engine":"node >= 0.10.28"
 }
