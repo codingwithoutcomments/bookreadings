@@ -2,6 +2,8 @@
     "name":"bookreadings",
     "description":"...",
     "author":"Chris Reath",
-    "dependencies": {},
+    "dependencies": {
+	    "node-static": "0.x.x",
+	  },
     "engine":"node >= 0.10.28"
 }
