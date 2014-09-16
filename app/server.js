@@ -4,4 +4,4 @@ var file = new static.Server('../app');
 
 require('http').createServer(function (request, response) {
     file.serve(request, response);
-}).listen(5000);
+}).listen(process.env.PORT || 5000);
