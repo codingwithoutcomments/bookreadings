@@ -91,4 +91,11 @@ angular.module("bookreadings")
 			$location.path('/');
 		}
 
+		$scope.search = function(search){
+
+			var path = "/search/" + search.searchterm;
+        	$location.path(path);
+
+		}
+
 	});
