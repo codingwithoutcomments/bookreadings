@@ -10,6 +10,7 @@
     <script src='https://cdn.firebase.com/js/simple-login/1.6.2/firebase-simple-login.js'></script>
     <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
     <script type="text/javascript" src="script/bootstrap.min.js"></script>
+    <script type="text/javascript" src="script/moment.min.js"></script>
     <!-- sound manager 2 -->
     <!-- Apache-licensed animation library -->
     <script type="text/javascript" src="soundmanager2.js"></script>
@@ -90,8 +91,13 @@
             </div>
             <form class="navbar-form navbar-left" role="search" ng-submit="search(searchObject)">
                 <div class="form-group" style="width:380px;">
-                  <input type="text" class="form-control" placeholder="Search" ng-model="searchObject.searchterm" style="width:100%;">
-                  <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Search" ng-model="searchObject.searchterm" style="width:100%;">
+                      <span ng-click="search(searchObject)" class="input-group-addon">
+                        <i class="glyphicon glyphicon-search"></i>
+                        </span>
+                    </div>
+                      <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
                 </div>
               </form>
             <div class="collapse navbar-collapse">

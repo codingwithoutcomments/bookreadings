@@ -38,6 +38,8 @@ angular.module("bookreadings")
 
 			var user = $scope.loginObj.user;
 			this.reading["created_by"] = user.uid;
+			this.reading["created_by_id"] = user.id;
+			this.reading["created_by_name"] = user.displayName;
 
 			//add counts
 			this.reading["like_count"] = 0

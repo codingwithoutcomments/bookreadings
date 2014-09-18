@@ -93,8 +93,12 @@ angular.module("bookreadings")
 
 		$scope.search = function(search){
 
-			var path = "/search/" + search.searchterm;
-        	$location.path(path);
+			if(search && search.hasOwnProperty("searchterm")){
+				 if(search.searchterm.length > 0) {
+					var path = "/search/" + search.searchterm;
+		        	$location.path(path);
+		        }
+	        }
 
 		}
 

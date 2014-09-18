@@ -21,12 +21,12 @@
   -webkit-border-radius: 0 !important;
      -moz-border-radius: 0 !important;
           border-radius: 0 !important;
-  }
+}
 
-  .reading-stats {
-  	height:30px;
-  	text-align:right;
-  }
+.reading-stats {
+	height:30px;
+	text-align:right;
+}
 
 .reading-stats span{
 	line-height:30px;
@@ -35,4 +35,14 @@
 
 .reading-comment-header {
 	margin-top:40px;
+}
+
+.reading-header-username {
+	padding-left:20px;
+}
+
+.reading-header {
+	padding-top:10px; 
+	color:#999;
+	font-size:16px;
 }

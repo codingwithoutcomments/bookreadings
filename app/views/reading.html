@@ -2,6 +2,14 @@
 
 <div class="container" ng-controller="readingCtrl" style="background-color:#FFFFFF;margin-bottom:20px;">
 	<div class="row">
+		<div class="col-xs-6 reading-header reading-header-username">
+			Posted by {{reading.created_by_name }}
+		</div>
+		<div class="col-xs-6 reading-header" style="text-align:right;">
+			{{ reading.time_since }}
+		</div>
+	</div>
+	<div class="row">
 		<div class="col-xs-12" style="overflow:hidden;padding-left:5px;">
 		    <div class="ui360 sm2_playing ui360reading" ng-click="readingPlayed(reading_id)">
 		     	<a ng-href="{{audio_link}}" class="norewrite exclude button-exclude inline-exclude"></a>
@@ -44,9 +52,9 @@
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
-					<button ng-repeat="tag in reading.tags" type="button" class="btn btn-primary btn-xs" style="margin-right:4px;">
+					<a ng-repeat="tag in reading.tags" href="/#/search/{{tag}}/" type="button" class="btn btn-primary btn-xs" style="margin-right:4px;">
 						#{{tag}}
-					</button>	
+					</a>	
 				</div>
 			</div>
 			<div class="row reading-comment-header">

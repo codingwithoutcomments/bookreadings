@@ -26,6 +26,9 @@ angular.module("bookreadings")
             $scope.audio_link = S3ReadingsPath + $scope.reading.audio_key;
             $scope.reading["cover_image_url_converted"] = $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
 
+            var time = moment($scope.reading.created);
+            var timeSince = time.fromNow();
+            $scope.reading["time_since"] = timeSince;
 
             $scope.$watch('reading', function(newValue, oldValue){
 
