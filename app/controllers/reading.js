@@ -51,19 +51,20 @@ angular.module("bookreadings")
         //populate the comments on the page
         var commentsArray = getFirebaseReadingComments(readingsURL, $scope.reading_id).$asArray();
         commentsArray.$watch(function(event){
-
           if(event.event == "child_added") {
-
             var commentObject = getFirebaseCommentReference(commentsURL, event.key).$asObject();
             addComment(commentObject);
-
           }
-
         });
 
         function addComment(commentObject) {
 
           commentObject.$loaded().then(function() {
+
+            var time = moment(commentObject.created);
+            var timeSince = time.fromNow();
+            commentObject["timeSince"] = timeSince;
+
             $scope.comments.push(commentObject);
           });
         }
