@@ -20,6 +20,9 @@ angular.module("bookreadings")
 
 	       // post search requests to https://<INSTANCE>.firebaseio.com/search/request
 			var search_query = {
+				"sort" : [
+			        "_score"
+			    ],
 				"query": {
 			        "query_string": {
 			            "query": searchTerm,
