@@ -1,0 +1,12 @@
+.media-heading a {
+	color:black;
+}
+
+.media-heading a:hover {
+	text-decoration: :none;
+}
+
+.reading-stats span{
+	line-height:30px;
+	color:#999;
+} 

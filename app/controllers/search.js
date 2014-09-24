@@ -6,6 +6,7 @@ angular.module("bookreadings")
 
         $scope.searchterm = $routeParams.searchterm;
         $scope.searchObject.searchterm = $scope.searchterm;
+        $scope.$emit('clearHeaderSearch', null);
         $scope.readingResults = [];
 
 		var queue = new Firebase('https://bookreadings.firebaseio.com/search');
@@ -17,23 +18,34 @@ angular.module("bookreadings")
 		        }
 		    }};
 
-	       var reqRef = queue.child('request').push({ index: index, type: type, query: search_query});
-	       // read the replies from https://bookreadings.firebaseio.com/search/response
-	       queue.child('response/'+reqRef.name()).on('value', function fn(snap) {
-	          if( snap.val() !== null ) {     // wait for data
-	             snap.ref().off('value', fn); // stop listening
-	             snap.ref().remove();         // clear the queue
-	             callback(snap.val());
-	          }
-	       });
+		    var requestFirebase = new Firebase('https://bookreadings.firebaseio.com/search/request/')
+		    var requestRef = $firebase(requestFirebase);
+
+	        requestRef.$push({ index: index, type: type, query: search_query}).then(function(ref){
+
+	        	var request_name = ref.name();
+			    var responseFirebase = new Firebase('https://bookreadings.firebaseio.com/search/response/' + request_name);
+			    var responseRef = $firebase(responseFirebase);
+
+			    var responseObject = responseRef.$asObject();
+			    responseObject.$bindTo($scope, "data").then(function(){
+			          if( $scope.data !== null ) {     // wait for data
+			          	 var objectValue = $scope.data;
+			             callback(objectValue);
+			             $scope.data = {};
+			          }
+			    });
+
+	       }, function(err) {
+	       	   console.log(err);
+			});
 	    }
 	    // invoke a search for *foo*
 	    search('firebase', 'reading', $scope.searchterm, function(data) {
+	    	$scope.number_of_results = data.total;
 	        console.log('got back '+data.total+' hits');
 	        if( data.hits ) {
 	           data.hits.forEach(function(hit) {
-
-	           		console.log(hit);
 
 			        var readingFirebase = new Firebase(readingsURL + "/" + hit._id);
 			        var readingRef = $firebase(readingFirebase);
@@ -48,6 +60,12 @@ angular.module("bookreadings")
 	    function add_reading_to_page(readingRecord) {
 
 	        readingRecord.$loaded().then(function() {
+
+	            var time = moment(readingRecord.created);
+	            var timeSince = time.fromNow();
+	            readingRecord["timeSince"] = timeSince;
+
+	        	console.log(readingRecord);
 
 	        	$scope.readingResults.push(readingRecord);
 

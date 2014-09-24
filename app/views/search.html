@@ -1,11 +1,27 @@
+<link href="css/search.css" rel="stylesheet" />
 <div class="container" ng-controller="searchCtrl" style="background-color:#FFFFFF;margin-bottom:20px;">
 	<div class="row" style='margin-top:20px;'>
 		<div class="col-sm-2" style='font-size:20px;'>
-			<b>Search</b>
+			<div class="row">
+				<div class="col-xs-12">
+					<b>Search</b>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					Everything 
+				</div>
+			</div>
 		</div>
 		<div class="col-xs-12 col-sm-10">
 			<div class="row">
 				<div class="col-xs-8">
+					<b>Number of Results: {{number_of_results}}</b>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-8">
+	            <form role="search" ng-submit="search(searchObject)">
 	                <div class="form-group">
 	                    <div class="input-group">
 	                      <input type="text" class="form-control" placeholder="Search" ng-model="searchObject.searchterm" style="width:100%;">
@@ -16,11 +32,43 @@
 	                      <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
 	                </div>
 	              </div>
+	             </form>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
 					<div ng-repeat="reading in readingResults" style="margin-bottom:10px;">
-						{{reading.title}}
+						<div class="media">
+						  <a class="pull-left" href="#">
+						    <img class="media-object" ng-src="{{reading.cover_image_url}}/convert?w=120&height=120&fit=crop" alt="...">
+						  </a>
+						  <div class="media-body">
+						  	<div class="row">
+								<div class="col-xs-12">
+								  	<h5 style="margin:0px;color:#999;">{{reading.created_by_name}} - {{reading.timeSince}}</h5>
+							  </div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+								    <h3 class="media-heading">
+								    	<a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.title}}</a>
+								    </h3>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<a ng-repeat="tag in reading.tags" href="/#/search/{{tag}}/" type="button" class="btn btn-primary btn-xs" style="margin-right:4px;">
+										#{{tag}}
+									</a>	
+								</div>
+							</div>
+						    <div class="row">
+								<div class="col-xs-12 reading-stats">
+									<span><span class="glyphicon glyphicon-play"></span> {{ reading.play_count }} | <span class="glyphicon glyphicon-heart"></span> {{reading.like_count}} | <span class="glyphicon glyphicon-comment"></span> {{reading.comment_count}}</span>
+								</div>
+							</div>
+						  </div>
+						</div>
+						<hr ng-hide="$last">
 					</div>
 				</div>
 			</div>

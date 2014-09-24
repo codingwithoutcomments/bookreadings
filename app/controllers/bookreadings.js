@@ -102,4 +102,6 @@ angular.module("bookreadings")
 
 		}
 
+		$scope.$on('clearHeaderSearch', function(event, data) { $scope.searchPageObject = null; });
+
 	});
