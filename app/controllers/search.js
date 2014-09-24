@@ -10,16 +10,24 @@ angular.module("bookreadings")
         $scope.readingResults = [];
         $scope.last_response_key = null;
 
+        $scope.from = 0;
+        $scope.hide_more_results_button = true;
+        $scope.size = 10;
+        $scope.number_of_results_shown = 0;
+
 		var queue = new Firebase('https://bookreadings.firebaseio.com/search');
-	    function search(index, type, searchTerm, callback) {
+	    function search(index, type, searchTerm, from, size, callback) {
 
 	       // post search requests to https://<INSTANCE>.firebaseio.com/search/request
 			var search_query = {
 				"query": {
 			        "query_string": {
 			            "query": searchTerm,
-		        },
-		    }};
+			        },
+			    },
+			    "size": size,
+			    "from": from,
+			};
 
 		    var requestFirebase = new Firebase('https://bookreadings.firebaseio.com/search/request/')
 		    var requestRef = $firebase(requestFirebase);
@@ -46,6 +54,7 @@ angular.module("bookreadings")
 	    function load_response_object(responseObject, callback, unwatch) {
 
 	    	responseObject.$loaded().then(function(){
+	    		console.log(responseObject);
 	    		if(responseObject.total != null) {
 	    			unwatch();
 	    			callback(responseObject);
@@ -53,12 +62,33 @@ angular.module("bookreadings")
 	    	});
 
 	    }
-	    // invoke a search for *foo*
-	    search('firebase', 'reading', $scope.searchterm, function(data) {
 
-	    	if(data.$id != $scope.last_response_key) {
+	    $scope.show_more_results = function() {
+
+		    // invoke a search for *foo*
+		    $scope.from = $scope.from + $scope.size;
+
+		    search('firebase', 'reading', $scope.searchterm, $scope.from, $scope.size, parse_results);
+
+	    }
+
+	    // invoke a search for *foo*
+	    search('firebase', 'reading', $scope.searchterm, $scope.from, $scope.size, parse_results);
+
+	    function parse_results(data) {
+
+	    	if(data.$id != $scope.last_response_key && data.hits.length > 0) {
+
 		    	$scope.last_response_key = data.$id;
 		    	$scope.number_of_results = data.total;
+
+		    	$scope.number_of_results_shown = $scope.number_of_results_shown + data.hits.length
+		    	if($scope.number_of_results_shown == $scope.number_of_results) {
+		    		$scope.hide_more_results_button = true;
+		    	} else {
+		    		$scope.hide_more_results_button = false;
+		    	}
+
 		        console.log('got back '+data.total+' hits');
 		        if( data.hits ) {
 		           data.hits.forEach(function(hit) {
@@ -72,7 +102,8 @@ angular.module("bookreadings")
 		           });
 		        }
 		     }
-	    });
+
+	    };
 
 	    function add_reading_to_page(readingRecord) {
 

@@ -1,6 +1,6 @@
 <link href="css/search.css" rel="stylesheet" />
 <div class="container" ng-controller="searchCtrl" style="background-color:#FFFFFF;margin-bottom:20px;">
-	<div class="row" style='margin-top:20px;'>
+	<div class="row" style='margin-top:20px;margin-bottom:20px;'>
 		<div class="col-sm-2" style='font-size:20px;'>
 			<div class="row">
 				<div class="col-xs-12">
@@ -70,6 +70,11 @@
 						</div>
 						<hr ng-hide="$last">
 					</div>
+				</div>
+			</div>
+			<div class="row" ng-hide="hide_more_results_button">
+				<div class="col-xs-12">
+	 				<button type="submit" class="btn btn-primary btn-block" ng-click="show_more_results()">More Results</button>
 				</div>
 			</div>
 		</div>
