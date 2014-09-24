@@ -82,7 +82,7 @@ angular.module("bookreadings")
 			        		"audio_filename" : InkBlobs[i].filename,
 			        		"audio_mimetype" : InkBlobs[i].mimetype,
 			        		"audio_size" : InkBlobs[i].size,
-			        		"audio_key" : InkBlobs[i].key
+			        		"audio_key" : encodeURIComponent(InkBlobs[i].key)
 			        	}
 
 			        	//var uploaded_file_ref = readingsRef.push();
