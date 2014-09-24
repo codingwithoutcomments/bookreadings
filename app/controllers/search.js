@@ -8,14 +8,17 @@ angular.module("bookreadings")
         $scope.searchObject.searchterm = $scope.searchterm;
         $scope.$emit('clearHeaderSearch', null);
         $scope.readingResults = [];
+        $scope.last_response_key = null;
 
 		var queue = new Firebase('https://bookreadings.firebaseio.com/search');
 	    function search(index, type, searchTerm, callback) {
+
 	       // post search requests to https://<INSTANCE>.firebaseio.com/search/request
-			var search_query = {"query": {
-		        "query_string": {
-		            "query": searchTerm,
-		        }
+			var search_query = {
+				"query": {
+			        "query_string": {
+			            "query": searchTerm,
+		        },
 		    }};
 
 		    var requestFirebase = new Firebase('https://bookreadings.firebaseio.com/search/request/')
@@ -28,33 +31,47 @@ angular.module("bookreadings")
 			    var responseRef = $firebase(responseFirebase);
 
 			    var responseObject = responseRef.$asObject();
-			    responseObject.$bindTo($scope, "data").then(function(){
-			          if( $scope.data !== null ) {     // wait for data
-			          	 var objectValue = $scope.data;
-			             callback(objectValue);
-			             $scope.data = {};
-			          }
+			    var unwatch = responseObject.$watch(function(data){
+		          if( data !== null ) {     // wait for data
+			    	 load_response_object(responseObject, callback, unwatch);
+		          }
+
 			    });
 
 	       }, function(err) {
 	       	   console.log(err);
 			});
 	    }
+
+	    function load_response_object(responseObject, callback, unwatch) {
+
+	    	responseObject.$loaded().then(function(){
+	    		if(responseObject.total != null) {
+	    			unwatch();
+	    			callback(responseObject);
+	    		}
+	    	});
+
+	    }
 	    // invoke a search for *foo*
 	    search('firebase', 'reading', $scope.searchterm, function(data) {
-	    	$scope.number_of_results = data.total;
-	        console.log('got back '+data.total+' hits');
-	        if( data.hits ) {
-	           data.hits.forEach(function(hit) {
 
-			        var readingFirebase = new Firebase(readingsURL + "/" + hit._id);
-			        var readingRef = $firebase(readingFirebase);
+	    	if(data.$id != $scope.last_response_key) {
+		    	$scope.last_response_key = data.$id;
+		    	$scope.number_of_results = data.total;
+		        console.log('got back '+data.total+' hits');
+		        if( data.hits ) {
+		           data.hits.forEach(function(hit) {
 
-			        var readingRecord = readingRef.$asObject();
-			        add_reading_to_page(readingRecord);
+				        var readingFirebase = new Firebase(readingsURL + "/" + hit._id);
+				        var readingRef = $firebase(readingFirebase);
 
-	           });
-	        }
+				        var readingRecord = readingRef.$asObject();
+				        add_reading_to_page(readingRecord);
+
+		           });
+		        }
+		     }
 	    });
 
 	    function add_reading_to_page(readingRecord) {
