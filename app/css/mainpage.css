@@ -10,7 +10,10 @@
 }
 
 .readingTitle a {
-	color:black;
+	color:white;
+	background-color: black;
+	font-size:30px;
+	padding:5px;
 }
 
 .readingTitle h1 {
