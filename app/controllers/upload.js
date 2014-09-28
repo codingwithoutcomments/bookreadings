@@ -1,4 +1,4 @@
-angular.module("bookreadings")
+var app = angular.module("bookreadings")
 	.constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
 	.constant("tagsURL", "https://bookreadings.firebaseio.com/tags")
 	.controller("uploadCtrl", function ($scope, $firebase, $http, $location, readingsURL, tagsURL, string_manipulation) {
@@ -45,13 +45,34 @@ angular.module("bookreadings")
 			this.reading["like_count"] = 0
 			this.reading["play_count"] = 0
 			this.reading["comment_count"] = 0
+			this.reading["$priority"] = Firebase.ServerValue.TIMESTAMP
+
 
 			var readingsRef = new Firebase(readingsURL);
-			var _readingRef = $firebase(readingsRef);
-			_readingRef.$push(reading).then(function(ref){
+			var _readingRef = $firebase(readingsRef).$asArray();
+			_readingRef.$add(reading).then(function(ref){
 
-	        	var path = "reading/" + ref.name() + "/" + reading.slug;
-	        	$location.path(path);
+				var singleReadingRef = new Firebase(readingsURL + "/" + ref.name());
+				var _singleReadingRef = $firebase(singleReadingRef).$asObject();
+				_singleReadingRef.$loaded().then(function() {
+
+					var readingsByDateCreatedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByDateCreated");
+					var _readingsByDateCreatedRef = $firebase(readingsByDateCreatedRef).$asArray();
+
+					var data = {}
+					data["reading_id"] = ref.name();
+					data["$priority"] = -_singleReadingRef.$priority;
+
+					this.reading_id = ref.name();
+
+					_readingsByDateCreatedRef.$add(data).then(function(ref) {
+
+			        	var path = "reading/" + this.reading_id + "/" + reading.slug;
+			        	$location.path(path);
+
+					});
+
+		        });
 
 			});
 		}

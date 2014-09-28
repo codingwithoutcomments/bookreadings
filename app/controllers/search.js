@@ -80,7 +80,7 @@ angular.module("bookreadings")
 
 	    function parse_results(data) {
 
-	    	if(data.$id != $scope.last_response_key && data.hits.length > 0) {
+	    	if(data.$id != $scope.last_response_key && data.hits && data.hits.length > 0) {
 
 		    	$scope.last_response_key = data.$id;
 		    	$scope.number_of_results = data.total;
@@ -104,6 +104,10 @@ angular.module("bookreadings")
 
 		           });
 		        }
+		     } else {
+
+		     	$scope.number_of_results = 0;
+
 		     }
 
 	    };

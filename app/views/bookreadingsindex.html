@@ -4,21 +4,16 @@
 	<div class="col-sm-2" style='font-size:20px;'>
 		<div class="row">
 			<div class="col-xs-12">
-				<b>Search</b>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12">
-				Everything 
+				<b>Most Recent</b>
 			</div>
 		</div>
 	</div>
 	<div class="col-xs-12 col-sm-10" style='margin-top:10px;' >
-		<div class="row" ng-repeat="reading in readings track by reading.$id" ng-style="{'background-image':'url({{reading.cover_image_url}}/convert?w=950&h=300&fit=crop&align=top)'}" style='margin-bottom:10px;padding-bottom:40px;height:300px;background-repeat:no-repeat;background-size:cover;'>
+		<div class="row" ng-repeat="reading in readings track by reading.$id" ng-if="reading.cover_image_url" ng-style="{'background-image':'url({{reading.cover_image_url}}/convert?w=950&h=300&fit=crop&align=top)'}" style='margin-bottom:10px;padding-bottom:40px;height:300px;background-repeat:no-repeat;background-size:cover;'>
 			<div class="col-xs-12">
 		        <div class="media" >
 				    <div class="ui360 ui360reading">
-				     	<a ng-href="{{S3ReadingsPath}}{{reading.audio_key}}" class="norewrite exclude button-exclude inline-exclude"></a> 
+				     	<a ng-href="{{S3ReadingsPath}}{{reading.audio_key}}" class="norewrite exclude button-exclude inline-exclude"></a>
 				    </div>
 					<div class='media-body' style="overflow:hidden;">
 					    <div>
@@ -28,13 +23,13 @@
 						    <div>
 								<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading_id)" ng-class="{ 'active' : reading_liked }">
 									<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : reading_liked }"></span> {{ like_text }}
-								</button>	
+								</button>
 								<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}" class="btn btn-default btn-xs">
 									<span class="glyphicon glyphicon-fire"></span> Buy Book
-								</a>	
+								</a>
 								<a ng-href="{{audio_link}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs">
 									<span class="glyphicon glyphicon-save"></span> Download
-								</a>	
+								</a>
 							</div>
 					    </div>
 			        </div>
