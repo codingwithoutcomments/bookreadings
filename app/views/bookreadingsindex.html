@@ -1,10 +1,15 @@
 <link href="css/mainpage.css" rel="stylesheet" />
 
 <div class="container" ng-controller="mainPageController" style="background-color:#FFFFFF;">
-	<div class="col-sm-2" style='font-size:20px;'>
+	<div class="col-sm-2" style='font-size:20px;margin-top:10px;'>
 		<div class="row">
 			<div class="col-xs-12">
-				<b>Most Recent</b>
+				<div class="arrow_box" >
+					<h1 style='font-size:20px;padding-left:5px;margin-bottom:5px;font-weight:200;'>Most Recent</span>
+				</div>
+				<div>
+					<h1 style='font-size:20px;padding-left:5px;margin:0px;font-weight:200;'>Most Popular</h1>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -21,8 +26,8 @@
 					    		<a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.title}}</a>
 						    </div>
 						    <div>
-								<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading_id)" ng-class="{ 'active' : reading_liked }">
-									<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : reading_liked }"></span> {{ like_text }}
+								<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading_id)" ng-class="{ 'active' : reading.reading_liked }">
+									<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : reading.reading_liked }"></span> <span ng-if="reading.like_text">{{ reading.like_text }}</span><span ng-if="!reading.like_text">Like</span>
 								</button>
 								<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}" class="btn btn-default btn-xs">
 									<span class="glyphicon glyphicon-fire"></span> Buy Book
@@ -38,3 +43,5 @@
 		</div>
 	</div>
 </div>
+
+<script src="controllers/mainpage.js"></script>

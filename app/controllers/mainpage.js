@@ -6,6 +6,7 @@ angular.module("bookreadings")
 
     	$scope.S3ReadingsPath = S3ReadingsPath;
         $scope.oldReadings = {};
+        $scope.populatedLikes = {};
 
     	var ref = new Firebase(readingsByDateCreatedURL);
     	var count = 0, pageSize = 5;
@@ -33,15 +34,56 @@ angular.module("bookreadings")
                         console.log(_readingObject);
                         $scope.readings.push(_readingObject);
                         $scope.oldReadings[_readingObject.$id] = true;
+
                     }
 
                 }
+
+                populateLikesOnPage();
 
             });
 
             console.log("load next page");
 
 		};
+
+        $scope.$watch('loginObj.user', function(newValue, oldValue) {
+
+        	populateLikesOnPage();
+
+        });
+
+        function populateLikesOnPage(){
+
+          if($scope.loginObj.user && $scope.readings){
+
+          	for(var i = 0; i < $scope.readings.length; i++) {
+
+          		var reading = $scope.readings[i];
+
+          		if(!(reading.$id in $scope.populatedLikes)) {
+
+		            reading.$loaded().then(function(data){
+
+		              if(reading.likes_by_user && $scope.loginObj.user.uid in reading.likes_by_user) {
+
+		                reading.reading_liked = true;
+		                reading.like_text = "Unlike"
+		                console.log("Like Exists");
+		              }
+
+		              $scope.populatedLikes[reading.$id] = true;
+
+		            }, function(errorObject) {
+
+		              console.log("Error retrieving like");
+
+		            });
+		        }
+	        };
+
+          }
+        }
 
 		$scope.loadNextPage();
 
