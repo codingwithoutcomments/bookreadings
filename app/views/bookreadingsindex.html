@@ -13,19 +13,22 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-xs-12 col-sm-10" style='margin-top:10px;' >
-		<div class="row" ng-repeat="reading in readings track by reading.$id" ng-if="reading.cover_image_url" ng-style="{'background-image':'url({{reading.cover_image_url}}/convert?w=950&h=300&fit=crop&align=top)'}" style='margin-bottom:10px;padding-bottom:40px;height:300px;background-repeat:no-repeat;background-size:cover;'>
-			<div class="col-xs-12">
-		        <div class="media" >
-				    <div class="ui360 ui360reading">
-				     	<a ng-href="{{S3ReadingsPath}}{{reading.audio_key}}" class="norewrite exclude button-exclude inline-exclude"></a>
-				    </div>
-					<div class='media-body' style="overflow:hidden;">
-					    <div>
+	<div class="col-xs-12 col-sm-10" style='margin-top:10px;'>
+		<div ng-repeat="reading in readings track by reading.$id">
+			<div class="row" ng-if="reading.cover_image_url" ng-style="{'background-image':'url({{reading.cover_image_url}}/convert?w=950&h=300&fit=crop&align=top)'}" style='height:300px;background-repeat:no-repeat;background-size:cover;margin-bottom:10px;'>
+				<div class="col-xs-12">
+			        <div class="media" >
+					    <div class="ui360 ui360reading">
+					     	<a ng-href="{{S3ReadingsPath}}{{reading.audio_key}}" class="norewrite exclude button-exclude inline-exclude"></a>
+					    </div>
+						<div class='media-body' style="overflow:hidden;">
+							<div class="userCreated">
+								<a>{{reading.created_by_name}}</a>
+							</div>
 					    	<div class="readingTitle">
 					    		<a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.title}}</a>
 						    </div>
-						    <div>
+						    <div style='margin-top:5px;'>
 								<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingLikesProperties[reading.$id].reading_liked }">
 									<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingLikesProperties[reading.$id].reading_liked }"></span> <span ng-if="readingLikesProperties[reading.$id].like_text">{{ readingLikesProperties[reading.$id].like_text }}</span><span ng-if="!readingLikesProperties[reading.$id].like_text">Like</span>
 								</button>
@@ -36,10 +39,15 @@
 									<span class="glyphicon glyphicon-save"></span> Download
 								</a>
 							</div>
-					    </div>
-			        </div>
-			    </div>
-		     </div>
+				        </div>
+				    </div>
+			     </div>
+			</div>
+			<div style='position:relative'>
+				<div style="position:absolute; bottom:15px;right:0; color:white;">
+					<span style="background-color:black;padding:3px;"><span class="glyphicon glyphicon-play"></span> {{ reading.play_count }} | <span class="glyphicon glyphicon-heart"></span> {{reading.like_count}} | <span class="glyphicon glyphicon-comment"></span> {{reading.comment_count}}</span>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

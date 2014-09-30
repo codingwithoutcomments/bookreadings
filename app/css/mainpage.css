@@ -4,16 +4,30 @@
 	width:75px;
 }
 
+.userCreated {
+
+	margin-top:17px;
+}
+
+.userCreated a {
+
+	color:#999;
+	background-color: black;
+	font-size:15px;
+	padding:3px;
+
+}
+
 .readingTitle {
 	overflow:hidden;
-	margin-top:17px;
+	margin-top:3px;
 }
 
 .readingTitle a {
 	color:white;
 	background-color: black;
 	font-size:30px;
-	padding:5px;
+	padding:3px;
 }
 
 .readingTitle h1 {
@@ -71,4 +85,12 @@
 	border-left-color: #f4ff5c;
 	border-width: 11px;
 	margin-top: -10px;
+}
+
+menu_font {
+	font-size:20px;
+	padding-left:5px;
+	margin-bottom:0px;
+	style:font-weight:200;
+
 }
