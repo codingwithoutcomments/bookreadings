@@ -67,8 +67,12 @@ angular.module("bookreadings")
 
 		              if(reading.likes_by_user && $scope.loginObj.user.uid in reading.likes_by_user) {
 
-		                reading.reading_liked = true;
-		                reading.like_text = "Unlike"
+		                if($scope.readingLikesProperties[reading.$id] == null) {
+		                  $scope.readingLikesProperties[reading.$id] = {};
+		                }
+
+		                $scope.readingLikesProperties[reading.$id].reading_liked = true;
+		                $scope.readingLikesProperties[reading.$id].like_text = "Unlike"
 		                console.log("Like Exists");
 		              }
 

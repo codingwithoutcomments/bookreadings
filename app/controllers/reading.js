@@ -14,10 +14,6 @@ angular.module("bookreadings")
         $scope.comments = []
         $scope.reading = null;
 
-        //dictionary for holding reading like information: like_text and reading_liked
-        //can't add directly to reading because it's synced to the server
-        $scope.readingLikesProperties = {};
-
         var readingFirebase = new Firebase(readingsURL + "/" + $scope.reading_id);
         var readingRef = $firebase(readingFirebase);
 
@@ -32,6 +28,7 @@ angular.module("bookreadings")
             var time = moment($scope.reading.created);
             var timeSince = time.fromNow();
             $scope.reading["time_since"] = timeSince;
+            
             if($scope.readingLikesProperties[$scope.reading.$id] == null) {
               $scope.readingLikesProperties[$scope.reading.$id] = {};
             }
@@ -80,7 +77,7 @@ angular.module("bookreadings")
 
           if($scope.loginObj.user){
 
-            var readingLikesByUserRef = getFirebaseReadingLikesByUserReference(readingsURL, $scope.reading_id, $scope.loginObj.user.uid);
+            var readingLikesByUserRef = $scope.getFirebaseReadingLikesByUserReference(readingsURL, $scope.reading_id, $scope.loginObj.user.uid);
             var userRecord = readingLikesByUserRef.$asObject();
             userRecord.$loaded().then(function(data){
 
@@ -117,41 +114,6 @@ angular.module("bookreadings")
             if($scope.reading.comment_count > 5) return true;
           }
           return false;
-        }
-
-        function getFirebaseReadingLikeRef(readingsURL, reading_id, like_name) {
-
-          var readingFirebase = new Firebase(readingsURL + "/" + reading_id + "/likes/" + like_name);
-          return $firebase(readingFirebase);
-
-        }
-
-        function getFirebaseReadingLikesByUserReference(readingsURL, reading_id, user_id) {
-
-          var readingLikesByUserFirebase = new Firebase(readingsURL + "/" + reading_id + "/likes_by_user/" + user_id);
-          return $firebase(readingLikesByUserFirebase);
-
-        }
-
-        function getFirebaseUserLikesReference(usersURL, user_id, like_name) {
-
-          var usersLikesFirebase = new Firebase(usersURL + "/" + user_id + "/likes/" + like_name);
-          return $firebase(usersLikesFirebase);
-
-        }
-
-        function getFirebaseLikesReference(like_name) {
-
-          var likesFirebase = new Firebase(likesURL + "/" + like_name);
-          return $firebase(likesFirebase);
-
-        }
-
-        function getFirebaseReadingLikeCounterReference(readingsURL, reading_id) {
-
-          var readingLikeLikeCounterFirebase = new Firebase(readingsURL + "/" + reading_id + "/like_count");
-          return $firebase(readingLikeLikeCounterFirebase);
-
         }
 
         function getFirebaseReadingCommentCounterReference(readingsURL, reading_id) {
@@ -270,117 +232,6 @@ angular.module("bookreadings")
 
           }
 
-        }
-
-        $scope.likeReading = function(reading_id) {
-
-          var likesFirebase = new Firebase(likesURL);
-          var likesRef = $firebase(likesFirebase);
-
-          var user = $scope.loginObj.user;
-
-          if(user) {
-
-            //make sure like doesn't already exist
-            //if already exists then remove like
-            var readingLikesByUserRef = getFirebaseReadingLikesByUserReference(readingsURL, reading_id, user.uid);
-
-            var userRecord = readingLikesByUserRef.$asObject();
-            userRecord.$loaded().then(function(data){
-
-              var like_name = data.like_name;
-              if(like_name != null) {
-
-                $scope.readingLikesProperties[reading_id].reading_liked = false;
-                $scope.readingLikesProperties[reading_id].like_text = "Like"
-
-                //remove like
-                var user = $scope.loginObj.user;
-                getFirebaseLikesReference(like_name).$remove();
-                getFirebaseUserLikesReference(usersURL, user.uid, like_name).$remove();
-                getFirebaseReadingLikesByUserReference(readingsURL, reading_id, user.uid).$remove();
-                getFirebaseReadingLikeRef(readingsURL, reading_id, like_name).$remove();
-
-                //decrement counter
-                var likeCount = getFirebaseReadingLikeCounterReference(readingsURL, reading_id);
-                likeCount.$transaction(function(currentCount) {
-                  if (!currentCount) return 1;   // Initial value for counter.
-                  if (currentCount < 0) return;  // Return undefined to abort transaction.
-                  return currentCount - 1;       // Increment the count by 1.
-                }).then(function(snapshot) {
-                  if (!snapshot) {
-                    // Handle aborted transaction.
-                  } else {
-                    // Do something.
-                  }
-                }, function(err) {
-                  // Handle the error condition.
-                });
-
-              } else {
-
-                $scope.readingLikesProperties[reading_id].reading_liked = true;
-                $scope.readingLikesProperties[reading_id].like_text = "Unlike"
-
-                //if doesn't exist
-                //add like to general like object
-                var like_object = {}
-                like_object["type"] = "reading";
-                like_object["created_by"] = $scope.loginObj.user.uid;
-                like_object["created"] = Firebase.ServerValue.TIMESTAMP;
-                like_object["object_id"] = reading_id;
-                like_object["value"] = 1;
-                likesRef.$push(like_object).then(function(ref){
-
-                  //add like to reading object
-                  //for the ability to list out all the likes for the reading
-                  var likeName = ref.name();
-                  var readingLikeRef = getFirebaseReadingLikeRef(readingsURL, reading_id, likeName);
-                  readingLikeRef.$set(true)
-
-                  //add like by user to reading object
-                  //so that we can easily look up if the user already liked the reading
-                  var readingLikesByUserRef = getFirebaseReadingLikesByUserReference(readingsURL, reading_id, $scope.loginObj.user.uid);
-                  var dict = {};
-                  dict["like_name"] = likeName;
-                  readingLikesByUserRef.$set(dict);
-
-                  //add likes to user
-                  //so that on user page, one can print out what they have liked
-                  var usersLikesRef = getFirebaseUserLikesReference(usersURL, $scope.loginObj.user.uid, likeName );
-                  usersLikesRef.$set(true)
-
-                  //increment counter
-                  var likeCount = getFirebaseReadingLikeCounterReference(readingsURL, reading_id);
-                  likeCount.$transaction(function(currentCount) {
-                    if (!currentCount) return 1;   // Initial value for counter.
-                    if (currentCount < 0) return;  // Return undefined to abort transaction.
-                    return currentCount + 1;       // Increment the count by 1.
-                  }).then(function(snapshot) {
-                    if (!snapshot) {
-                      // Handle aborted transaction.
-                    } else {
-                      // Do something.
-                    }
-                  }, function(err) {
-                    // Handle the error condition.
-                  });
-
-                }, function (errorObject) {
-                  console.log('Adding like failed: ' + errorObject.code);
-                });
-
-              }
-
-            }, function(errorObject) {
-
-              console.log("Error retrieving like");
-
-            });
-
-            //imcrement total amount of likes in the denomalized counter
-
-          }
         }
 
     });
