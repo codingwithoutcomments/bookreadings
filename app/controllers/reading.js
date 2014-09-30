@@ -10,10 +10,13 @@ angular.module("bookreadings")
         threeSixtyPlayer.init();
 
         $scope.reading_id = $routeParams.id;
-        $scope.like_text = "Like";
         $scope.reading_played = false;
         $scope.comments = []
         $scope.reading = null;
+
+        //dictionary for holding reading like information: like_text and reading_liked
+        //can't add directly to reading because it's synced to the server
+        $scope.readingLikesProperties = {};
 
         var readingFirebase = new Firebase(readingsURL + "/" + $scope.reading_id);
         var readingRef = $firebase(readingFirebase);
@@ -29,6 +32,10 @@ angular.module("bookreadings")
             var time = moment($scope.reading.created);
             var timeSince = time.fromNow();
             $scope.reading["time_since"] = timeSince;
+            if($scope.readingLikesProperties[$scope.reading.$id] == null) {
+              $scope.readingLikesProperties[$scope.reading.$id] = {};
+            }
+            $scope.readingLikesProperties[$scope.reading.$id].like_text = "Like";
 
             $scope.$watch('reading', function(newValue, oldValue){
 
@@ -79,8 +86,11 @@ angular.module("bookreadings")
 
               if(data.like_name != null) {
 
-                $scope.reading_liked = true;
-                $scope.like_text = "Unlike"
+                if($scope.readingLikesProperties[$scope.reading_id] == null) {
+                  $scope.readingLikesProperties[$scope.reading_id] = {};
+                }
+                $scope.readingLikesProperties[$scope.reading_id].reading_liked = true;
+                $scope.readingLikesProperties[$scope.reading_id].like_text = "Unlike"
                 console.log("Like Exists");
               }
 
@@ -281,8 +291,8 @@ angular.module("bookreadings")
               var like_name = data.like_name;
               if(like_name != null) {
 
-                $scope.reading_liked = false;
-                $scope.like_text = "Like"
+                $scope.readingLikesProperties[reading_id].reading_liked = false;
+                $scope.readingLikesProperties[reading_id].like_text = "Like"
 
                 //remove like
                 var user = $scope.loginObj.user;
@@ -309,8 +319,8 @@ angular.module("bookreadings")
 
               } else {
 
-                $scope.reading_liked = true;
-                $scope.like_text = "Unlike"
+                $scope.readingLikesProperties[reading_id].reading_liked = true;
+                $scope.readingLikesProperties[reading_id].like_text = "Unlike"
 
                 //if doesn't exist
                 //add like to general like object

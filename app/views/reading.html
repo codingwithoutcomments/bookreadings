@@ -21,8 +21,8 @@
 	</div>
 	<div class="row" style="margin-top:20px;">
 		<div class="col-xs-6">
-			<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading_id)" ng-class="{ 'active' : reading_liked }">
-				<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : reading_liked }"></span> {{ like_text }}
+			<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading_id)" ng-class="{ 'active' : readingLikesProperties[reading.$id].reading_liked }">
+				<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingLikesProperties[reading.$id].reading_liked }"></span> {{readingLikesProperties[reading.$id].like_text}}
 			</button>	
 			<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}" class="btn btn-default btn-xs">
 				<span class="glyphicon glyphicon-fire"></span> Buy Book
