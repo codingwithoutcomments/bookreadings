@@ -263,7 +263,7 @@ angular.module("bookreadings")
           }
         }
 
-        $scope.readingPlayed = function(reading_id) {
+        $scope.readingPlayed = function(reading_id, readingsByMostPlayedId) {
 
 	        if($scope.readingProperties[reading_id] == null) {
 	          $scope.readingProperties[reading_id] = {};
@@ -280,11 +280,24 @@ angular.module("bookreadings")
               if (!currentCount) return 1;   // Initial value for counter.
               if (currentCount < 0) return;  // Return undefined to abort transaction.
               return currentCount + 1;       // Increment the count by 1.
-            }).then(function(snapshot) {
+            }, false).then(function(snapshot) {
               if (!snapshot) {
                 // Handle aborted transaction.
               } else {
-                // Do something.
+
+                //increment priority of readings by most played
+				var readingsByMostPlayedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByMostPlayed/" + readingsByMostPlayedId + "/");
+				_readingByMostPlayedRef = $firebase(readingsByMostPlayedRef).$asObject();
+				_readingByMostPlayedRef.$loaded().then(function(){
+
+					console.log(_readingByMostPlayedRef);
+
+					_readingByMostPlayedRef["$priority"] = -snapshot.val();
+					_readingByMostPlayedRef.$save();
+
+				});
+
+
               }
             }, function(err) {
               // Handle the error condition.

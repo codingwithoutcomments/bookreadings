@@ -67,8 +67,24 @@ var app = angular.module("bookreadings")
 
 					_readingsByDateCreatedRef.$add(data).then(function(ref) {
 
-			        	var path = "reading/" + this.reading_id + "/" + reading.slug;
-			        	$location.path(path);
+						this.readingsByDateCreatedId = ref.name();
+
+						var readingsByMostPlayedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByMostPlayed");
+						var _readingsByMostPlayedRef = $firebase(readingsByMostPlayedRef).$asArray();
+
+						var data = {}
+						data["reading_id"] = this.reading_id;
+						data["$priority"] = 0;
+
+						_readingsByMostPlayedRef.$add(data).then(function(ref) {
+
+							_singleReadingRef.readingsByDateCreatedId = readingsByDateCreatedId;
+							_singleReadingRef.readingsByMostPlayedId = ref.name();
+							_singleReadingRef.$save();
+
+				        	var path = "reading/" + this.reading_id + "/" + reading.slug;
+				        	$location.path(path);
+				        });
 
 					});
 

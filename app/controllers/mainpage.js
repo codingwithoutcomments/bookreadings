@@ -1,14 +1,15 @@
 angular.module("bookreadings")
     .constant("readingsByDateCreatedURL", "https://bookreadings.firebaseio.com/readingsByDateCreated")
+    .constant("readingsByMostPlayedURL", "https://bookreadings.firebaseio.com/readingsByMostPlayed")
     .constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
     .constant("S3ReadingsPath", "https://s3-us-west-2.amazonaws.com/bookreadings/")
-    .controller("mainPageController", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsByDateCreatedURL, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath) {
+    .controller("mainPageController", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsByDateCreatedURL, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, readingsByMostPlayedURL, S3ReadingsPath) {
 
     	$scope.S3ReadingsPath = S3ReadingsPath;
         $scope.oldReadings = {};
         $scope.populatedLikes = {};
 
-    	var ref = new Firebase(readingsByDateCreatedURL);
+    	var ref = new Firebase(readingsByMostPlayedURL);
     	var count = 0, pageSize = 5;
 
         threeSixtyPlayer.init();

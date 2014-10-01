@@ -18,7 +18,7 @@
 			<div class="row" ng-if="reading.cover_image_url" ng-style="{'background-image':'url({{reading.cover_image_url}}/convert?w=950&h=300&fit=crop&align=top)'}" style='height:300px;background-repeat:no-repeat;background-size:cover;margin-bottom:10px;'>
 				<div class="col-xs-12" style='padding-left:0px;'>
 			        <div class="media" >
-					    <div class="ui360 ui360reading" ng-click="readingPlayed(reading.$id)">
+					    <div class="ui360 ui360reading" ng-click="readingPlayed(reading.$id, reading.readingsByMostPlayedId)">
 					     	<a ng-href="{{S3ReadingsPath}}{{reading.audio_key}}?s={{randomAudioPlayerValue}}" class="norewrite exclude button-exclude inline-exclude"></a>
 					    </div>
 						<div class='media-body' style="overflow:hidden;">
@@ -76,8 +76,8 @@
 				</div>
 			</div>
 			<div style='position:relative'>
-				<div style="position:absolute; bottom:15px;left:0;color:white;background-color:black;">
-					<span style="background-color:black;padding:3px;"><span class="glyphicon glyphicon-play"></span>  {{ reading.play_count }}  | <span class="glyphicon glyphicon-heart"></span>  {{reading.like_count}} | <span class="glyphicon glyphicon-comment"></span>  {{reading.comment_count}}</span>
+				<div style="position:absolute; bottom:17px;left:0;color:white;background-color:black;font-size:12px;">
+					<span style="background-color:black;padding:3px;"><span class="glyphicon glyphicon-play"></span> &nbsp;{{ reading.play_count }}  | &nbsp;<span class="glyphicon glyphicon-heart"></span> &nbsp;{{reading.like_count}} | &nbsp;<span class="glyphicon glyphicon-comment"></span> &nbsp;{{reading.comment_count}}</span>
 				</div>
 			</div>
 		</div>
