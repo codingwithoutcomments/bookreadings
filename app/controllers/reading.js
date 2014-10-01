@@ -28,7 +28,7 @@ angular.module("bookreadings")
             var time = moment($scope.reading.created);
             var timeSince = time.fromNow();
             $scope.reading["time_since"] = timeSince;
-            
+
             if($scope.readingProperties[$scope.reading.$id] == null) {
               $scope.readingProperties[$scope.reading.$id] = {};
             }
@@ -151,33 +151,6 @@ angular.module("bookreadings")
 
         }
 
-        $scope.readingPlayed = function(reading_id) {
-
-          if(!$scope.reading_played) {
-
-            $scope.reading_played = true;
-
-            var readingPlayCounterFirebase = new Firebase(readingsURL + "/" + reading_id + "/play_count");
-            var play_count = $firebase(readingPlayCounterFirebase);
-
-            play_count.$transaction(function(currentCount) {
-              if (!currentCount) return 1;   // Initial value for counter.
-              if (currentCount < 0) return;  // Return undefined to abort transaction.
-              return currentCount + 1;       // Increment the count by 1.
-            }).then(function(snapshot) {
-              if (!snapshot) {
-                // Handle aborted transaction.
-              } else {
-                // Do something.
-              }
-            }, function(err) {
-              // Handle the error condition.
-            });
-
-          }
-
-        }
-
         $scope.commentOnReading = function(comment, reading_id) {
 
           var commentsFirebase = new Firebase(commentsURL);
@@ -233,5 +206,27 @@ angular.module("bookreadings")
           }
 
         }
+        
+        var hasRegistered = false;
+        $scope.$watch(function() {
+          if (hasRegistered) return;
+          hasRegistered = true
+          // Note that we're using a private Angular method here (for now)
+          $scope.$$postDigest(function() {
+            hasRegistered = false;
+
+                soundManager.setup({
+                  url: 'sfw/',
+                  onready: function() {
+                    threeSixtyPlayer.init();
+                  },
+                  ontimeout: function() {
+                    // Hrmm, SM2 could not start. Missing SWF? Flash blocked? Show an error, etc.?
+                  }
+                });
+
+          });
+        });
+
 
     });

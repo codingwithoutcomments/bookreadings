@@ -12,7 +12,7 @@
 	<div class="row">
 		<div class="col-xs-12" style="overflow:hidden;padding-left:5px;">
 		    <div class="ui360 sm2_playing ui360reading" ng-click="readingPlayed(reading_id)">
-		     	<a ng-href="{{audio_link}}" class="norewrite exclude button-exclude inline-exclude"></a>
+		     	<a ng-href="{{audio_link}}?s={{randomAudioPlayerValue}}" class="norewrite exclude button-exclude inline-exclude"></a>
 		    </div>
 		    <div class="readingTitle">
 		    	<h1 style="">{{reading.title}}</h1>

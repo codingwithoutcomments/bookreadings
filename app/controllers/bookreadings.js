@@ -10,6 +10,7 @@ angular.module("bookreadings")
         //dictionary for holding reading like information: like_text and reading_liked
         //can't add directly to reading because it's synced to the server
         $scope.readingProperties = {};
+        $scope.randomAudioPlayerValue = 0;
 
 		var firebaseRef = new Firebase(firebaseURL);
 	    $scope.loginObj = $firebaseSimpleLogin(firebaseRef);
@@ -261,5 +262,51 @@ angular.module("bookreadings")
 
           }
         }
+
+        $scope.readingPlayed = function(reading_id) {
+
+	        if($scope.readingProperties[reading_id] == null) {
+	          $scope.readingProperties[reading_id] = {};
+	        }
+
+          if(!($scope.readingProperties[reading_id].reading_played == true)) {
+
+            $scope.readingProperties[reading_id].reading_played = true;
+
+            var readingPlayCounterFirebase = new Firebase(readingsURL + "/" + reading_id + "/play_count");
+            var play_count = $firebase(readingPlayCounterFirebase);
+
+            play_count.$transaction(function(currentCount) {
+              if (!currentCount) return 1;   // Initial value for counter.
+              if (currentCount < 0) return;  // Return undefined to abort transaction.
+              return currentCount + 1;       // Increment the count by 1.
+            }).then(function(snapshot) {
+              if (!snapshot) {
+                // Handle aborted transaction.
+              } else {
+                // Do something.
+              }
+            }, function(err) {
+              // Handle the error condition.
+            });
+
+          }
+
+        }
+
+        function makeid()
+		{
+		    var text = "";
+		    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+		    for( var i=0; i < 5; i++ )
+		        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+		    return text;
+		}
+
+        $scope.$on('$routeChangeSuccess', function(next, current) { 
+        	$scope.randomAudioPlayerValue = makeid();
+		 });
 
 	});
