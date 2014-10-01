@@ -21,6 +21,14 @@
 .readingTitle {
 	overflow:hidden;
 	margin-top:3px;
+
+	max-height:165px;
+	text-overflow: ellipsis; 
+
+	  -webkit-line-clamp: 4;
+	  -webkit-box-orient: vertical;
+	  display: -webkit-box;
+	  color:white;
 }
 
 .readingTitle a {

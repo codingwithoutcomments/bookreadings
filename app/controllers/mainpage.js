@@ -35,6 +35,9 @@ angular.module("bookreadings")
                         $scope.readings.push(_readingObject);
                         $scope.oldReadings[_readingObject.$id] = true;
 
+                        calculateTheCreatedTimeForReading(_readingObject);
+
+
                     }
 
                 }
@@ -46,6 +49,23 @@ angular.module("bookreadings")
             console.log("load next page");
 
 		};
+
+		function calculateTheCreatedTimeForReading(reading) {
+
+            //calculte the created time
+            reading.$loaded().then(function() {
+
+                if($scope.readingLikesProperties[reading.$id] == null) {
+                  $scope.readingLikesProperties[reading.$id] = {};
+                }
+
+	            var time = moment(reading.created);
+	            var timeSince = time.fromNow();
+	            $scope.readingLikesProperties[reading.$id].timesince = timeSince;
+
+            });
+
+		}
 
         $scope.$watch('loginObj.user', function(newValue, oldValue) {
 
