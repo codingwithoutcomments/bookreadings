@@ -25,13 +25,13 @@
 							<div class="row">
 								<div class="col-xs-9" style='padding-right:0px;'>
 									<div class="userCreated">
-										<a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.created_by_name}} <span ng-if="readingLikesProperties[reading.$id].timesince">- {{readingLikesProperties[reading.$id].timesince}}</span></a>
+										<a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.created_by_name}} <span ng-if="readingProperties[reading.$id].timesince">- {{readingProperties[reading.$id].timesince}}</span></a>
 									</div>
 								</div>
 								<div class="col-xs-3" style='text-align:right;'>
 									<div style='margin-top:17px;'>
-										<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingLikesProperties[reading.$id].reading_liked }">
-											<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingLikesProperties[reading.$id].reading_liked }"></span> 
+										<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
+											<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }"></span> 
 										</button>
 										<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}" class="btn btn-default btn-xs">
 											<span class="glyphicon glyphicon-fire"></span> 
@@ -56,8 +56,8 @@
 							</div> -->
 						    <!--
 						    <div style='margin-top:7px;'>
-								<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingLikesProperties[reading.$id].reading_liked }">
-									<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingLikesProperties[reading.$id].reading_liked }"></span> <span ng-if="readingLikesProperties[reading.$id].like_text">{{ readingLikesProperties[reading.$id].like_text }}</span><span ng-if="!readingLikesProperties[reading.$id].like_text">Like</span>
+								<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
+									<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }"></span> <span ng-if="readingProperties[reading.$id].like_text">{{ readingProperties[reading.$id].like_text }}</span><span ng-if="!readingProperties[reading.$id].like_text">Like</span>
 								</button>
 								<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}" class="btn btn-default btn-xs">
 									<span class="glyphicon glyphicon-fire"></span> Buy Book

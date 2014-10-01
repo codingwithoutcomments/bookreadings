@@ -55,13 +55,13 @@ angular.module("bookreadings")
             //calculte the created time
             reading.$loaded().then(function() {
 
-                if($scope.readingLikesProperties[reading.$id] == null) {
-                  $scope.readingLikesProperties[reading.$id] = {};
+                if($scope.readingProperties[reading.$id] == null) {
+                  $scope.readingProperties[reading.$id] = {};
                 }
 
 	            var time = moment(reading.created);
 	            var timeSince = time.fromNow();
-	            $scope.readingLikesProperties[reading.$id].timesince = timeSince;
+	            $scope.readingProperties[reading.$id].timesince = timeSince;
 
             });
 
@@ -87,12 +87,12 @@ angular.module("bookreadings")
 
 		              if(reading.likes_by_user && $scope.loginObj.user.uid in reading.likes_by_user) {
 
-		                if($scope.readingLikesProperties[reading.$id] == null) {
-		                  $scope.readingLikesProperties[reading.$id] = {};
+		                if($scope.readingProperties[reading.$id] == null) {
+		                  $scope.readingProperties[reading.$id] = {};
 		                }
 
-		                $scope.readingLikesProperties[reading.$id].reading_liked = true;
-		                $scope.readingLikesProperties[reading.$id].like_text = "Unlike"
+		                $scope.readingProperties[reading.$id].reading_liked = true;
+		                $scope.readingProperties[reading.$id].like_text = "Unlike"
 		                console.log("Like Exists");
 		              }
 

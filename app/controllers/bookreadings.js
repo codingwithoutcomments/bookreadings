@@ -9,7 +9,7 @@ angular.module("bookreadings")
 
         //dictionary for holding reading like information: like_text and reading_liked
         //can't add directly to reading because it's synced to the server
-        $scope.readingLikesProperties = {};
+        $scope.readingProperties = {};
 
 		var firebaseRef = new Firebase(firebaseURL);
 	    $scope.loginObj = $firebaseSimpleLogin(firebaseRef);
@@ -154,8 +154,8 @@ angular.module("bookreadings")
 
           var user = $scope.loginObj.user;
 
-	        if($scope.readingLikesProperties[reading_id] == null) {
-	          $scope.readingLikesProperties[reading_id] = {};
+	        if($scope.readingProperties[reading_id] == null) {
+	          $scope.readingProperties[reading_id] = {};
 	        }
 
           if(user) {
@@ -170,8 +170,8 @@ angular.module("bookreadings")
               var like_name = data.like_name;
               if(like_name != null) {
 
-                $scope.readingLikesProperties[reading_id].reading_liked = false;
-                $scope.readingLikesProperties[reading_id].like_text = "Like"
+                $scope.readingProperties[reading_id].reading_liked = false;
+                $scope.readingProperties[reading_id].like_text = "Like"
 
                 //remove like
                 var user = $scope.loginObj.user;
@@ -198,8 +198,8 @@ angular.module("bookreadings")
 
               } else {
 
-                $scope.readingLikesProperties[reading_id].reading_liked = true;
-                $scope.readingLikesProperties[reading_id].like_text = "Unlike"
+                $scope.readingProperties[reading_id].reading_liked = true;
+                $scope.readingProperties[reading_id].like_text = "Unlike"
 
                 //if doesn't exist
                 //add like to general like object
