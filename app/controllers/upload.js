@@ -78,12 +78,26 @@ var app = angular.module("bookreadings")
 
 						_readingsByMostPlayedRef.$add(data).then(function(ref) {
 
-							_singleReadingRef.readingsByDateCreatedId = readingsByDateCreatedId;
-							_singleReadingRef.readingsByMostPlayedId = ref.name();
-							_singleReadingRef.$save();
+							this.readingByMostPlayedId = ref.name();
 
-				        	var path = "reading/" + this.reading_id + "/" + reading.slug;
-				        	$location.path(path);
+							var readingsByFeaturedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByFeatured");
+							var _readingsByFeaturedRef = $firebase(readingsByFeaturedRef).$asArray();
+
+							var data = {}
+							data["reading_id"] = this.reading_id;
+							data["$priority"] = 0;
+
+							_readingsByFeaturedRef.$add(data).then(function(ref) {
+
+								_singleReadingRef.readingsByDateCreatedId = readingsByDateCreatedId;
+								_singleReadingRef.readingsByMostPlayedId = readingByMostPlayedId;
+								_singleReadingRef.readingsByFeaturedId = ref.name();
+								_singleReadingRef.$save();
+
+					        	var path = "reading/" + this.reading_id + "/" + reading.slug;
+					        	$location.path(path);
+
+					        });
 				        });
 
 					});

@@ -206,7 +206,7 @@ angular.module("bookreadings")
           }
 
         }
-        
+
         var hasRegistered = false;
         $scope.$watch(function() {
           if (hasRegistered) return;
