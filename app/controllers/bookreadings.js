@@ -277,6 +277,7 @@ angular.module("bookreadings")
             var play_count = $firebase(readingPlayCounterFirebase);
 
             play_count.$transaction(function(currentCount) {
+              
               if (!currentCount) return 1;   // Initial value for counter.
               if (currentCount < 0) return;  // Return undefined to abort transaction.
               return currentCount + 1;       // Increment the count by 1.
@@ -286,16 +287,16 @@ angular.module("bookreadings")
               } else {
 
                 //increment priority of readings by most played
-				var readingsByMostPlayedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByMostPlayed/" + readingsByMostPlayedId + "/");
-				_readingByMostPlayedRef = $firebase(readingsByMostPlayedRef).$asObject();
-				_readingByMostPlayedRef.$loaded().then(function(){
+        				var readingsByMostPlayedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByMostPlayed/" + readingsByMostPlayedId + "/");
+        				_readingByMostPlayedRef = $firebase(readingsByMostPlayedRef).$asObject();
+        				_readingByMostPlayedRef.$loaded().then(function(){
 
-					console.log(_readingByMostPlayedRef);
+        					console.log(_readingByMostPlayedRef);
 
-					_readingByMostPlayedRef["$priority"] = -snapshot.val();
-					_readingByMostPlayedRef.$save();
+        					_readingByMostPlayedRef["$priority"] = -snapshot.val();
+        					_readingByMostPlayedRef.$save();
 
-				});
+        				});
 
 
               }

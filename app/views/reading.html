@@ -30,6 +30,15 @@
 			<a ng-href="{{audio_link}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs">
 				<span class="glyphicon glyphicon-save"></span> Download
 			</a>
+			<div class="btn-group" ng-show="user.admin || readingProperties[reading.$id].reading_created_by_logged_in_user">
+			  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+			    <span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu" role="menu">
+			    <li><a href="#" ng-show="user.admin"><span class="glyphicon glyphicon-star"></span> Feature</a></li>
+			    <li><a href="#" ng-show="readingProperties[reading.$id].reading_created_by_logged_in_user"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
+			  </ul>
+			</div>
 		</div>
 		<div class="col-xs-6 reading-stats">
 			<span><span class="glyphicon glyphicon-play"></span> {{ reading.play_count }} | <span class="glyphicon glyphicon-heart"></span> {{reading.like_count}} | <span class="glyphicon glyphicon-comment"></span> {{reading.comment_count}}</span>

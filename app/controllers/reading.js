@@ -91,6 +91,17 @@ angular.module("bookreadings")
                 console.log("Like Exists");
               }
 
+              //check to see if user created the reading
+              if($scope.reading) {
+
+                if($scope.reading.created_by_id == $scope.loginObj.user.id) {
+
+                  $scope.readingProperties[$scope.reading_id].reading_created_by_logged_in_user = true;
+                }
+
+              }
+
+
             }, function(errorObject) {
 
               console.log("Error retrieving like");
