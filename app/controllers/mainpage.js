@@ -32,16 +32,16 @@ angular.module("bookreadings")
     	$scope.loadNextPage = function () {
 
 			count += pageSize;
-			var readingsByCreated = $firebase(ref.startAt().limit( count )).$asArray();
-            readingsByCreated.$loaded(function(){
+			var readings = $firebase(ref.startAt().limit( count )).$asArray();
+            readings.$loaded(function(){
 
                 if(!$scope.readings) {
                     $scope.readings = [];
                 }
 
-                for(var i = 0; i < readingsByCreated.length; i++) {
+                for(var i = 0; i < readings.length; i++) {
 
-                    var readingRef = new Firebase(readingsURL + "/" + readingsByCreated[i].reading_id);
+                    var readingRef = new Firebase(readingsURL + "/" + readings[i].reading_id);
                     var _readingObject = $firebase(readingRef).$asObject();
 
                     if(!(_readingObject.$id in $scope.oldReadings)) {
@@ -51,7 +51,7 @@ angular.module("bookreadings")
                         $scope.readings.push(_readingObject);
                         $scope.oldReadings[_readingObject.$id] = true;
 
-                        calculateTheCreatedTimeForReading(_readingObject);
+                        calculateTheCreatedTimeForReading(_readingObject, readings[i], $scope.filterBy);
 
 
                     }
@@ -66,7 +66,7 @@ angular.module("bookreadings")
 
 		};
 
-		function calculateTheCreatedTimeForReading(reading) {
+		function calculateTheCreatedTimeForReading(reading, readingsByRef, filter) {
 
             //calculte the created time
             reading.$loaded().then(function() {
@@ -75,7 +75,16 @@ angular.module("bookreadings")
                   $scope.readingProperties[reading.$id] = {};
                 }
 
-	            var time = moment(reading.created);
+                var time;
+                if(filter == "featured") {
+
+                  time = moment(Math.abs(readingsByRef.$priority));
+
+                } else {
+
+	             time = moment(reading.created);
+                 
+                }
 	            var timeSince = time.fromNow();
 	            $scope.readingProperties[reading.$id].timesince = timeSince;
 

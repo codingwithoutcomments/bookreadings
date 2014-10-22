@@ -24,7 +24,7 @@
 			<div class="row" ng-if="reading.cover_image_url" ng-style="{'background-image':'url({{reading.cover_image_url}}/convert?w=950&h=300&fit=crop&align=top)'}" style='height:300px;background-repeat:no-repeat;background-size:cover;margin-bottom:10px;'>
 				<div class="col-xs-12" style='padding-left:0px;'>
 			        <div class="media" >
-					    <div class="ui360 ui360reading" ng-click="readingPlayed(reading.$id, rreading.readingsByMostPlayedId)">
+					    <div class="ui360 ui360reading" ng-click="readingPlayed(reading.$id, reading.readingsByMostPlayedId)">
 					     	<a ng-href="{{S3ReadingsPath}}{{reading.audio_key}}?s={{randomAudioPlayerValue}}" class="norewrite exclude button-exclude inline-exclude"></a>
 					    </div>
 						<div class='media-body' style="overflow:hidden;">

@@ -15,9 +15,9 @@ angular.module("bookreadings")
         $scope.reading = null;
 
         var readingFirebase = new Firebase(readingsURL + "/" + $scope.reading_id);
-        var readingRef = $firebase(readingFirebase);
+        $scope.readingRef = $firebase(readingFirebase);
 
-        var readingRecord = readingRef.$asObject();
+        var readingRecord = $scope.readingRef.$asObject();
         readingRecord.$loaded().then(function() {
 
             $scope.reading = readingRecord
@@ -94,7 +94,7 @@ angular.module("bookreadings")
               //check to see if user created the reading
               if($scope.reading) {
 
-                if($scope.reading.created_by_id == $scope.loginObj.user.id) {
+                if(readingCreatedByLoggedInUser()) {
 
                   $scope.readingProperties[$scope.reading_id].reading_created_by_logged_in_user = true;
                 }
@@ -111,6 +111,90 @@ angular.module("bookreadings")
 
         });
 
+        function readingCreatedByLoggedInUser(){
+
+            if($scope.reading.created_by_id == $scope.loginObj.user.id) {
+
+              return true;
+            }
+
+            return false;
+
+        }
+
+        $scope.delete = function(){
+
+          swal({   
+            title: "Are you sure?",   
+            text: "Your will not be able to recover this reading!",  
+            type: "warning",   
+            showCancelButton: true,   
+            confirmButtonColor: "#DD6B55",   
+            confirmButtonText: "Yes, delete it!",   
+            cancelButtonText: "No, cancel! ",   
+            closeOnConfirm: true,   
+            closeOnCancel: false }, 
+            function(isConfirm){   
+
+              if (!isConfirm) {     
+                swal("Cancelled", "Your reading is safe :)", "error");   
+
+              } else {
+
+                //delete all the instances of the reading 
+
+                var readingsByDateCreatedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByDateCreated/" + $scope.reading.readingsByDateCreatedId);
+                $firebase(readingsByDateCreatedRef).$remove();
+
+                var readingsByMostPlayedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByMostPlayed/" + $scope.reading.readingsByMostPlayedId);
+                $firebase(readingsByMostPlayedRef).$remove();
+
+                getFirebaseReadingsByFeaturedReference($scope.reading.readingsByFeaturedId).$remove();
+
+                $scope.readingRef.$remove();
+
+                //send the user to the home page
+                var path = "/";
+                $location.path(path);
+
+              }
+
+            });
+
+        };
+
+        $scope.feature = function(){
+
+          if(readingCreatedByLoggedInUser()) {
+
+            //set the priority to the current timestamp
+            //then reverse that timestamp
+            var readingsByFeatured = getFirebaseReadingsByFeaturedReference($scope.reading.readingsByFeaturedId).$asObject();
+            readingsByFeatured.$loaded().then(function() {
+
+               readingsByFeatured["$priority"] = Firebase.ServerValue.TIMESTAMP;
+               readingsByFeatured.$save().then(function(ref){
+
+                var priorityFeatured = getFirebaseReadingsByFeaturedReference(ref.name()).$asObject();
+                priorityFeatured.$loaded().then(function() {
+
+                  priorityFeatured["$priority"] = -priorityFeatured.$priority;
+                  priorityFeatured.$save();
+
+                  //display featured message
+                  swal("Featured", "This reading has been featured", "success");   
+
+
+               });
+
+            });
+
+          });
+
+        }
+
+      }
+
         $scope.showTopCommentBox = function(){
 
           if($scope.loginObj.user && $scope.reading){
@@ -125,6 +209,13 @@ angular.module("bookreadings")
             if($scope.reading.comment_count > 5) return true;
           }
           return false;
+        }
+
+        function getFirebaseReadingsByFeaturedReference(id) {
+
+            var readingsByFeaturedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByFeatured/" + id);
+            return $firebase(readingsByFeaturedRef);
+
         }
 
         function getFirebaseReadingCommentCounterReference(readingsURL, reading_id) {
