@@ -3,8 +3,6 @@ var app = angular.module("bookreadings")
 	.constant("tagsURL", "https://bookreadings.firebaseio.com/tags")
 	.controller("uploadCtrl", function ($scope, $firebase, $http, $location, readingsURL, tagsURL, string_manipulation) {
 
-		$("#tags").tagsinput('items');
-
 		filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
 		$scope.reading_cover_photo = "http://placehold.it/950/950"
@@ -31,6 +29,7 @@ var app = angular.module("bookreadings")
 			if(tag_string.length > 0) {
 				tag_array = tag_string.split(',');
 			}
+			//TODO format tags correctly
 			this.reading["tags"] = tag_array
 
 			this.reading["created"] = Firebase.ServerValue.TIMESTAMP;

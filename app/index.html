@@ -4,7 +4,7 @@
     <title>Bookreadings</title>
     <script src="angular.min.js"></script>
     <script src="jquery-2.1.1.js"></script>
-    <script src="bootstrap-tagsinput.js"></script>
+    <script type="text/javascript" src="script/ng-tags-input.min.js"></script>
     <script src="https://cdn.firebase.com/js/client/1.0.17/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/angularfire/0.8.2/angularfire.js"></script>
     <script src='https://cdn.firebase.com/js/simple-login/1.6.2/firebase-simple-login.js'></script>
@@ -27,19 +27,28 @@
     <link href="bookreadings.css" rel="stylesheet" />
     <link href="bootstrap-theme.css" rel="stylesheet" />
     <link href="bootstrap-tagsinput.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/ng-tags-input.min.css"> 
+    <link rel="stylesheet" href="css/ng-tags-input.bootstrap.min.css"> 
     <link rel="stylesheet" type="text/css" href="css/sweet-alert.css">
 
     <!-- soundManager.useFlashBlock: related CSS -->
     <link rel="stylesheet" type="text/css" href="css/flashblock.css" />
 
     <script>
-        angular.module("bookreadings", ["firebase", "ng", "ngRoute", "string_manipulation"])
+        angular.module("bookreadings", ["firebase", "ng", "ngRoute", "string_manipulation", "ngTagsInput"])
         .config(function($routeProvider) {
 
             $routeProvider.when("/upload/", {
                 templateUrl: "/views/upload.html",
                 auth: function (user) {
                   return user
+                }
+            });
+
+            $routeProvider.when("/reading/:id/:slug/edit/", {
+                templateUrl: "/views/edit.html",
+                auth: function (user) {
+                  return true
                 }
             });
 
@@ -101,6 +110,7 @@
     <script src="controllers/search.js"></script>
     <script src="controllers/reading.js"></script>
     <script src="controllers/mainpage.js"></script>
+    <script src="controllers/edit.js"></script>
     <script src="components/string/string_manipulation.js"></script>
     <script src="ngmodules/angular-route.min.js"></script>
     <script src="ngmodules/angular-resource.min.js"></script>

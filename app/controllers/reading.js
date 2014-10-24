@@ -121,6 +121,25 @@ angular.module("bookreadings")
 
         });
 
+        function userIsAdmin() {
+
+          if($scope.loginObj.user.admin) {
+            return true;
+          }
+
+          return false;
+
+        }
+
+        function userIsAdminOrReadingIsCreatedByLoggedInUser(){
+
+            if($scope.reading.created_by_id == $scope.loginObj.user.id || $scope.loginObj.user.admin) {
+
+              return true;
+            }
+
+        }
+
         function readingCreatedByLoggedInUser(){
 
             if($scope.reading.created_by_id == $scope.loginObj.user.id) {
@@ -133,6 +152,8 @@ angular.module("bookreadings")
         }
 
         $scope.delete = function(){
+
+          if(userIsAdminOrReadingIsCreatedByLoggedInUser()){
 
           swal({   
             title: "Are you sure?",   
@@ -177,11 +198,24 @@ angular.module("bookreadings")
 
             });
 
+          }
+
         };
+
+        $scope.edit = function(){
+
+          if(userIsAdminOrReadingIsCreatedByLoggedInUser()) {
+
+            var path = "reading/" + $scope.reading_id + "/" + $scope.reading.slug + "/edit/";
+            $location.path(path);
+
+          }
+
+        }
 
         $scope.feature = function(){
 
-          if(readingCreatedByLoggedInUser()) {
+          if(userIsAdmin()) {
 
             //set the priority to the current timestamp
             //then reverse that timestamp

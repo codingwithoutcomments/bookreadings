@@ -1,0 +1,56 @@
+<div class="container" ng-controller="editCtrl" style="background-color:#FFFFFF;margin-bottom:20px;">
+	<div class="row">
+	  	<div class="col-xs-12">
+	  		<div class="panel panel-default" style="margin-bottom:0px;">
+	  			<div class="panel-body">
+			  		<h3>Edit {{updateReading.title}}</h3>
+			  	</div>
+		  	</div>
+	  	</div>
+	 </div>
+	 <div class="row">
+	 <!-- <div class="row"> -->
+	 	<div class="col-xs-12">
+	 		<div class="panel panel-default">
+		 		<div class="panel-body">
+		 			<form role="form" name="updateReadingForm" ng-submit="addReading(updateReading, reading)" novalidate>
+		 				<div class="form-group" ng-class="updateReadingForm.readingTitle.$invalid && updateReadingForm.readingTitle.$dirty ? 'has-error has-feedback' : ''">
+		 					<label for="Title">Title <span style="color:red;">*</span></label>
+		 					<label ng-show="updateReadingForm.readingTitle.$invalid && updateReadingForm.readingTitle.$dirty" class="control-label">(Please provide a title)</label>
+							<input name="readingTitle" class="form-control"	placeholder="" id="ReadingTitle" required ng-model="updateReading.title">
+							<span ng-show="updateReadingForm.readingTitle.$invalid && updateReadingForm.readingTitle.$dirty" class="glyphicon glyphicon-remove form-control-feedback"></span>
+		 				</div>
+		 				<div class="form-group">
+		 					<label for="Description">Description</label>
+							<textarea name="readingDescription" class="form-control"	placeholder="Some details about the reading" id="ReadingDescription" rows="3" ng-model="updateReading.description"></textarea>
+		 				</div>
+		 				<div class="form-group">
+		 					<label for="Tags">Tags</label>
+		 					<tags-input ng-model="updateReading.tags"></tags-input>
+		 				</div>
+		 				<div class="form-group">
+		 					<label for="coverimage">Cover image</label>
+				 			<div ng-show="reading_cover_photo_uploaded" class="row">
+				 				<div class="col-xs-12">
+				 					<img class="center-block img-responsive" ng-src="{{updateReading.reading_cover_photo}}">
+					 			</div>
+					 		</div>
+					 		<div class="row">
+		 						<div class="col-xs-12">
+				 					<button type="button" class="btn btn-default btn-xs btn-block" ng-click="upload_cover_image(reading)">Choose New Image</button>
+				 				</div>
+			 				</div>
+			 			</div>
+		 				<div class="form-group" ng-class="updateReadingForm.readingPurchaseLink.$invalid ? 'has-error has-feedback' : ''">
+		 					<label for="PurchaseLink">Book Purchase Link</label>
+		 					<label ng-show="updateReadingForm.readingPurchaseLink.$invalid" class="control-label">(Please provide a valid url)</label>
+							<input name="readingPurchaseLink" type="url" class="form-control" placeholder="http://www.amazon.com/gp/product/0374534144/" id="ReadingPurchaseLink" ng-model="newReading.purchaseLink">
+							<span ng-show="updateReadingForm.readingPurchaseLink.$invalid" class="glyphicon glyphicon-remove form-control-feedback"></span>
+		 				</div>
+		 				<button type="submit" class="btn btn-primary btn-block" ng-disabled="updateReadingForm.$invalid">Save</button>
+			 		</form>
+		 		</div>
+		 	</div>
+	 	</div>
+	 </div>
+</div>
