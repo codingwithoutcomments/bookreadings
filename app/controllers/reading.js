@@ -13,6 +13,7 @@ angular.module("bookreadings")
         $scope.reading_played = false;
         $scope.comments = []
         $scope.reading = null;
+        $scope.reading_deleted = false;
 
         var readingFirebase = new Firebase(readingsURL + "/" + $scope.reading_id);
         $scope.readingRef = $firebase(readingFirebase);
@@ -20,33 +21,42 @@ angular.module("bookreadings")
         var readingRecord = $scope.readingRef.$asObject();
         readingRecord.$loaded().then(function() {
 
-            $scope.reading = readingRecord
-            console.log($scope.reading);
-            $scope.audio_link = S3ReadingsPath + $scope.reading.audio_key;
-            $scope.reading["cover_image_url_converted"] = $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
+            console.log(readingRecord);
 
-            var time = moment($scope.reading.created);
-            var timeSince = time.fromNow();
-            $scope.reading["time_since"] = timeSince;
+            if(readingRecord.deleted == true) {
 
-            if($scope.readingProperties[$scope.reading.$id] == null) {
-              $scope.readingProperties[$scope.reading.$id] = {};
-            }
-            $scope.readingProperties[$scope.reading.$id].like_text = "Like";
+              $scope.reading_deleted = true;
 
-            $scope.$watch('reading', function(newValue, oldValue){
+            } else {
 
-              soundManager.setup({
-                url: 'sfw/',
-                onready: function() {
-                  threeSixtyPlayer.init();
-                },
-                ontimeout: function() {
-                  // Hrmm, SM2 could not start. Missing SWF? Flash blocked? Show an error, etc.?
-                }
+              $scope.reading = readingRecord
+
+              $scope.audio_link = S3ReadingsPath + $scope.reading.audio_key;
+              $scope.reading["cover_image_url_converted"] = $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
+
+              var time = moment($scope.reading.created);
+              var timeSince = time.fromNow();
+              $scope.reading["time_since"] = timeSince;
+
+              if($scope.readingProperties[$scope.reading.$id] == null) {
+                $scope.readingProperties[$scope.reading.$id] = {};
+              }
+              $scope.readingProperties[$scope.reading.$id].like_text = "Like";
+
+              $scope.$watch('reading', function(newValue, oldValue){
+
+                soundManager.setup({
+                  url: 'sfw/',
+                  onready: function() {
+                    threeSixtyPlayer.init();
+                  },
+                  ontimeout: function() {
+                    // Hrmm, SM2 could not start. Missing SWF? Flash blocked? Show an error, etc.?
+                  }
+                });
+
               });
-
-            });
+            }
 
         }, function (errorObject) {
           console.log('The read failed: ' + errorObject.code);
@@ -151,7 +161,13 @@ angular.module("bookreadings")
 
                 getFirebaseReadingsByFeaturedReference($scope.reading.readingsByFeaturedId).$remove();
 
-                $scope.readingRef.$remove();
+                var readingRecord = $scope.readingRef.$asObject();
+                readingRecord.$loaded().then(function() {
+
+                  readingRecord.deleted = true;
+                  readingRecord.$save();
+
+                });
 
                 //send the user to the home page
                 var path = "/";

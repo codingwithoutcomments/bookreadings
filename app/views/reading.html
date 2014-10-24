@@ -1,103 +1,112 @@
 <link href="css/reading.css" rel="stylesheet" />
 
 <div class="container" ng-controller="readingCtrl" style="background-color:#FFFFFF;margin-bottom:20px;">
-	<div class="row">
-		<div class="col-xs-6 reading-header reading-header-username">
-			Posted by {{reading.created_by_name }}
-		</div>
-		<div class="col-xs-6 reading-header" style="text-align:right;">
-			{{ reading.time_since }}
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12" style="overflow:hidden;padding-left:5px;">
-		    <div class="ui360 sm2_playing ui360reading" ng-click="readingPlayed(reading_id, reading.readingsByMostPlayedId)">
-		     	<a ng-href="{{audio_link}}?s={{randomAudioPlayerValue}}" class="norewrite exclude button-exclude inline-exclude"></a>
-		    </div>
-		    <div class="readingTitle">
-		    	<h1 style="">{{reading.title}}</h1>
-		    </div>
-		</div>
-	</div>
-	<div class="row" style="margin-top:20px;">
-		<div class="col-xs-6">
-			<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading_id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
-				<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }"></span> {{readingProperties[reading.$id].like_text}}
-			</button>
-			<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}" class="btn btn-default btn-xs">
-				<span class="glyphicon glyphicon-fire"></span> Buy Book
-			</a>
-			<a ng-href="{{audio_link}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs">
-				<span class="glyphicon glyphicon-save"></span> Download
-			</a>
-			<div class="btn-group" ng-show="user.admin || readingProperties[reading.$id].reading_created_by_logged_in_user">
-			  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-			    <span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>
-			  </button>
-			  <ul class="dropdown-menu" role="menu">
-			    <li><a ng-click="edit()"><span class="glyphicon glyphicon-edit"></span> Edit</a></li>
-			    <li><a ng-click="delete()" ng-show="readingProperties[reading.$id].reading_created_by_logged_in_user"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
-			    <li><a ng-click="feature()" ng-show="user.admin"><span class="glyphicon glyphicon-star"></span> Feature</a></li>
-			  </ul>
+	<div ng-if="reading_deleted">
+		<div class="row">
+			<div class="col-xs-12">
+				Reading has been deleted by the author or admin.
 			</div>
 		</div>
-		<div class="col-xs-6 reading-stats">
-			<span><span class="glyphicon glyphicon-play"></span> {{ reading.play_count }} | <span class="glyphicon glyphicon-heart"></span> {{reading.like_count}} | <span class="glyphicon glyphicon-comment"></span> {{reading.comment_count}}</span>
-		</div>
 	</div>
-	<div class="row">
-		<div class="col-xs-12">
-			<hr style='margin-top:0px;'>
+	<div ng-if="reading">
+		<div class="row">
+			<div class="col-xs-6 reading-header reading-header-username">
+				Posted by {{reading.created_by_name }}
+			</div>
+			<div class="col-xs-6 reading-header" style="text-align:right;">
+				{{ reading.time_since }}
+			</div>
 		</div>
-	</div>
-	<div class="row" style="padding-bottom:20px;">
-		<div class="col-xs-4">
-			<img class="center-block img-responsive img-thumbnail" ng-if="reading.cover_image_url_converted" ng-src="{{reading.cover_image_url_converted}}">
+		<div class="row">
+			<div class="col-xs-12" style="overflow:hidden;padding-left:5px;">
+			    <div class="ui360 sm2_playing ui360reading" ng-click="readingPlayed(reading_id, reading.readingsByMostPlayedId)">
+			     	<a ng-href="{{audio_link}}?s={{randomAudioPlayerValue}}" class="norewrite exclude button-exclude inline-exclude"></a>
+			    </div>
+			    <div class="readingTitle">
+			    	<h1 style="">{{reading.title}}</h1>
+			    </div>
+			</div>
 		</div>
-		<div class="col-xs-8">
-			<div class="row">
-				<div class="col-xs-12">
-					<p>{{reading.description}}</p>
+		<div class="row" style="margin-top:20px;">
+			<div class="col-xs-6">
+				<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading_id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
+					<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }"></span> {{readingProperties[reading.$id].like_text}}
+				</button>
+				<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}" class="btn btn-default btn-xs">
+					<span class="glyphicon glyphicon-fire"></span> Buy Book
+				</a>
+				<a ng-href="{{audio_link}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs">
+					<span class="glyphicon glyphicon-save"></span> Download
+				</a>
+				<div class="btn-group" ng-show="user.admin || readingProperties[reading.$id].reading_created_by_logged_in_user">
+				  <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+				    <span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu" role="menu">
+				    <li><a ng-click="edit()"><span class="glyphicon glyphicon-edit"></span> Edit</a></li>
+				    <li><a ng-click="delete()" ng-show="readingProperties[reading.$id].reading_created_by_logged_in_user"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
+				    <li><a ng-click="feature()" ng-show="user.admin"><span class="glyphicon glyphicon-star"></span> Feature</a></li>
+				  </ul>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-12">
-					<a ng-repeat="tag in reading.tags" href="/#/search/{{tag}}/" type="button" class="btn btn-primary btn-xs" style="margin-right:4px;">
-						#{{tag}}
-					</a>
-				</div>
+			<div class="col-xs-6 reading-stats">
+				<span><span class="glyphicon glyphicon-play"></span> {{ reading.play_count }} | <span class="glyphicon glyphicon-heart"></span> {{reading.like_count}} | <span class="glyphicon glyphicon-comment"></span> {{reading.comment_count}}</span>
 			</div>
-			<div class="row reading-comment-header">
-				<div class="col-xs-9">
-					<span class="glyphicon glyphicon-comment"></span> {{reading.comment_count}} Comments
-					<hr style='margin-top:0px;'>
-					<div ng-show='showTopCommentBox()' style="overflow:hidden;">
-						<div style="float:left;">
-							<img style='height:34px;width:34px;' ng-src="{{profile_picture}}">
-						</div>
-						<div style="overflow:hidden;margin-left:5px;">
-							<form role="form" name="newCommentForm" ng-submit="commentOnReading(comment, reading_id)">
-								<input class='form-control non-rounded-corner-input' placeholder="Enter Comment..." ng-model="comment.comment">
-							</form>
-						</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<hr style='margin-top:0px;'>
+			</div>
+		</div>
+		<div class="row" style="padding-bottom:20px;">
+			<div class="col-xs-4">
+				<img class="center-block img-responsive img-thumbnail" ng-if="reading.cover_image_url_converted" ng-src="{{reading.cover_image_url_converted}}">
+			</div>
+			<div class="col-xs-8">
+				<div class="row">
+					<div class="col-xs-12">
+						<p>{{reading.description}}</p>
 					</div>
-					<div class="media" ng-repeat="comment in comments" style="margin-bottom:10px;">
-						<a class="pull-left" href="#">
-					    <img class="media-object" ng-src="{{comment.picture}}" alt="...">
-					  </a>
-					  <div class="media-body">
-					    <h6 class="media-heading">{{comment.display_name}} - {{comment.timeSince}}</h6>
-					    {{ comment.content }}
-					  </div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<a ng-repeat="tag in reading.tags" href="/#/search/{{tag}}/" type="button" class="btn btn-primary btn-xs" style="margin-right:4px;">
+							#{{tag}}
+						</a>
 					</div>
-					<div ng-show='showBottomCommentBox()' style="overflow:hidden;">
-						<div style="float:left;">
-							<img style='height:34px;width:34px;' ng-src="{{profile_picture}}">
+				</div>
+				<div class="row reading-comment-header">
+					<div class="col-xs-9">
+						<span class="glyphicon glyphicon-comment"></span> {{reading.comment_count}} Comments
+						<hr style='margin-top:0px;'>
+						<div ng-show='showTopCommentBox()' style="overflow:hidden;">
+							<div style="float:left;">
+								<img style='height:34px;width:34px;' ng-src="{{profile_picture}}">
+							</div>
+							<div style="overflow:hidden;margin-left:5px;">
+								<form role="form" name="newCommentForm" ng-submit="commentOnReading(comment, reading_id)">
+									<input class='form-control non-rounded-corner-input' placeholder="Enter Comment..." ng-model="comment.comment">
+								</form>
+							</div>
 						</div>
-						<div style="overflow:hidden;margin-left:5px;">
-							<form role="form" name="newCommentForm" ng-submit="commentOnReading(comment, reading_id)">
-								<input class='form-control non-rounded-corner-input' placeholder="Enter Comment..." ng-model="comment.comment">
-							</form>
+						<div class="media" ng-repeat="comment in comments" style="margin-bottom:10px;">
+							<a class="pull-left" href="#">
+						    <img class="media-object" ng-src="{{comment.picture}}" alt="...">
+						  </a>
+						  <div class="media-body">
+						    <h6 class="media-heading">{{comment.display_name}} - {{comment.timeSince}}</h6>
+						    {{ comment.content }}
+						  </div>
+						</div>
+						<div ng-show='showBottomCommentBox()' style="overflow:hidden;">
+							<div style="float:left;">
+								<img style='height:34px;width:34px;' ng-src="{{profile_picture}}">
+							</div>
+							<div style="overflow:hidden;margin-left:5px;">
+								<form role="form" name="newCommentForm" ng-submit="commentOnReading(comment, reading_id)">
+									<input class='form-control non-rounded-corner-input' placeholder="Enter Comment..." ng-model="comment.comment">
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
