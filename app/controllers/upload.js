@@ -24,12 +24,12 @@ var app = angular.module("bookreadings")
 			}
 			this.reading["purchaseLink"] = purchaseLink;
 
-			var tag_string = $("#tags").val();
-			var tag_array = null;
-			if(tag_string.length > 0) {
-				tag_array = tag_string.split(',');
-			}
 			//TODO format tags correctly
+			var tags = newReading.tags;
+			var tag_array = [];
+			for(var i = 0; i < tags.length; i++) {
+				tag_array.push(tags[i].text);
+			}
 			this.reading["tags"] = tag_array
 
 			this.reading["created"] = Firebase.ServerValue.TIMESTAMP;
