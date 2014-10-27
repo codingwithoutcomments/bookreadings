@@ -13,7 +13,7 @@
 	 	<div class="col-xs-12">
 	 		<div class="panel panel-default">
 		 		<div class="panel-body">
-		 			<form role="form" name="updateReadingForm" ng-submit="addReading(updateReading, reading)" novalidate>
+		 			<form role="form" name="updateReadingForm" ng-submit="updateReadingInformation(updateReading, readingRef)" novalidate>
 		 				<div class="form-group" ng-class="updateReadingForm.readingTitle.$invalid && updateReadingForm.readingTitle.$dirty ? 'has-error has-feedback' : ''">
 		 					<label for="Title">Title <span style="color:red;">*</span></label>
 		 					<label ng-show="updateReadingForm.readingTitle.$invalid && updateReadingForm.readingTitle.$dirty" class="control-label">(Please provide a title)</label>

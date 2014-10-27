@@ -5,7 +5,7 @@ angular.module("bookreadings")
     .constant("usersURL", "https://bookreadings.firebaseio.com/users")
     .constant("firebaseURL", "https://bookreadings.firebaseio.com")
     .constant("S3ReadingsPath", "https://s3-us-west-2.amazonaws.com/bookreadings/")
-    .controller("editCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath) {
+    .controller("editCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath, string_manipulation) {
 
       filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
@@ -33,10 +33,56 @@ angular.module("bookreadings")
               $scope.updateReading.tags = $scope.reading.tags;
               $scope.updateReading.reading_cover_photo = $scope.reading.cover_image_url;
               $scope.updateReading.purchaseLink = $scope.reading.purchaseLink;
+              $scope.updateReading.cover_image_url = $scope.reading.cover_image_url;
+              $scope.updateReading.cover_image_filename = $scope.reading.cover_image_filename;
+              $scope.updateReading.cover_image_mimetype = $scope.reading.cover_image_mimetype;
+              $scope.updateReading.cover_image_size = $scope.reading.cover_image_size;
+              $scope.updateReading.cover_image_key = $scope.reading.cover_image_key;
 
             }
 
         });
+
+        $scope.updateReadingInformation = function(updateReading, readingRef) {
+
+          var tags = updateReading.tags;
+          var tag_array = [];
+          for(var i = 0; i < tags.length; i++) {
+            tag_array.push(tags[i].text);
+          }
+
+          var slug = string_manipulation.slugify(updateReading.title);
+          var modified = Firebase.ServerValue.TIMESTAMP;
+
+          var update_dictionary = {
+
+            "cover_image_url": updateReading.cover_image_url,
+            "cover_image_filename" : updateReading.cover_image_filename,
+            "cover_image_mimetype" : updateReading.cover_image_mimetype,
+            "cover_image_size" : updateReading.cover_image_size,
+            "cover_image_key" : updateReading.cover_image_key,
+            "title"  : updateReading.title,
+            "modified" : modified,
+            "tags" : tag_array,
+            "slug" : slug,
+          }
+
+          if(updateReading.description) {
+            update_dictionary["description"] = updateReading.description;
+          }
+
+          if(updateReading.purchaseLink) {
+            update_dictionary["purchaseLink"] = updateReading.purchaseLink;
+          }
+
+          readingRef.$update(update_dictionary).then(function(ref){
+
+              var path = "reading/" + ref.name() + "/" + slug;
+              $location.path(path);
+
+          });
+
+        }
 
         $scope.upload_cover_image = function(updateReading){
 
