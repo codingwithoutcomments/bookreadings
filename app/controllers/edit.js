@@ -19,6 +19,9 @@ angular.module("bookreadings")
         var readingRecord = $scope.readingRef.$asObject();
         readingRecord.$loaded().then(function() {
 
+            $scope.slug = readingRecord.slug;
+            $scope.reading_id = readingRecord.name();
+
             if(readingRecord.deleted == true) {
 
                 $location.path("/");
@@ -42,6 +45,9 @@ angular.module("bookreadings")
             }
 
         });
+
+        $scope.cancelEdit = function
+
 
         $scope.updateReadingInformation = function(updateReading, readingRef) {
 
