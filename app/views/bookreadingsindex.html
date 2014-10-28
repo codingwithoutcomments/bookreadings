@@ -8,13 +8,13 @@
 					<b>readin.gs</b>
 				</div>
 				<div>
-					<h1 style='font-size:20px;padding-left:5px;margin-bottom:5px;margin-top:5px;font-weight:200;'><a href="/#/featured">Featured</a></span>
+					<h1 class="sidebar-header" ng-class="featured_class"><a href="/#/featured">Featured</a></span>
 				</div>
 				<div>
-					<h1 style='font-size:20px;padding-left:5px;margin-bottom:5px;margin-top:0px;font-weight:200;'><a href="/#/recent/">Most Recent</a></span>
+					<h1 class="sidebar-header"><a href="/#/recent/">Most Recent</a></span>
 				</div>
 				<div>
-					<h1 style='font-size:20px;padding-left:5px;margin:0px;margin-top:0px;font-weight:200;margin-bottom:5px;'><a href="/#/popular">Most Popular</a></h1>
+					<h1 class="sidebar-header"><a href="/#/popular">Most Popular</a></h1>
 				</div>
 			</div>
 		</div>
@@ -56,22 +56,6 @@
 									#{{tag}}
 								</a>
 						    </div>
-						    <!--
-						    <div style='color:white;margin-top:7px;'>
-								<span style="background-color:black;padding:3px;"><span class="glyphicon glyphicon-play"></span>  {{ reading.play_count }}  | <span class="glyphicon glyphicon-heart"></span>  {{reading.like_count}} | <span class="glyphicon glyphicon-comment"></span>  {{reading.comment_count}}</span>
-							</div> -->
-						    <!--
-						    <div style='margin-top:7px;'>
-								<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
-									<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }"></span> <span ng-if="readingProperties[reading.$id].like_text">{{ readingProperties[reading.$id].like_text }}</span><span ng-if="!readingProperties[reading.$id].like_text">Like</span>
-								</button>
-								<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}" class="btn btn-default btn-xs">
-									<span class="glyphicon glyphicon-fire"></span> Buy Book
-								</a>
-								<a ng-href="{{audio_link}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs">
-									<span class="glyphicon glyphicon-save"></span> Download
-								</a>
-							</div> -->
 				        </div>
 				    </div>
 			     </div>

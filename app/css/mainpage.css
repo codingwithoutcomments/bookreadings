@@ -76,6 +76,18 @@
 	font-size:16px;
 }
 
+.sidebar-header {
+	font-size:20px;
+	padding-left:5px;
+	margin-bottom:5px;
+	margin-top:5px;
+	font-weight:200;
+}
+
+.sidebar-header a{
+	color:black;
+}
+
 .arrow_box {
 	position: relative;
 	background: #f4ff5c;
