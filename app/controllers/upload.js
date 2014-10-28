@@ -157,7 +157,7 @@ var app = angular.module("bookreadings")
 
 		};
 
-		$scope.upload_cover_image = function(reading){
+		$scope.upload_cover_image = function(reading, newReading){
 
 			this.reading = reading
 
@@ -189,6 +189,7 @@ var app = angular.module("bookreadings")
 				        	var filepicker = "https://www.filepicker.io/api/file/" + InkBlobs[i].key + "/convert?w=950&height=950"
 				        	$scope.reading_cover_photo = InkBlobs[i].url
 				        	$scope.reading_cover_photo_uploaded = true;
+				        	$scope.newReading.has_cover_photo = true;
 			        	});
 
 			        }

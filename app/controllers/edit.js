@@ -19,7 +19,7 @@ angular.module("bookreadings")
         var readingRecord = $scope.readingRef.$asObject();
         readingRecord.$loaded().then(function() {
 
-            if(readingRecord.deleted == true) {
+            if(readingRecord.deleted == true || !$scope.userIsAdminOrReadingIsCreatedByLoggedInUser(readingRecord.created_by_id)) {
 
                 $location.path("/");
 

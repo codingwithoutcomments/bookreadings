@@ -104,7 +104,7 @@ angular.module("bookreadings")
               //check to see if user created the reading
               if($scope.reading) {
 
-                if(readingCreatedByLoggedInUser()) {
+                if($scope.readingCreatedByLoggedInUser()) {
 
                   $scope.readingProperties[$scope.reading_id].reading_created_by_logged_in_user = true;
                 }
@@ -121,26 +121,7 @@ angular.module("bookreadings")
 
         });
 
-        function userIsAdmin() {
-
-          if($scope.loginObj.user.admin) {
-            return true;
-          }
-
-          return false;
-
-        }
-
-        function userIsAdminOrReadingIsCreatedByLoggedInUser(){
-
-            if($scope.reading.created_by_id == $scope.loginObj.user.id || $scope.loginObj.user.admin) {
-
-              return true;
-            }
-
-        }
-
-        function readingCreatedByLoggedInUser(){
+        $scope.readingCreatedByLoggedInUser = function(){
 
             if($scope.reading.created_by_id == $scope.loginObj.user.id) {
 
@@ -153,7 +134,7 @@ angular.module("bookreadings")
 
         $scope.delete = function(){
 
-          if(userIsAdminOrReadingIsCreatedByLoggedInUser()){
+          if($scope.userIsAdminOrReadingIsCreatedByLoggedInUser($scope.reading.created_by_id)){
 
           swal({   
             title: "Are you sure?",   
@@ -204,7 +185,7 @@ angular.module("bookreadings")
 
         $scope.edit = function(){
 
-          if(userIsAdminOrReadingIsCreatedByLoggedInUser()) {
+          if($scope.userIsAdminOrReadingIsCreatedByLoggedInUser($scope.reading.created_by_id)) {
 
             var path = "reading/" + $scope.reading_id + "/" + $scope.reading.slug + "/edit/";
             $location.path(path);
@@ -215,7 +196,7 @@ angular.module("bookreadings")
 
         $scope.feature = function(){
 
-          if(userIsAdmin()) {
+          if($scope.userIsAdmin()) {
 
             //set the priority to the current timestamp
             //then reverse that timestamp

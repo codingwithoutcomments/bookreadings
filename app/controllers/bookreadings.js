@@ -95,6 +95,34 @@ angular.module("bookreadings")
 
 		}
 
+    $scope.userIsAdmin = function() {
+
+      if($scope.loginObj.user) {
+
+        if($scope.loginObj.user.admin) {
+          return true;
+        }
+
+      }
+
+      return false;
+
+    }
+
+    $scope.userIsAdminOrReadingIsCreatedByLoggedInUser = function(reading_created_by){
+
+        if($scope.loginObj.user) {
+
+          if(reading_created_by == $scope.loginObj.user.id || $scope.loginObj.user.admin) {
+
+            return true;
+          }
+        }
+
+        return false;
+
+    }
+
 		$scope.logout = function() {
 			$scope.loginObj.$logout();
 			$location.path('/');
@@ -277,7 +305,6 @@ angular.module("bookreadings")
             var play_count = $firebase(readingPlayCounterFirebase);
 
             play_count.$transaction(function(currentCount) {
-              
               if (!currentCount) return 1;   // Initial value for counter.
               if (currentCount < 0) return;  // Return undefined to abort transaction.
               return currentCount + 1;       // Increment the count by 1.
