@@ -8,13 +8,13 @@
 					<b>readin.gs</b>
 				</div>
 				<div>
-					<h1 class="sidebar-header" ng-class="featured_class"><a href="/#/featured">Featured</a></span>
+					<h1 class="sidebar-header" ng-class="(filterByIndex==0) ? 'arrow_box' : ''"><a href="/#/featured">Featured</a></span>
 				</div>
 				<div>
-					<h1 class="sidebar-header"><a href="/#/recent/">Most Recent</a></span>
+					<h1 class="sidebar-header" ng-class="(filterByIndex==2) ? 'arrow_box' : ''"><a href="/#/recent/">Most Recent</a></span>
 				</div>
 				<div>
-					<h1 class="sidebar-header"><a href="/#/popular">Most Popular</a></h1>
+					<h1 class="sidebar-header" ng-class="(filterByIndex==1) ? 'arrow_box' : ''"><a href="/#/popular">Most Popular</a></h1>
 				</div>
 			</div>
 		</div>
