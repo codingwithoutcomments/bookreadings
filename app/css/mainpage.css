@@ -78,9 +78,12 @@
 
 .sidebar-header {
 	font-size:20px;
-	padding-left:5px;
+	padding-left:15px;
+	padding-top:5px;
+	padding-bottom:5px;
 	margin-bottom:5px;
 	margin-top:5px;
+	padding-right:-5px;
 	font-weight:200;
 }
 
@@ -90,20 +93,25 @@
 
 .arrow_box {
 	position: relative;
-	background: #f4ff5c;
+	/* background: #f4ff5c; */
+	background:black;
+}
+.arrow_box a {
+	color:white;
 }
 .arrow_box:after {
 	left: 100%;
-	top: 50%;
+	top: 30%;
 	border: solid transparent;
 	content: " ";
-	height: 0;
+	height: 10px;
 	width: 0;
 	position: absolute;
 	pointer-events: none;
 	border-color: rgba(244, 255, 92, 0);
-	border-left-color: #f4ff5c;
-	border-width: 11px;
+	/*border-left-color: #f4ff5c; */
+	border-left-color:black;
+	border-width: 16px;
 	margin-top: -10px;
 }
 

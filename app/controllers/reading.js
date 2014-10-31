@@ -32,7 +32,6 @@ angular.module("bookreadings")
               $scope.reading = readingRecord
 
               $scope.audio_link = S3ReadingsPath + $scope.reading.audio_key;
-              $scope.reading["cover_image_url_converted"] = $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
 
               var time = moment($scope.reading.created);
               var timeSince = time.fromNow();
@@ -42,6 +41,7 @@ angular.module("bookreadings")
                 $scope.readingProperties[$scope.reading.$id] = {};
               }
               $scope.readingProperties[$scope.reading.$id].like_text = "Like";
+              $scope.readingProperties[$scope.reading.$id].cover_image_url_converted = $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
 
               $scope.$watch('reading', function(newValue, oldValue){
 

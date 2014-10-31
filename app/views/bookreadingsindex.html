@@ -11,10 +11,10 @@
 					<h1 class="sidebar-header" ng-class="(filterByIndex==0) ? 'arrow_box' : ''"><a href="/#/featured">Featured</a></span>
 				</div>
 				<div>
-					<h1 class="sidebar-header" ng-class="(filterByIndex==2) ? 'arrow_box' : ''"><a href="/#/recent/">Most Recent</a></span>
+					<h1 class="sidebar-header" ng-class="(filterByIndex==2) ? 'arrow_box' : ''"><a href="/#/recent/">Recent</a></span>
 				</div>
 				<div>
-					<h1 class="sidebar-header" ng-class="(filterByIndex==1) ? 'arrow_box' : ''"><a href="/#/popular">Most Popular</a></h1>
+					<h1 class="sidebar-header" ng-class="(filterByIndex==1) ? 'arrow_box' : ''"><a href="/#/popular">Popular</a></h1>
 				</div>
 			</div>
 		</div>
@@ -60,7 +60,7 @@
 				    </div>
 			     </div>
 			</div>
-			<div style='position:relative'>
+			<div ng-if="reading.cover_image_url" style='position:relative'>
 				<div style="position:absolute; bottom:15px;right:0;color:white;">
 					bookreadin.gs
 				</div>
