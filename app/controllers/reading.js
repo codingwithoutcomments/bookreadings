@@ -163,17 +163,16 @@ angular.module("bookreadings")
 
                 getFirebaseReadingsByFeaturedReference($scope.reading.readingsByFeaturedId).$remove();
 
-                var readingRecord = $scope.readingRef.$asObject();
-                readingRecord.$loaded().then(function() {
+                update_dictionary = {};
+                update_dictionary["deleted"] = true;
+                update_dictionary["modified"] = Firebase.ServerValue.TIMESTAMP;
+                $scope.readingRef.$update(update_dictionary).then(function(){
 
-                  readingRecord.deleted = true;
-                  readingRecord.$save();
+                  //send the user to the home page
+                  var path = "/";
+                  $location.path(path);
 
                 });
-
-                //send the user to the home page
-                var path = "/";
-                $location.path(path);
 
               }
 

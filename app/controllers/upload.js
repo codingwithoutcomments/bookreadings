@@ -59,6 +59,8 @@ var app = angular.module("bookreadings")
 					var _readingsByDateCreatedRef = $firebase(readingsByDateCreatedRef).$asArray();
 
 					var data = {}
+					var user = $scope.loginObj.user;
+					data["created_by"] = user.uid
 					data["reading_id"] = ref.name();
 					data["$priority"] = -_singleReadingRef.$priority;
 
@@ -72,6 +74,8 @@ var app = angular.module("bookreadings")
 						var _readingsByMostPlayedRef = $firebase(readingsByMostPlayedRef).$asArray();
 
 						var data = {}
+						var user = $scope.loginObj.user;
+						data["created_by"] = user.uid
 						data["reading_id"] = this.reading_id;
 						data["$priority"] = 0;
 
@@ -83,18 +87,23 @@ var app = angular.module("bookreadings")
 							var _readingsByFeaturedRef = $firebase(readingsByFeaturedRef).$asArray();
 
 							var data = {}
+							var user = $scope.loginObj.user;
+							data["created_by"] = user.uid
 							data["reading_id"] = this.reading_id;
 							data["$priority"] = 0;
 
 							_readingsByFeaturedRef.$add(data).then(function(ref) {
 
-								_singleReadingRef.readingsByDateCreatedId = readingsByDateCreatedId;
-								_singleReadingRef.readingsByMostPlayedId = readingByMostPlayedId;
-								_singleReadingRef.readingsByFeaturedId = ref.name();
-								_singleReadingRef.$save();
+								update_dictionary = {};
+								update_dictionary["readingsByDateCreatedId"]= readingsByDateCreatedId;
+								update_dictionary["readingsByMostPlayedId"] = readingByMostPlayedId;
+								update_dictionary["readingsByFeaturedId"] = ref.name();
+								$firebase(singleReadingRef).$update(update_dictionary).then(function(){
 
-					        	var path = "reading/" + this.reading_id + "/" + reading.slug;
-					        	$location.path(path);
+						        	var path = "reading/" + this.reading_id + "/" + reading.slug;
+						        	$location.path(path);
+
+								});
 
 					        });
 				        });
