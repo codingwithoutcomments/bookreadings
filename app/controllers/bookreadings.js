@@ -44,7 +44,8 @@ angular.module("bookreadings")
 				$scope.user = user;
 				$rootScope.user = user;
 				$scope.firstName = user.displayName.split(' ')[0];
-				$scope.profile_picture = "http://graph.facebook.com/" + $scope.user.provider_id + "/picture";
+        $scope.provider_id = user.$id.split(':')[1];
+				$scope.profile_picture = "http://graph.facebook.com/" + $scope.provider_id + "/picture";
 
 			} else {
 
@@ -58,11 +59,11 @@ angular.module("bookreadings")
 		$scope.socialLogin = function() {
 
 			$scope.loginObj.$login("facebook", {
-				rememberMe: true, 
+				rememberMe: true,
 				scope: 'email'
 			}).then(function(user) {
 
-				var userFirebase = new Firebase(firebaseURL + "/users/" + user.uid);
+    				var userFirebase = new Firebase(firebaseURL + "/users/" + user.uid);
 		        var userRef = $firebase(userFirebase);
 
 		        this.userRef = userRef;
@@ -75,18 +76,23 @@ angular.module("bookreadings")
 				    	//user exists
 				    	setUser(userRecord);
 
+           //new user
 					 } else {
 
 				    	var newUser = {}
 				    	newUser["displayName"] = user.displayName;
-				    	newUser["provider"] = user.provider;
-				    	newUser["provider_id"] = user.id;
-				    	newUser["email"] = user.thirdPartyUserData.email;
 
 					    this.newUser = newUser;
 					    this.userRef.$set(newUser).then(function(ref){
 
 					    	setUser(userRecord);
+
+                var newUserInfo = {};
+                newUserInfo["email"] = user.thirdPartyUserData.email;
+                var userInfoFirebase = new Firebase(firebaseURL + "/user_info/" + user.uid);
+                var userInfoRef = $firebase(userInfoFirebase);
+                userInfoRef.$set(newUserInfo);
+
 
 					    });
 					 }
@@ -277,7 +283,7 @@ angular.module("bookreadings")
             var play_count = $firebase(readingPlayCounterFirebase);
 
             play_count.$transaction(function(currentCount) {
-              
+
               if (!currentCount) return 1;   // Initial value for counter.
               if (currentCount < 0) return;  // Return undefined to abort transaction.
               return currentCount + 1;       // Increment the count by 1.
@@ -319,7 +325,7 @@ angular.module("bookreadings")
 		    return text;
 		}
 
-        $scope.$on('$routeChangeSuccess', function(next, current) { 
+        $scope.$on('$routeChangeSuccess', function(next, current) {
         	$scope.randomAudioPlayerValue = makeid();
 		 });
 
