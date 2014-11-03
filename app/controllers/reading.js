@@ -32,7 +32,6 @@ angular.module("bookreadings")
               $scope.reading = readingRecord
 
               $scope.audio_link = S3ReadingsPath + $scope.reading.audio_key;
-              $scope.reading["cover_image_url_converted"] = $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
 
               var time = moment($scope.reading.created);
               var timeSince = time.fromNow();
@@ -42,6 +41,7 @@ angular.module("bookreadings")
                 $scope.readingProperties[$scope.reading.$id] = {};
               }
               $scope.readingProperties[$scope.reading.$id].like_text = "Like";
+              $scope.readingProperties[$scope.reading.$id].cover_image_url_converted = $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
 
               $scope.$watch('reading', function(newValue, oldValue){
 
@@ -104,7 +104,7 @@ angular.module("bookreadings")
               //check to see if user created the reading
               if($scope.reading) {
 
-                if(readingCreatedByLoggedInUser()) {
+                if($scope.readingCreatedByLoggedInUser()) {
 
                   $scope.readingProperties[$scope.reading_id].reading_created_by_logged_in_user = true;
                 }
@@ -121,26 +121,7 @@ angular.module("bookreadings")
 
         });
 
-        function userIsAdmin() {
-
-          if($scope.loginObj.user.admin) {
-            return true;
-          }
-
-          return false;
-
-        }
-
-        function userIsAdminOrReadingIsCreatedByLoggedInUser(){
-
-            if($scope.reading.created_by_id == $scope.loginObj.user.id || $scope.loginObj.user.admin) {
-
-              return true;
-            }
-
-        }
-
-        function readingCreatedByLoggedInUser(){
+        $scope.readingCreatedByLoggedInUser = function(){
 
             if($scope.reading.created_by_id == $scope.loginObj.user.id) {
 
@@ -153,7 +134,7 @@ angular.module("bookreadings")
 
         $scope.delete = function(){
 
-          if(userIsAdminOrReadingIsCreatedByLoggedInUser()){
+          if($scope.userIsAdminOrReadingIsCreatedByLoggedInUser($scope.reading.created_by_id)){
 
           swal({   
             title: "Are you sure?",   
@@ -182,17 +163,16 @@ angular.module("bookreadings")
 
                 getFirebaseReadingsByFeaturedReference($scope.reading.readingsByFeaturedId).$remove();
 
-                var readingRecord = $scope.readingRef.$asObject();
-                readingRecord.$loaded().then(function() {
+                update_dictionary = {};
+                update_dictionary["deleted"] = true;
+                update_dictionary["modified"] = Firebase.ServerValue.TIMESTAMP;
+                $scope.readingRef.$update(update_dictionary).then(function(){
 
-                  readingRecord.deleted = true;
-                  readingRecord.$save();
+                  //send the user to the home page
+                  var path = "/";
+                  $location.path(path);
 
                 });
-
-                //send the user to the home page
-                var path = "/";
-                $location.path(path);
 
               }
 
@@ -204,7 +184,7 @@ angular.module("bookreadings")
 
         $scope.edit = function(){
 
-          if(userIsAdminOrReadingIsCreatedByLoggedInUser()) {
+          if($scope.userIsAdminOrReadingIsCreatedByLoggedInUser($scope.reading.created_by_id)) {
 
             var path = "reading/" + $scope.reading_id + "/" + $scope.reading.slug + "/edit/";
             $location.path(path);
@@ -215,7 +195,7 @@ angular.module("bookreadings")
 
         $scope.feature = function(){
 
-          if(userIsAdmin()) {
+          if($scope.userIsAdmin()) {
 
             //set the priority to the current timestamp
             //then reverse that timestamp

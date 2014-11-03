@@ -12,16 +12,19 @@ angular.module("bookreadings")
 
         var ref = new Firebase(readingsByFeaturedURL);
         $scope.filterBy ="featured";
+        $scope.filterByIndex = 0;
 
         if($location.path() == "/popular/") {
 
             ref = new Firebase(readingsByMostPlayedURL)
             $scope.filterBy ="popular";
+            $scope.filterByIndex = 1;
 
         }else if($location.path() == "/recent/") {
 
             ref = new Firebase(readingsByDateCreatedURL);
             $scope.filterBy ="recent";
+            $scope.filterByIndex = 2;
 
         }
 
