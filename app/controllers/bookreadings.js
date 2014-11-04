@@ -175,6 +175,13 @@ angular.module("bookreadings")
 
         }
 
+        function getFirebaseUserSpecificEventsReference(usersURL, user_id, event_id) {
+
+          var usersEventsFirebase = new Firebase(usersURL + "/" + user_id + "/events/" + event_id);
+          return $firebase(usersEventsFirebase);
+
+        }
+
         function getFirebaseLikesReference(like_name) {
 
           var likesFirebase = new Firebase(likesURL + "/" + like_name);
@@ -215,10 +222,23 @@ angular.module("bookreadings")
                 $scope.readingProperties[reading_id].reading_liked = false;
                 $scope.readingProperties[reading_id].like_text = "Like"
 
-                //remove like
                 var user = $scope.loginObj.user;
-                getFirebaseLikesReference(like_name).$remove();
-                getFirebaseUserLikesReference(usersURL, user.uid, like_name).$remove();
+
+                var likeReference = getFirebaseLikesReference(like_name);
+                var likeReferenceObject = likeReference.$asObject();
+                likeReferenceObject.$loaded().then(function(){
+
+                  //remove event from user
+                  var created_by = likeReferenceObject.created_by;
+                  var event_id = likeReferenceObject.event_id;
+
+                  var specificEventReference = getFirebaseUserSpecificEventsReference(usersURL, created_by, event_id);
+                  specificEventReference.$remove();
+
+                  //remove like
+                  likeReference.$remove();
+                });
+
                 $scope.getFirebaseReadingLikesByUserReference(readingsURL, reading_id, user.uid).$remove();
                 getFirebaseReadingLikeRef(readingsURL, reading_id, like_name).$remove();
 
@@ -266,23 +286,27 @@ angular.module("bookreadings")
                   dict["like_name"] = likeName;
                   readingLikesByUserRef.$set(dict);
 
-                  //add likes to user
-                  //so that on user page, one can print out what they have liked
-                  //TODO: remove because adding events instead
-                  var usersLikesRef = getFirebaseUserLikesReference(usersURL, $scope.loginObj.user.uid, likeName );
-                  usersLikesRef.$set(true)
-
-                  var likeReference = getFirebaseLikesReference(ref.name()).asObject();
-                  likeReference.$loaded().then(function(){
+                  var likeReference = getFirebaseLikesReference(ref.name());
+                  var likeReferenceObject = likeReference.$asObject();
+                  likeReferenceObject.$loaded().then(function(){
 
                     //add to a a general "user" events queue
                     //sort by "newest"
                     var event_object = {};
-                    event_object["event_type"] = like
+                    event_object["event_type"] = "like"
                     event_object["object_id"] = ref.name();
-                    var timestamp = -likeReference.created;
+                    event_object["$priority"] = -likeReferenceObject.created;
                     //set the priority to the negative timestamp
-                    var userEventsRef = getFirebaseUserEventsReference(usersURL, $scope.loginObj.user.uid);
+                    var userEventsRef = getFirebaseUserEventsReference(usersURL, $scope.loginObj.user.uid).$asArray();
+                    userEventsRef.$add(event_object).then(function(ref){
+
+                      var update_dict = {};
+                      update_dict["event_id"] = ref.name();
+
+                      //add event id to "like" object
+                      likeReference.$update(update_dict);
+
+                    });
 
                   });
 

@@ -283,6 +283,13 @@ angular.module("bookreadings")
 
         }
 
+        function getFirebaseUserEventsReference(usersURL, user_id) {
+
+          var usersEventsFirebase = new Firebase(usersURL + "/" + user_id + "/events/");
+          return $firebase(usersEventsFirebase);
+
+        }
+
         $scope.commentOnReading = function(comment, reading_id) {
 
           var commentsFirebase = new Firebase(commentsURL);
@@ -310,9 +317,30 @@ angular.module("bookreadings")
               var reading_comment_ref = getFirebaseReadingCommentRefernece(readingsURL, reading_id, comment_name);
               reading_comment_ref.$set(true);
 
-              //add comment to user
-              var user_comment_ref = getFirebaseUserCommentReference(usersURL, $scope.loginObj.user.uid, comment_name);
-              user_comment_ref.$set(true);
+              //add comment event
+              var commentReference = getFirebaseCommentReference(commentsURL, ref.name());
+              var commentReferenceObject = commentReference.$asObject();
+              commentReferenceObject.$loaded().then(function(){
+
+                //add to a a general "user" events queue
+                //sort by "newest"
+                var event_object = {};
+                event_object["event_type"] = "comment"
+                event_object["object_id"] = ref.name();
+                event_object["$priority"] = -commentReferenceObject.created;
+                //set the priority to the negative timestamp
+                var userEventsRef = getFirebaseUserEventsReference(usersURL, $scope.loginObj.user.uid).$asArray();
+                userEventsRef.$add(event_object).then(function(ref){
+
+                  var update_dict = {};
+                  update_dict["event_id"] = ref.name();
+
+                  //add event id to "like" object
+                  commentReference.$update(update_dict);
+
+                });
+
+              });
 
               //increment counter
               var commentCount = getFirebaseReadingCommentCounterReference(readingsURL, reading_id);
