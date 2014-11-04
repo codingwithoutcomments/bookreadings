@@ -1,14 +1,7 @@
 <link href="css/reading.css" rel="stylesheet" />
 
 <div class="container" ng-controller="readingCtrl" style="background-color:#FFFFFF;margin-bottom:20px;">
-	<div ng-if="reading_deleted">
-		<div class="row">
-			<div class="col-xs-12">
-				Reading has been deleted by the author or admin.
-			</div>
-		</div>
-	</div>
-	<div ng-if="reading">
+	<div>
 		<div class="row">
 			<div class="col-xs-6 reading-header reading-header-username">
 				Posted by {{reading.created_by_name }}
@@ -94,7 +87,7 @@
 						    <img class="media-object" ng-src="{{comment.picture}}" alt="...">
 						  </a>
 						  <div class="media-body">
-						    <h6 class="media-heading">{{comment.display_name}} - {{comment.timeSince}}</h6>
+						    <h6 class="media-heading">{{comment.display_name}} - <span ng-if="comment_properties[comment.$id].timeSince">{{comment_properties[comment.$id].timeSince}}<span></h6>
 						    {{ comment.content }}
 						  </div>
 						</div>

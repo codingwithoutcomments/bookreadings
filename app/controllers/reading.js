@@ -14,6 +14,7 @@ angular.module("bookreadings")
         $scope.comments = []
         $scope.reading = null;
         $scope.reading_deleted = false;
+        $scope.comment_properties = {};
 
         var readingFirebase = new Firebase(readingsURL + "/" + $scope.reading_id);
         $scope.readingRef = $firebase(readingFirebase);
@@ -25,7 +26,8 @@ angular.module("bookreadings")
 
             if(readingRecord.deleted == true) {
 
-              $scope.reading_deleted = true;
+              var path = "reading/" + readingRecord.reading_id + "/" + readingRecord.slug + "/deleted";
+              $location.path(path);
 
             } else {
 
@@ -67,19 +69,24 @@ angular.module("bookreadings")
         commentsArray.$watch(function(event){
           if(event.event == "child_added") {
             var commentObject = getFirebaseCommentReference(commentsURL, event.key).$asObject();
-            addComment(commentObject);
+            $scope.comments.push(commentObject);
+            addCommentTime(commentObject);
           }
         });
 
-        function addComment(commentObject) {
+        function addCommentTime(commentObject) {
 
           commentObject.$loaded().then(function() {
 
             var time = moment(commentObject.created);
             var timeSince = time.fromNow();
-            commentObject["timeSince"] = timeSince;
 
-            $scope.comments.push(commentObject);
+            if($scope.comment_properties[commentObject.$id] == null) {
+              $scope.comment_properties[commentObject.$id] = {};
+            }
+
+            $scope.comment_properties[commentObject.$id].timeSince = timeSince;
+
           });
         }
 

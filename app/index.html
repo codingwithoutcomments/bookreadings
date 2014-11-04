@@ -59,6 +59,13 @@
                 }
             });
 
+            $routeProvider.when("/reading/:id/:slug/deleted", {
+                templateUrl: "/views/reading_deleted.html",
+                auth: function (user) {
+                  return true
+                }
+            });
+
             $routeProvider.when("/featured/", {
                 templateUrl: "/views/bookreadingsindex.html",
                 auth: function (user) {
