@@ -23,7 +23,7 @@
 	margin-top:3px;
 
 	max-height:165px;
-	text-overflow: ellipsis; 
+	text-overflow: ellipsis;
 
 	  -webkit-line-clamp: 4;
 	  -webkit-box-orient: vertical;
@@ -60,7 +60,7 @@
 .reading-stats span{
 	line-height:30px;
 	color:#999;
-} 
+}
 
 .reading-comment-header {
 	margin-top:40px;
@@ -71,7 +71,7 @@
 }
 
 .reading-header {
-	padding-top:10px; 
+	padding-top:10px;
 	color:#999;
 	font-size:16px;
 }
@@ -100,19 +100,6 @@
 	color:white;
 }
 .arrow_box:after {
-	left: 100%;
-	top: 30%;
-	border: solid transparent;
-	content: " ";
-	height: 10px;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-	border-color: rgba(244, 255, 92, 0);
-	/*border-left-color: #f4ff5c; */
-	border-left-color:black;
-	border-width: 16px;
-	margin-top: -10px;
 }
 
 menu_font {

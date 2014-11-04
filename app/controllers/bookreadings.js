@@ -168,6 +168,13 @@ angular.module("bookreadings")
 
         }
 
+        function getFirebaseUserEventsReference(usersURL, user_id) {
+
+          var usersEventsFirebase = new Firebase(usersURL + "/" + user_id + "/events/");
+          return $firebase(usersEventsFirebase);
+
+        }
+
         function getFirebaseLikesReference(like_name) {
 
           var likesFirebase = new Firebase(likesURL + "/" + like_name);
@@ -261,8 +268,23 @@ angular.module("bookreadings")
 
                   //add likes to user
                   //so that on user page, one can print out what they have liked
+                  //TODO: remove because adding events instead
                   var usersLikesRef = getFirebaseUserLikesReference(usersURL, $scope.loginObj.user.uid, likeName );
                   usersLikesRef.$set(true)
+
+                  var likeReference = getFirebaseLikesReference(ref.name()).asObject();
+                  likeReference.$loaded().then(function(){
+
+                    //add to a a general "user" events queue
+                    //sort by "newest"
+                    var event_object = {};
+                    event_object["event_type"] = like
+                    event_object["object_id"] = ref.name();
+                    var timestamp = -likeReference.created;
+                    //set the priority to the negative timestamp
+                    var userEventsRef = getFirebaseUserEventsReference(usersURL, $scope.loginObj.user.uid);
+
+                  });
 
                   //increment counter
                   var likeCount = getFirebaseReadingLikeCounterReference(readingsURL, reading_id);
