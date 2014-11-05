@@ -26,7 +26,7 @@ angular.module("bookreadings")
 
             if(readingRecord.deleted == true) {
 
-              var path = "reading/" + readingRecord.reading_id + "/" + readingRecord.slug + "/deleted";
+              var path = "reading/" + $scope.reading_id + "/" + readingRecord.slug + "/deleted";
               $location.path(path);
 
             } else {

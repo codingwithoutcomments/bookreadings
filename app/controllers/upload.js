@@ -20,7 +20,7 @@ var app = angular.module("bookreadings")
 
 			var purchaseLink = null;
 			if(newReading.purchaseLink) {
-				purchaseLink = newReading.purchaseLink
+				purchaseLink = getPathFromUrl(newReading.purchaseLink);
 			}
 			this.reading["purchaseLink"] = purchaseLink;
 
@@ -113,6 +113,10 @@ var app = angular.module("bookreadings")
 		        });
 
 			});
+		}
+
+		function getPathFromUrl(url) {
+		  return url.split("?")[0];
 		}
 
         function getFirebaseTagReference(tagsURL, tag_name, tag_id) {

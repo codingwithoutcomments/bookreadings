@@ -37,12 +37,12 @@
 								<div class="col-xs-3" style='text-align:right;'>
 									<div style='margin-top:17px;'>
 										<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
-											<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }"></span>
+											<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }" title="Like"></span>
 										</button>
-										<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}" class="btn btn-default btn-xs">
+										<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}&tag=bookreadings-20" class="btn btn-default btn-xs" title="Buy Book">
 											<span class="glyphicon glyphicon-fire"></span>
 										</a>
-										<a ng-href="{{audio_link}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs">
+										<a ng-href="{{audio_link}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs" title="Download">
 											<span class="glyphicon glyphicon-save"></span>
 										</a>
 									</div>
