@@ -83,29 +83,16 @@ var app = angular.module("bookreadings")
 
 							this.readingByMostPlayedId = ref.name();
 
-							var readingsByFeaturedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByFeatured");
-							var _readingsByFeaturedRef = $firebase(readingsByFeaturedRef).$asArray();
+							update_dictionary = {};
+							update_dictionary["readingsByDateCreatedId"]= readingsByDateCreatedId;
+							update_dictionary["readingsByMostPlayedId"] = readingByMostPlayedId;
+							$firebase(singleReadingRef).$update(update_dictionary).then(function(){
 
-							var data = {}
-							var user = $scope.loginObj.user;
-							data["created_by"] = user.uid
-							data["reading_id"] = this.reading_id;
-							data["$priority"] = 0;
+					        	var path = "reading/" + this.reading_id + "/" + reading.slug;
+					        	$location.path(path);
 
-							_readingsByFeaturedRef.$add(data).then(function(ref) {
+							});
 
-								update_dictionary = {};
-								update_dictionary["readingsByDateCreatedId"]= readingsByDateCreatedId;
-								update_dictionary["readingsByMostPlayedId"] = readingByMostPlayedId;
-								update_dictionary["readingsByFeaturedId"] = ref.name();
-								$firebase(singleReadingRef).$update(update_dictionary).then(function(){
-
-						        	var path = "reading/" + this.reading_id + "/" + reading.slug;
-						        	$location.path(path);
-
-								});
-
-					        });
 				        });
 
 					});

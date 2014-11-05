@@ -105,7 +105,7 @@ angular.module("bookreadings")
 
       if($scope.loginObj.user) {
 
-        if($scope.loginObj.user.admin) {
+        if($scope.user.admin) {
           return true;
         }
 
@@ -119,7 +119,7 @@ angular.module("bookreadings")
 
         if($scope.loginObj.user) {
 
-          if(reading_created_by == $scope.loginObj.user.id || $scope.loginObj.user.admin) {
+          if(reading_created_by == $scope.loginObj.user.id || $scope.user.admin) {
 
             return true;
           }

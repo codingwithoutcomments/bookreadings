@@ -204,13 +204,16 @@ angular.module("bookreadings")
 
           if($scope.userIsAdmin()) {
 
-            //set the priority to the current timestamp
-            //then reverse that timestamp
-            var readingsByFeatured = getFirebaseReadingsByFeaturedReference($scope.reading.readingsByFeaturedId).$asObject();
-            readingsByFeatured.$loaded().then(function() {
+              var readingsByFeaturedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByFeatured");
+              var _readingsByFeaturedRef = $firebase(readingsByFeaturedRef).$asArray();
 
-               readingsByFeatured["$priority"] = Firebase.ServerValue.TIMESTAMP;
-               readingsByFeatured.$save().then(function(ref){
+              var data = {}
+              var user = $scope.loginObj.user;
+              data["created_by"] = user.uid
+              data["reading_id"] = $scope.reading_id;
+              data["$priority"] = Firebase.ServerValue.TIMESTAMP;
+
+              _readingsByFeaturedRef.$add(data).then(function(ref) {
 
                 var priorityFeatured = getFirebaseReadingsByFeaturedReference(ref.name()).$asObject();
                 priorityFeatured.$loaded().then(function() {
@@ -218,15 +221,18 @@ angular.module("bookreadings")
                   priorityFeatured["$priority"] = -priorityFeatured.$priority;
                   priorityFeatured.$save();
 
-                  //display featured message
-                  swal("Featured", "This reading has been featured", "success");   
+                  update_dictionary = {};
+                  update_dictionary["readingsByFeaturedId"] = ref.name();
+                  $scope.readingRef.$update(update_dictionary).then(function(){
 
+                      //display featured message
+                      swal("Featured", "This reading has been featured", "success");   
 
-               });
+                  });
+
+              });
 
             });
-
-          });
 
         }
 
