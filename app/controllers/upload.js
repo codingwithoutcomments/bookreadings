@@ -1,7 +1,8 @@
 var app = angular.module("bookreadings")
 	.constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
 	.constant("tagsURL", "https://bookreadings.firebaseio.com/tags")
-	.controller("uploadCtrl", function ($scope, $firebase, $http, $location, readingsURL, tagsURL, string_manipulation) {
+    .constant("CDNReadingsPath", "https://d1onveq9178bu8.cloudfront.net")
+	.controller("uploadCtrl", function ($scope, $firebase, $http, $location, readingsURL, tagsURL, string_manipulation, CDNReadingsPath) {
 
 		filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
@@ -128,7 +129,7 @@ var app = angular.module("bookreadings")
 		        	for(var i = 0; i < InkBlobs.length; i++) {
 
 			        	reading = {
-			        		"audio_url" : InkBlobs[i].url,
+			        		"audio_url" : InkBlobs[i].url.replace("https://www.filepicker.io", ""),
 			        		"audio_filename" : InkBlobs[i].filename,
 			        		"audio_mimetype" : InkBlobs[i].mimetype,
 			        		"audio_size" : InkBlobs[i].size,
@@ -175,7 +176,7 @@ var app = angular.module("bookreadings")
 
 		        	for(var i = 0; i < InkBlobs.length; i++) {
 
-			        	reading["cover_image_url"] = InkBlobs[i].url;
+			        	reading["cover_image_url"] = InkBlobs[i].url.replace("https://www.filepicker.io", "");
 			        	reading["cover_image_filename"] = InkBlobs[i].filename;
 			        	reading["cover_image_mimetype"] = InkBlobs[i].mimetype;
 			        	reading["cover_image_size"] = InkBlobs[i].size;
@@ -187,7 +188,7 @@ var app = angular.module("bookreadings")
 
 				        	$scope.reading = reading
 				        	var filepicker = "https://www.filepicker.io/api/file/" + InkBlobs[i].key + "/convert?w=950&height=950"
-				        	$scope.reading_cover_photo = InkBlobs[i].url
+				        	$scope.reading_cover_photo = CDNReadingsPath + reading.cover_image_url;
 				        	$scope.reading_cover_photo_uploaded = true;
 				        	$scope.newReading.has_cover_photo = true;
 			        	});

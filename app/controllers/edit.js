@@ -105,7 +105,7 @@ angular.module("bookreadings")
 
                   for(var i = 0; i < InkBlobs.length; i++) {
 
-                    reading["cover_image_url"] = InkBlobs[i].url;
+                    reading["cover_image_url"] = InkBlobs[i].url.replace("https://www.filepicker.io", "");
                     reading["cover_image_filename"] = InkBlobs[i].filename;
                     reading["cover_image_mimetype"] = InkBlobs[i].mimetype;
                     reading["cover_image_size"] = InkBlobs[i].size;

@@ -1,6 +1,8 @@
 angular.module("bookreadings")
     .constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
-    .controller("searchCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, S3ReadingsPath) {
+    .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
+    .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
+    .controller("searchCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP) {
 
     	$scope.searchObject = {}
 
@@ -14,6 +16,8 @@ angular.module("bookreadings")
         $scope.hide_more_results_button = true;
         $scope.size = 10;
         $scope.number_of_results_shown = 0;
+
+        $scope.CDNReadingsPathFP = CDNReadingsPathFP;
 
 		var queue = new Firebase('https://bookreadings.firebaseio.com/search');
 	    function search(index, type, searchTerm, from, size, callback) {

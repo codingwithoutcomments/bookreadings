@@ -5,7 +5,9 @@ angular.module("bookreadings")
     .constant("usersURL", "https://bookreadings.firebaseio.com/users")
     .constant("firebaseURL", "https://bookreadings.firebaseio.com")
     .constant("S3ReadingsPath", "https://s3-us-west-2.amazonaws.com/bookreadings/")
-    .controller("readingCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath) {
+    .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
+    .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
+    .controller("readingCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP) {
 
         threeSixtyPlayer.init();
 
@@ -15,6 +17,7 @@ angular.module("bookreadings")
         $scope.reading = null;
         $scope.reading_deleted = false;
         $scope.comment_properties = {};
+        $scope.CDNReadingsPathCF = CDNReadingsPathCF;
 
         var readingFirebase = new Firebase(readingsURL + "/" + $scope.reading_id);
         $scope.readingRef = $firebase(readingFirebase);
@@ -33,8 +36,6 @@ angular.module("bookreadings")
 
               $scope.reading = readingRecord
 
-              $scope.audio_link = S3ReadingsPath + $scope.reading.audio_key;
-
               var time = moment($scope.reading.created);
               var timeSince = time.fromNow();
               $scope.reading["time_since"] = timeSince;
@@ -43,7 +44,7 @@ angular.module("bookreadings")
                 $scope.readingProperties[$scope.reading.$id] = {};
               }
               $scope.readingProperties[$scope.reading.$id].like_text = "Like";
-              $scope.readingProperties[$scope.reading.$id].cover_image_url_converted = $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
+              $scope.readingProperties[$scope.reading.$id].cover_image_url_converted = CDNReadingsPathFP + $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
 
               $scope.$watch('reading', function(newValue, oldValue){
 

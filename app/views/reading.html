@@ -13,7 +13,7 @@
 		<div class="row">
 			<div class="col-xs-12" style="overflow:hidden;padding-left:5px;">
 			    <div class="ui360 sm2_playing ui360reading" ng-click="readingPlayed(reading_id, reading.readingsByMostPlayedId)">
-			     	<a ng-href="{{audio_link}}?s={{randomAudioPlayerValue}}" class="norewrite exclude button-exclude inline-exclude"></a>
+			     	<a ng-href="{{CDNReadingsPathCF}}{{reading.audio_key}}?s={{randomAudioPlayerValue}}" class="norewrite exclude button-exclude inline-exclude"></a>
 			    </div>
 			    <div class="readingTitle">
 			    	<h1 style="">{{reading.title}}</h1>
@@ -28,7 +28,7 @@
 				<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}&tag=bookreadings-20" class="btn btn-default btn-xs">
 					<span class="glyphicon glyphicon-fire"></span> Buy Book
 				</a>
-				<a ng-href="{{audio_link}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs">
+				<a ng-href="{{CDNReadingsPath}}{{reading.audio_url}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs">
 					<span class="glyphicon glyphicon-save"></span> Download
 				</a>
 				<div class="btn-group" ng-show="user.admin || readingProperties[reading.$id].reading_created_by_logged_in_user">

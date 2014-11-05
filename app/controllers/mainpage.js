@@ -4,11 +4,15 @@ angular.module("bookreadings")
     .constant("readingsByFeaturedURL", "https://bookreadings.firebaseio.com/readingsByFeatured")
     .constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
     .constant("S3ReadingsPath", "https://s3-us-west-2.amazonaws.com/bookreadings/")
-    .controller("mainPageController", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsByDateCreatedURL, readingsByFeaturedURL, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, readingsByMostPlayedURL, S3ReadingsPath) {
+    .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
+    .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
+    .controller("mainPageController", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsByDateCreatedURL, readingsByFeaturedURL, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, CDNReadingsPathFP, CDNReadingsPathCF, readingsByMostPlayedURL, S3ReadingsPath) {
 
     	$scope.S3ReadingsPath = S3ReadingsPath;
         $scope.oldReadings = {};
         $scope.populatedLikes = {};
+        $scope.CDNReadingsPathCF = CDNReadingsPathCF;
+        $scope.CDNReadingsPathFP = CDNReadingsPathFP;
 
         var ref = new Firebase(readingsByFeaturedURL);
         $scope.filterBy ="featured";
