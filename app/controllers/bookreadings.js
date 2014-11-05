@@ -45,7 +45,7 @@ angular.module("bookreadings")
 				$rootScope.user = user;
 				$scope.firstName = user.displayName.split(' ')[0];
         $scope.provider_id = user.$id.split(':')[1];
-				$scope.profile_picture = "http://graph.facebook.com/" + $scope.provider_id + "/picture";
+				$scope.profile_picture = "https://graph.facebook.com/" + $scope.provider_id + "/picture";
 
 			} else {
 
