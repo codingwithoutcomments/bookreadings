@@ -2,7 +2,7 @@ var app = angular.module("bookreadings")
 	.constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
 	.constant("tagsURL", "https://bookreadings.firebaseio.com/tags")
     .constant("CDNReadingsPath", "https://d1onveq9178bu8.cloudfront.net")
-	.controller("uploadCtrl", function ($scope, $firebase, $http, $location, readingsURL, tagsURL, string_manipulation, CDNReadingsPath) {
+	.controller("uploadCtrl", function ($scope, $rootScope, $firebase, $http, $location, readingsURL, tagsURL, string_manipulation, CDNReadingsPath) {
 
 		filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
@@ -37,9 +37,10 @@ var app = angular.module("bookreadings")
 			this.reading["modified"] = Firebase.ServerValue.TIMESTAMP;
 
 			var user = $scope.loginObj.user;
+			var userObject = $rootScope.user;
 			this.reading["created_by"] = user.uid;
 			this.reading["created_by_id"] = user.id;
-			this.reading["created_by_name"] = user.displayName;
+			this.reading["created_by_name"] = userObject.displayName;
 
 			//add counts
 			this.reading["like_count"] = 0
@@ -51,6 +52,8 @@ var app = angular.module("bookreadings")
 			var readingsRef = new Firebase(readingsURL);
 			var _readingRef = $firebase(readingsRef).$asArray();
 			_readingRef.$add(reading).then(function(ref){
+
+				//update created by 
 
 				var singleReadingRef = new Firebase(readingsURL + "/" + ref.name());
 				var _singleReadingRef = $firebase(singleReadingRef).$asObject();

@@ -5,13 +5,16 @@ angular.module("bookreadings")
     .constant("usersURL", "https://bookreadings.firebaseio.com/users")
     .constant("firebaseURL", "https://bookreadings.firebaseio.com")
     .constant("S3ReadingsPath", "https://s3-us-west-2.amazonaws.com/bookreadings/")
-    .controller("editCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath, string_manipulation) {
+    .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
+    .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
+    .controller("editCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath, string_manipulation, CDNReadingsPathCF, CDNReadingsPathFP) {
 
       filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
     	//check if user is authorized -- otherwise forward to home page
         $scope.reading_id = $routeParams.id;
         $scope.reading_deleted = false;
+        $scope.CDNReadingsPathFP = CDNReadingsPathFP;
 
         var readingFirebase = new Firebase(readingsURL + "/" + $scope.reading_id);
         $scope.readingRef = $firebase(readingFirebase);
@@ -116,7 +119,7 @@ angular.module("bookreadings")
                     $scope.$apply(function(){
 
                       $scope.updateReading = reading
-                      updateReading.reading_cover_photo = InkBlobs[i].url
+                      updateReading.reading_cover_photo = reading.cover_image_url;
                     });
 
                   }
