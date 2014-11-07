@@ -6,7 +6,8 @@ angular.module("bookreadings")
     .constant("S3ReadingsPath", "https://s3-us-west-2.amazonaws.com/bookreadings/")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
-    .controller("mainPageController", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsByDateCreatedURL, readingsByFeaturedURL, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, CDNReadingsPathFP, CDNReadingsPathCF, readingsByMostPlayedURL, S3ReadingsPath) {
+    .constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
+    .controller("mainPageController", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsByDateCreatedURL, readingsByFeaturedURL, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, CDNReadingsPathFP, CDNReadingsPathCF, readingsByMostPlayedURL, S3ReadingsPath, readingsStatsURL) {
 
     	$scope.S3ReadingsPath = S3ReadingsPath;
         $scope.oldReadings = {};
@@ -60,6 +61,11 @@ angular.module("bookreadings")
 
                         calculateTheCreatedTimeForReading(_readingObject, readings[i], $scope.filterBy);
 
+                        var readingStatsRef = new Firebase(readingsStatsURL + "/" + readings[i].reading_id);
+                        var _readingStatsObject = $firebase(readingStatsRef).$asObject();
+
+                        getLikePlayCommentCounts(_readingObject, _readingStatsObject);
+
 
                     }
 
@@ -72,6 +78,21 @@ angular.module("bookreadings")
             console.log("load next page");
 
 		};
+
+        function getLikePlayCommentCounts(reading, readingStatsObject) {
+
+            if(readingStatsObject) {
+
+                readingStatsObject.$loaded().then(function(){
+
+                    $scope.readingProperties[reading.$id].comment_count = readingStatsObject.comment_count;
+                    $scope.readingProperties[reading.$id].like_count = readingStatsObject.like_count;
+                    $scope.readingProperties[reading.$id].play_count = readingStatsObject.play_count;
+
+                });
+            }
+
+        }
 
 		function calculateTheCreatedTimeForReading(reading, readingsByRef, filter) {
 

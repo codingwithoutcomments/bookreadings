@@ -4,7 +4,8 @@ angular.module("bookreadings")
     .constant("likesURL", "https://bookreadings.firebaseio.com/likes")
     .constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
     .constant("usersURL", "https://bookreadings.firebaseio.com/users")
-	.controller("bookreadingsCtrl", function ($scope, $rootScope, $firebase, $http, $location, $firebaseSimpleLogin, firebaseURL, firebaseAuthenticatedURL, likesURL, readingsURL, usersURL) {
+    .constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
+	.controller("bookreadingsCtrl", function ($scope, $rootScope, $firebase, $http, $location, $firebaseSimpleLogin, firebaseURL, firebaseAuthenticatedURL, likesURL, readingsURL, usersURL, readingsStatsURL) {
 
 
         //dictionary for holding reading like information: like_text and reading_liked
@@ -243,16 +244,16 @@ angular.module("bookreadings")
                 getFirebaseReadingLikeRef(readingsURL, reading_id, like_name).$remove();
 
                 //decrement counter
-                var likeCount = getFirebaseReadingLikeCounterReference(readingsURL, reading_id);
+                var likeCount = getFirebaseReadingLikeCounterReference(readingsStatsURL, reading_id);
                 likeCount.$transaction(function(currentCount) {
                   if (!currentCount) return 1;   // Initial value for counter.
                   if (currentCount < 0) return;  // Return undefined to abort transaction.
-                  return currentCount - 1;       // Increment the count by 1.
+                  return currentCount - 1;       // Decrement the current counter by 1
                 }).then(function(snapshot) {
                   if (!snapshot) {
                     // Handle aborted transaction.
                   } else {
-                    // Do something.
+                      $scope.readingProperties[reading_id].like_count = snapshot.val();
                   }
                 }, function(err) {
                   // Handle the error condition.
@@ -311,7 +312,7 @@ angular.module("bookreadings")
                   });
 
                   //increment counter
-                  var likeCount = getFirebaseReadingLikeCounterReference(readingsURL, reading_id);
+                  var likeCount = getFirebaseReadingLikeCounterReference(readingsStatsURL, reading_id);
                   likeCount.$transaction(function(currentCount) {
                     if (!currentCount) return 1;   // Initial value for counter.
                     if (currentCount < 0) return;  // Return undefined to abort transaction.
@@ -320,7 +321,7 @@ angular.module("bookreadings")
                     if (!snapshot) {
                       // Handle aborted transaction.
                     } else {
-                      // Do something.
+                      $scope.readingProperties[reading_id].like_count = snapshot.val();
                     }
                   }, function(err) {
                     // Handle the error condition.
@@ -353,7 +354,7 @@ angular.module("bookreadings")
 
             $scope.readingProperties[reading_id].reading_played = true;
 
-            var readingPlayCounterFirebase = new Firebase(readingsURL + "/" + reading_id + "/play_count");
+            var readingPlayCounterFirebase = new Firebase(readingsStatsURL + "/" + reading_id + "/play_count");
             var play_count = $firebase(readingPlayCounterFirebase);
 
             play_count.$transaction(function(currentCount) {
@@ -376,6 +377,8 @@ angular.module("bookreadings")
         					_readingByMostPlayedRef.$save();
 
         				});
+
+                $scope.readingProperties[reading_id].play_count = snapshot.val();
 
 
               }

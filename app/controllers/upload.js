@@ -1,8 +1,9 @@
 var app = angular.module("bookreadings")
 	.constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
+	.constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
 	.constant("tagsURL", "https://bookreadings.firebaseio.com/tags")
     .constant("CDNReadingsPath", "https://d1onveq9178bu8.cloudfront.net")
-	.controller("uploadCtrl", function ($scope, $rootScope, $firebase, $http, $location, readingsURL, tagsURL, string_manipulation, CDNReadingsPath) {
+	.controller("uploadCtrl", function ($scope, $rootScope, $firebase, $http, $location, readingsURL, tagsURL, string_manipulation, CDNReadingsPath, readingsStatsURL) {
 
 		filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
@@ -42,10 +43,6 @@ var app = angular.module("bookreadings")
 			this.reading["created_by_id"] = user.id;
 			this.reading["created_by_name"] = userObject.displayName;
 
-			//add counts
-			this.reading["like_count"] = 0
-			this.reading["play_count"] = 0
-			this.reading["comment_count"] = 0
 			this.reading["$priority"] = Firebase.ServerValue.TIMESTAMP
 
 
@@ -53,8 +50,16 @@ var app = angular.module("bookreadings")
 			var _readingRef = $firebase(readingsRef).$asArray();
 			_readingRef.$add(reading).then(function(ref){
 
-				//update created by 
+				//add counts to reading_stats
+				reading_stats = {};
+				reading_stats["like_count"] = 0
+				reading_stats["play_count"] = 0
+				reading_stats["comment_count"] = 0
+				var readingStatsRef = new Firebase(readingsStatsURL);
+				var _readingStatsRef = $firebase(readingStatsRef);
+				_readingStatsRef.$set(ref.name(), reading_stats);
 
+				//update created by 
 				var singleReadingRef = new Firebase(readingsURL + "/" + ref.name());
 				var _singleReadingRef = $firebase(singleReadingRef).$asObject();
 				_singleReadingRef.$loaded().then(function() {

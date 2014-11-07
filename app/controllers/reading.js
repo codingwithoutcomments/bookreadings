@@ -7,7 +7,8 @@ angular.module("bookreadings")
     .constant("S3ReadingsPath", "https://s3-us-west-2.amazonaws.com/bookreadings/")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
-    .controller("readingCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP) {
+    .constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
+    .controller("readingCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP, readingsStatsURL) {
 
         threeSixtyPlayer.init();
 
@@ -45,6 +46,17 @@ angular.module("bookreadings")
               }
               $scope.readingProperties[$scope.reading.$id].like_text = "Like";
               $scope.readingProperties[$scope.reading.$id].cover_image_url_converted = CDNReadingsPathFP + $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
+
+              //pull the reading stats 
+              var readingStatsRef = new Firebase(readingsStatsURL + "/" + $scope.reading_id);
+              var _readingStatsRef = $firebase(readingStatsRef);
+              var reading_stats_record = _readingStatsRef.$asObject();
+              reading_stats_record.$loaded().then(function(){
+
+                 $scope.reading_stats = reading_stats_record;
+
+              });
+
 
               $scope.$watch('reading', function(newValue, oldValue){
 
@@ -241,16 +253,16 @@ angular.module("bookreadings")
 
         $scope.showTopCommentBox = function(){
 
-          if($scope.loginObj.user && $scope.reading){
-            if($scope.reading.comment_count <= 5) return true;
+          if($scope.loginObj.user && $scope.reading_stats){
+            if($scope.reading_stats.comment_count <= 5) return true;
           }
           return false;
         }
 
         $scope.showBottomCommentBox = function(){
 
-          if($scope.loginObj.user && $scope.reading){
-            if($scope.reading.comment_count > 5) return true;
+          if($scope.loginObj.user && $scope.reading_stats){
+            if($scope.reading_stats.comment_count > 5) return true;
           }
           return false;
         }
@@ -357,7 +369,7 @@ angular.module("bookreadings")
               });
 
               //increment counter
-              var commentCount = getFirebaseReadingCommentCounterReference(readingsURL, reading_id);
+              var commentCount = getFirebaseReadingCommentCounterReference(readingsStatsURL, reading_id);
               commentCount.$transaction(function(currentCount) {
                 if (!currentCount) return 1;   // Initial value for counter.
                 if (currentCount < 0) return;  // Return undefined to abort transaction.

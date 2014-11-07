@@ -43,7 +43,7 @@
 				</div>
 			</div>
 			<div class="col-xs-6 reading-stats">
-				<span><span class="glyphicon glyphicon-play"></span> {{ reading.play_count }} | <span class="glyphicon glyphicon-heart"></span> {{reading.like_count}} | <span class="glyphicon glyphicon-comment"></span> {{reading.comment_count}}</span>
+				<span><span class="glyphicon glyphicon-play"></span> {{ reading_stats.play_count }} | <span class="glyphicon glyphicon-heart"></span> {{reading_stats.like_count}} | <span class="glyphicon glyphicon-comment"></span> {{reading_stats.comment_count}}</span>
 			</div>
 		</div>
 		<div class="row">
@@ -70,7 +70,7 @@
 				</div>
 				<div class="row reading-comment-header">
 					<div class="col-xs-9">
-						<span class="glyphicon glyphicon-comment"></span> {{reading.comment_count}} Comments
+						<span class="glyphicon glyphicon-comment"></span> {{reading_stats.comment_count}} Comments
 						<hr style='margin-top:0px;'>
 						<div ng-show='showTopCommentBox()' style="overflow:hidden;">
 							<div style="float:left;">
