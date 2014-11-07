@@ -8,7 +8,7 @@ angular.module("bookreadings")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
     .constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
-    .controller("readingCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP, readingsStatsURL) {
+    .controller("readingCtrl", function ($scope, $rootScope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP, readingsStatsURL) {
 
         threeSixtyPlayer.init();
 
@@ -322,6 +322,7 @@ angular.module("bookreadings")
           var commentsRef = $firebase(commentsFirebase);
 
           var user = $scope.loginObj.user;
+          var userObject = $rootScope.user;
 
           if(user) {
 
@@ -329,7 +330,7 @@ angular.module("bookreadings")
             comment_object["type"] = "reading";
             comment_object["created_by"] = $scope.loginObj.user.uid;
             comment_object["picture"] = "http://graph.facebook.com/" + user.id + "/picture";
-            comment_object["display_name"] = user.displayName;
+            comment_object["display_name"] = userObject.displayName;
             comment_object["created"] = Firebase.ServerValue.TIMESTAMP;
             comment_object["object_id"] = reading_id;
             comment_object["content"] = comment.comment;

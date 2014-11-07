@@ -21,7 +21,7 @@
 	</div>
 	<div class="col-xs-12 col-sm-10" style='margin-top:10px;'>
 		<div ng-repeat="reading in readings track by reading.$id">
-			<div class="row" ng-if="reading.cover_image_url" ng-style="{'background-image':'url({{CDNReadingsPathFP}}{{reading.cover_image_url}}/convert?w=950&h=300&fit=crop&align=top)'}" style='height:300px;background-repeat:no-repeat;background-size:cover;margin-bottom:10px;'>
+			<div class="row reading_row" ng-if="reading.cover_image_url" ng-style="{'background-image':'url({{CDNReadingsPathFP}}{{reading.cover_image_url}}/convert?w=950&h=300&fit=crop&align=top)'}" style='height:300px;background-repeat:no-repeat;background-size:cover;margin-bottom:10px;'>
 				<div class="col-xs-12" style='padding-left:0px;'>
 			        <div class="media" >
 					    <div class="ui360 ui360reading" ng-click="readingPlayed(reading.$id, reading.readingsByMostPlayedId)">

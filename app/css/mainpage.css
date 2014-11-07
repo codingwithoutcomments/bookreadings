@@ -109,3 +109,19 @@ menu_font {
 	style:font-weight:200;
 
 }
+
+.reading_row {
+
+	-moz-border-radius : 10px; /* Firefox */
+    -webkit-border-radius : 10px; /* Safari & Chrome */
+    -khtml-border-radius : 10px; /* Linux browsers */
+    border-radius : 10px; /* CSS3 compatible browsers */
+
+    border-style: solid;
+    border-width: 1px;
+    border-color: #cccccc;
+    padding: 0px;
+    border-spacing: 0px;
+    overflow: hidden;
+
+}
