@@ -74,6 +74,8 @@ var app = angular.module("bookreadings")
 					data["$priority"] = -_singleReadingRef.$priority;
 
 					this.reading_id = ref.name();
+					this.reading_priority = -_singleReadingRef.$priority;
+					this.reading_tags = _singleReadingRef.tags;
 
 					_readingsByDateCreatedRef.$add(data).then(function(ref) {
 
@@ -88,6 +90,10 @@ var app = angular.module("bookreadings")
 						data["reading_id"] = this.reading_id;
 						data["$priority"] = 0;
 
+						this.reading_id = this.reading_id;
+						this.reading_priority = this.reading_priority;
+						this.reading_tags = this.reading_tags;
+
 						_readingsByMostPlayedRef.$add(data).then(function(ref) {
 
 							this.readingByMostPlayedId = ref.name();
@@ -97,8 +103,15 @@ var app = angular.module("bookreadings")
 							update_dictionary["readingsByMostPlayedId"] = readingByMostPlayedId;
 							$firebase(singleReadingRef).$update(update_dictionary).then(function(){
 
-					        	var path = "reading/" + this.reading_id + "/" + reading.slug;
-					        	$location.path(path);
+								$scope.processed_tags = [];
+								var user = $scope.loginObj.user;
+								for(var i = 0; i < this.reading_tags.length; i++) {
+
+									//add tags to tag specific section
+									var tagsRef = getFirebaseTagNameReference(tagsURL, this.reading_tags[i]);
+									add_tags_to_tag_specific_section(tagsRef, this.reading_id, user.uid, this.reading_priority, this.reading.tags.length, this.reading_tags[i], reading.slug);
+
+								}
 
 							});
 
@@ -109,15 +122,54 @@ var app = angular.module("bookreadings")
 		        });
 
 			});
+
+		function add_tags_to_tag_specific_section(tagsRef, reading_id, user_id, reading_priority, number_of_tags, tag_name, reading_slug) {
+
+			var data = {};
+			data["created_by"] = user_id;
+			data["reading_id"] = reading_id;
+			data["$priority"] = reading_priority;
+
+			//save tag to list
+		    //set the priority	
+			tagsRef.$push(data).then(function(ref){
+
+				//save the id back to reading
+				var singleReadingTagRef = new Firebase(readingsURL + "/" + reading_id + "/" + "tag_locations");
+				var _singleReadingTagRef = $firebase(singleReadingTagRef);
+
+				_singleReadingRef.$set(tag_name, ref.name()).then(function(){
+
+					$scope.processed_tags.push(tag_name);
+
+					if($scope.processed_tags.length == number_of_tags) {
+
+			        	var path = "reading/" + reading_id + "/" + reading_slug;
+			        	$location.path(path);
+			        }
+
+				})
+
+
+			};
+
 		}
+		
 
 		function getPathFromUrl(url) {
 		  return url.split("?")[0];
 		}
 
-        function getFirebaseTagReference(tagsURL, tag_name, tag_id) {
+        function getFirebaseTagIDReference(tagsURL, tag_name, tag_id) {
 
           var tagFirebase = new Firebase(tagsURL + "/" + tag_name + "/" + tag_id);
+          return $firebase(tagFirebase);
+
+        }
+
+        function getFirebaseTagNameReference(tagsURL, tag_name) {
+
+          var tagFirebase = new Firebase(tagsURL + "/" + tag_name);
           return $firebase(tagFirebase);
 
         }
