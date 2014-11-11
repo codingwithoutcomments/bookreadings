@@ -7,7 +7,8 @@ angular.module("bookreadings")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
     .constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
-    .controller("mainPageController", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsByDateCreatedURL, readingsByFeaturedURL, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, CDNReadingsPathFP, CDNReadingsPathCF, readingsByMostPlayedURL, S3ReadingsPath, readingsStatsURL) {
+    .constant("tagURL", "https://bookreadings.firebaseio.com/tags")
+    .controller("mainPageController", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, tagURL, readingsByDateCreatedURL, readingsByFeaturedURL, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, CDNReadingsPathFP, CDNReadingsPathCF, readingsByMostPlayedURL, S3ReadingsPath, readingsStatsURL) {
 
     	$scope.S3ReadingsPath = S3ReadingsPath;
         $scope.oldReadings = {};
@@ -15,11 +16,19 @@ angular.module("bookreadings")
         $scope.CDNReadingsPathCF = CDNReadingsPathCF;
         $scope.CDNReadingsPathFP = CDNReadingsPathFP;
 
+        $scope.tag_name = $routeParams.tagname;
+
         var ref = new Firebase(readingsByFeaturedURL);
         $scope.filterBy ="featured";
         $scope.filterByIndex = 0;
 
-        if($location.path() == "/popular/") {
+        if($scope.tag_name) {
+
+            ref = new Firebase(tagURL + "/" + $scope.tag_name);
+            $scope.filterBy = "";
+            $scope.filterByIndex = -1;
+
+        }else if($location.path() == "/popular/") {
 
             ref = new Firebase(readingsByMostPlayedURL)
             $scope.filterBy ="popular";

@@ -66,6 +66,13 @@
                 }
             });
 
+            $routeProvider.when("/tag/:tagname/", {
+                templateUrl: "/views/bookreadingsindex.html",
+                auth: function (user) {
+                  return true
+                }
+            });
+
             $routeProvider.when("/featured/", {
                 templateUrl: "/views/bookreadingsindex.html",
                 auth: function (user) {

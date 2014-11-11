@@ -122,6 +122,7 @@ var app = angular.module("bookreadings")
 		        });
 
 			});
+		}
 
 		function add_tags_to_tag_specific_section(tagsRef, reading_id, user_id, reading_priority, number_of_tags, tag_name, reading_slug) {
 
@@ -130,15 +131,17 @@ var app = angular.module("bookreadings")
 			data["reading_id"] = reading_id;
 			data["$priority"] = reading_priority;
 
+			var tagsRefArray = tagsRef.$asArray();
+
 			//save tag to list
 		    //set the priority	
-			tagsRef.$push(data).then(function(ref){
+			tagsRefArray.$add(data).then(function(ref){
 
 				//save the id back to reading
 				var singleReadingTagRef = new Firebase(readingsURL + "/" + reading_id + "/" + "tag_locations");
 				var _singleReadingTagRef = $firebase(singleReadingTagRef);
 
-				_singleReadingRef.$set(tag_name, ref.name()).then(function(){
+				_singleReadingTagRef.$set(tag_name, ref.name()).then(function(){
 
 					$scope.processed_tags.push(tag_name);
 
@@ -148,10 +151,10 @@ var app = angular.module("bookreadings")
 			        	$location.path(path);
 			        }
 
-				})
+				});
 
 
-			};
+			});
 
 		}
 		
