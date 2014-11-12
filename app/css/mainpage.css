@@ -84,6 +84,11 @@
 	margin-top:5px;
 	font-weight:200;
 	text-align:center;
+
+	-moz-border-radius : 5px; /* Firefox */
+    -webkit-border-radius : 5px; /* Safari & Chrome */
+    -khtml-border-radius : 5px; /* Linux browsers */
+    border-radius : 5px; /* CSS3 compatible browsers */
 }
 
 .sidebar-header a{
