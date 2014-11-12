@@ -2,7 +2,8 @@ angular.module("bookreadings")
     .constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
-    .controller("searchCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP) {
+    .constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
+    .controller("searchCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsStatsURL, readingsURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP) {
 
     	$scope.searchObject = {}
 
@@ -106,6 +107,11 @@ angular.module("bookreadings")
 				        var readingRecord = readingRef.$asObject();
 				        add_reading_to_page(readingRecord);
 
+                        var readingStatsRef = new Firebase(readingsStatsURL + "/" + readingRecord.$id);
+                        var _readingStatsObject = $firebase(readingStatsRef).$asObject();
+
+                        getLikePlayCommmentCounts(readingRecord, _readingStatsObject);
+
 		           });
 		        }
 		     } else {
@@ -115,6 +121,25 @@ angular.module("bookreadings")
 		     }
 
 	    };
+
+        function getLikePlayCommmentCounts(reading, readingStatsObject) {
+
+            if(readingStatsObject) {
+
+                readingStatsObject.$loaded().then(function(){
+
+		              if($scope.readingProperties[reading.$id] == null) {
+		                $scope.readingProperties[reading.$id] = {};
+		              }
+
+                    $scope.readingProperties[reading.$id].comment_count = readingStatsObject.comment_count;
+                    $scope.readingProperties[reading.$id].like_count = readingStatsObject.like_count;
+                    $scope.readingProperties[reading.$id].play_count = readingStatsObject.play_count;
+
+                });
+            }
+
+        }
 
 	    function add_reading_to_page(readingRecord) {
 
