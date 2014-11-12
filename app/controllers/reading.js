@@ -8,7 +8,8 @@ angular.module("bookreadings")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
     .constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
-    .controller("readingCtrl", function ($scope, $rootScope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP, readingsStatsURL) {
+    .constant("tagsURL", "https://bookreadings.firebaseio.com/tagsURL")
+    .controller("readingCtrl", function ($scope, $rootScope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, tagsURL, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP, readingsStatsURL) {
 
         threeSixtyPlayer.init();
 
@@ -152,6 +153,20 @@ angular.module("bookreadings")
 
         }
 
+        function getFirebaseTagReadingReference(tagsURL, tag_name, reading_id) {
+
+          var tagFirebase = new Firebase(tagsURL + "/" + tag_name + "/" + reading_id);
+          return $firebase(tagFirebase);
+
+        }
+
+        function getFirebaseReadingTagLocation(readingsURL,reading_id, tag_name) {
+
+          var readingTagLocation = new Firebase(readingsURL + "/" + reading_id + "/tag_locations/" + tag_name);
+          return $firebase(readingTagLocation)
+
+        }
+
         $scope.delete = function(){
 
           if($scope.userIsAdminOrReadingIsCreatedByLoggedInUser($scope.reading.created_by_id)){
@@ -182,6 +197,18 @@ angular.module("bookreadings")
                 $firebase(readingsByMostPlayedRef).$remove();
 
                 getFirebaseReadingsByFeaturedReference($scope.reading.readingsByFeaturedId).$remove();
+
+                //delete tag locations and tags
+                for(var key in $scope.reading.tag_locations) {
+
+                  //remove from tags
+                  var tagReadingRef = getFirebaseTagReadingReference(tagsURL, key, $scope.reading.tag_locations[key]);
+                  tagReadingRef.$remove();
+
+                  //remove from reading object tag locations
+                  getFirebaseReadingTagLocation(readingsURL, $scope.reading.$id, key).$remove();
+
+                }
 
                 update_dictionary = {};
                 update_dictionary["deleted"] = true;
