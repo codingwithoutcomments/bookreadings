@@ -31,8 +31,10 @@ angular.module("bookreadings")
 
               $scope.reading = readingRecord
               $scope.old_tags = [];
-              for(var i = 0; i < readingRecord.tags.length; i++) {
-                $scope.old_tags.push(readingRecord.tags[i]);
+              if(readingRecord.tags) {
+                for(var i = 0; i < readingRecord.tags.length; i++) {
+                  $scope.old_tags.push(readingRecord.tags[i]);
+                }
               }
 
               $scope.updateReading = {};
@@ -131,14 +133,26 @@ angular.module("bookreadings")
                 //if not in array delete
                 if($.inArray(tag,new_tags) == -1) {
 
-                  //remove from tags
-                  var tagReadingRef = getFirebaseTagReadingReference(tagsURL, old_tags[i], reading_object.tag_locations[old_tags[i]]);
-                  tagReadingRef.$remove();
+                  if(reading_object.tag_locations) {
+
+                    //remove from tags
+                    var tagReadingRef = getFirebaseTagReadingReference(tagsURL, old_tags[i], reading_object.tag_locations[old_tags[i]]);
+                    tagReadingRef.$remove();
+
+                  }
 
                   //remove from reading object tag locations
                   getFirebaseReadingTagLocation(readingsURL, reading_object.$id, old_tags[i]).$remove();
 
                 }
+
+              }
+
+              //if no new tags just go directly to page
+              if(new_tags.length == 0) {
+                
+                var path = "reading/" + ref.name() + "/" + slug;
+                $location.path(path);
 
               }
 
