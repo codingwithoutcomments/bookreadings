@@ -3,9 +3,6 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<div>
-					<b>readin.gs</b>
-				</div>
-				<div>
 					<h1 class="sidebar-header" ng-class="(filterByIndex==0) ? 'arrow_box' : ''"><a href="/#/featured">Featured</a></span>
 				</div>
 				<div>
@@ -13,6 +10,9 @@
 				</div>
 				<div>
 					<h1 class="sidebar-header" ng-class="(filterByIndex==1) ? 'arrow_box' : ''"><a href="/#/popular">Popular</a></h1>
+				</div>
+				<div ng-if="tag_name">
+					<h1 class="sidebar-header" ng-class="(filterByIndex==-1) ? 'arrow_box' : ''"><a href="/#/tag/{{tag_name}}">#{{tag_name}}</a></h1>
 				</div>
 			</div>
 		</div>
