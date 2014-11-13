@@ -73,7 +73,7 @@
 					bookreadin.gs
 				</div>
 			</div>
-			<div style="position:relative" class="hidden-md hidden-lg">
+			<div style="position:relative" class="hidden-md hidden-lg" ng-if="reading.cover_image_url">
 				<div style="position:absolute; bottom:18px;right:0;color:white;">
 					<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
 						<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }" title="Like"></span>
@@ -86,7 +86,7 @@
 					</a>
 				</div>
 			</div>
-			<div style='position:relative'>
+			<div style='position:relative' ng-if="reading.cover_image_url">
 				<div style="position:absolute; bottom:17px;left:0;color:white;background-color:black;font-size:12px;">
 					<span style="background-color:black;padding:3px;"><span class="glyphicon glyphicon-play"></span> &nbsp;{{ readingProperties[reading.$id].play_count}}  | &nbsp;<span class="glyphicon glyphicon-heart"></span> &nbsp;{{readingProperties[reading.$id].like_count}} | &nbsp;<span class="glyphicon glyphicon-comment"></span> &nbsp;{{readingProperties[reading.$id].comment_count}}</span>
 				</div>
