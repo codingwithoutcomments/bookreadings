@@ -1,6 +1,6 @@
 <div class="container" ng-controller="mainPageController" style="background-color:#FFFFFF;">
 	<div class="col-sm-2" style='font-size:20px;margin-top:10px;'>
-		<div class="row">
+		<div class="row hidden-xs hidden-sm">
 			<div class="col-xs-12">
 				<div>
 					<h1 class="sidebar-header" ng-class="(filterByIndex==0) ? 'arrow_box' : ''"><a href="/#/featured">Featured</a></span>
@@ -29,10 +29,10 @@
 							<div class="row">
 								<div class="col-xs-9" style='padding-right:0px;'>
 									<div class="userCreated">
-										<a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.created_by_name}} <span ng-if="readingProperties[reading.$id].timesince">- {{readingProperties[reading.$id].timesince}}</span></a>
+										<span class="hidden-xs hidden-sm"><a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.created_by_name}}</span> <span class="hidden-xs hidden-sm" ng-if="readingProperties[reading.$id].timesince">-</span> <span ng-if="readingProperties[reading.$id].timesince">{{readingProperties[reading.$id].timesince}}</span></a>
 									</div>
 								</div>
-								<div class="col-xs-3" style='text-align:right;'>
+								<div class="col-xs-3 hidden-xs hidden-sm" style='text-align:right;'>
 									<div style='margin-top:17px;'>
 										<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
 											<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }" title="Like"></span>
@@ -46,10 +46,13 @@
 									</div>
 								</div>
 							</div>
-					    	<div class="readingTitle">
+					    	<div class="readingTitle hidden-xs hidden-sm">
 					    		<a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.title}}</a>
 						    </div>
-						    <div class="row">
+					    	<div class="readingTitleMobile hidden-md hidden-lg">
+					    		<a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.title}}</a>
+						    </div>
+						    <div class="row hidden-xs hidden-sm">
 							    <div class="col-md-12" style='margin-top:3px;'>
 									<a ng-repeat="tag in reading.tags" href="/#/tag/{{tag}}/" type="button" class="btn btn-xs" style="margin-right:4px;background-color:black;color:#999;">
 										#{{tag}}
@@ -60,9 +63,22 @@
 				    </div>
 			     </div>
 			</div>
-			<div ng-if="reading.cover_image_url" style='position:relative'>
+			<div class="hidden-xs hidden-sm" ng-if="reading.cover_image_url" style='position:relative'>
 				<div style="position:absolute; bottom:15px;right:0;color:white;">
 					bookreadin.gs
+				</div>
+			</div>
+			<div style="position:relative" class="hidden-md hidden-lg">
+				<div style="position:absolute; bottom:18px;right:0;color:white;">
+					<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
+						<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }" title="Like"></span>
+					</button>
+					<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}&tag=bookreadings-20" class="btn btn-default btn-xs" title="Buy Book">
+						<span class="glyphicon glyphicon-fire"></span>
+					</a>
+					<a ng-href="{{audio_link}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs" title="Download">
+						<span class="glyphicon glyphicon-save"></span>
+					</a>
 				</div>
 			</div>
 			<div style='position:relative'>
