@@ -1,6 +1,6 @@
 <div class="container" ng-controller="mainPageController" style="background-color:#FFFFFF;">
 	<div class="col-sm-2" style='font-size:20px;margin-top:10px;'>
-		<div class="row hidden-xs hidden-sm">
+		<div class="row hidden-xs">
 			<div class="col-xs-12">
 				<div>
 					<h1 class="sidebar-header" ng-class="(filterByIndex==0) ? 'arrow_box' : ''"><a href="/#/featured">Featured</a></span>
@@ -18,6 +18,11 @@
 		</div>
 	</div>
 	<div class="col-xs-12 col-sm-10" style='margin-top:10px;'>
+		<!-- Bootstrap debug size
+        <span class="hidden-xs hidden-sm hidden-md">large</span>
+        <span class="hidden-xs hidden-sm hidden-lg">medium</span>
+        <span class="hidden-xs hidden-md hidden-lg">small</span>
+        <span class="hidden-sm hidden-md hidden-lg">x-small</span> -->
 		<div ng-repeat="reading in readings track by reading.$id">
 			<div class="row reading_row" ng-if="reading.cover_image_url" ng-style="{'background-image':'url({{CDNReadingsPathFP}}{{reading.cover_image_url}}/convert?w=950&h=300&fit=crop&align=top)'}" style='height:300px;background-repeat:no-repeat;background-size:cover;margin-bottom:10px;'>
 				<div class="col-xs-12" style='padding-left:0px;'>
@@ -29,7 +34,7 @@
 							<div class="row">
 								<div class="col-xs-9" style='padding-right:0px;'>
 									<div class="userCreated">
-										<span class="hidden-xs hidden-sm"><a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.created_by_name}}</span> <span class="hidden-xs hidden-sm" ng-if="readingProperties[reading.$id].timesince">-</span> <span ng-if="readingProperties[reading.$id].timesince">{{readingProperties[reading.$id].timesince}}</span></a>
+										<span class="hidden-xs hidden-sm"><a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.created_by_name}}</span><span class="hidden-xs hidden-sm" ng-if="readingProperties[reading.$id].timesince">-</span> <span ng-if="readingProperties[reading.$id].timesince">{{readingProperties[reading.$id].timesince}}</span></a>
 									</div>
 								</div>
 								<div class="col-xs-3 hidden-xs hidden-sm" style='text-align:right;'>
