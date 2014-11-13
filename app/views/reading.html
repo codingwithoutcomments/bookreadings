@@ -28,7 +28,7 @@
 				<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}&tag=bookreadings-20" class="btn btn-default btn-xs">
 					<span class="glyphicon glyphicon-fire"></span> Buy Book
 				</a>
-				<a ng-href="{{CDNReadingsPath}}{{reading.audio_url}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs">
+				<a ng-href="{{CDNReadingsPathCF}}{{reading.audio_key}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs">
 					<span class="glyphicon glyphicon-save"></span> Download
 				</a>
 				<div class="btn-group" ng-show="user.admin || readingProperties[reading.$id].reading_created_by_logged_in_user">
