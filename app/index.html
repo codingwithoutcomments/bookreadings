@@ -3,6 +3,9 @@
 <head>
     <title>bookreadin.gs</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- favicon -->
+    <link rel="shortcut icon" href="favicon.ico" />
+
     <script src="angular.min.js"></script>
     <script src="jquery-2.1.1.js"></script>
     <script type="text/javascript" src="script/ng-tags-input.min.js"></script>
@@ -155,16 +158,16 @@
     <nav class="navbar navbar-inverse" style="margin-bottom:0px;">
         <div class="container">
             <div class="navbar-header" >
-                <a class="navbar-brand" style='padding-top:6px;padding-right:0px;' href="#"><img src="/css/bookreadings_logo_513x106.png" style="width:171px; height:36px;"></a>
-                <span class="hidden-sm hidden-md hidden-lg">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" 
-                         data-target="#example-navbar-collapse">
-                         <span class="sr-only">Toggle navigation</span>
-                         <span class="icon-bar"></span>
-                         <span class="icon-bar"></span>
-                         <span class="icon-bar"></span>
-                      </button>
-                </span>
+                <button type="button" class="navbar-toggle navbar-left" data-toggle="collapse" 
+                     data-target="#example-navbar-collapse">
+                     <span class="sr-only">Toggle navigation</span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                  </button>
+                <a class="navbar-brand" style='padding-top:6px;padding-right:0px;' href="#">
+                    <img src="/css/bookreadings_logo_513x106.png" style="width:171px; height:36px;">
+                </a>
             </div>
             <form class="navbar-form navbar-left hidden-sm hidden-xs" role="search" ng-submit="search(searchPageObject)">
                 <div class="form-group" style="width:380px;">
@@ -187,7 +190,7 @@
                         </a>
                     </li>
                     <!-- Desktop User Dropbown -->
-                    <li class="dropdown hidden-xs" ng-show="loginObj.user">
+                    <li class="dropdown hidden-xs hidden-sm" ng-show="loginObj.user">
                       <a class="dropdown-toggle" data-toggle="dropdown" style="padding-bottom:0px;padding-top:15px;">
                         <img ng-src="{{profile_picture}}" style="height:25px;width:25px;margin-right:5px;" class="img-circle"> {{firstName}} <span class="caret"></span>
                      </a>
@@ -196,13 +199,13 @@
                       </ul>
                     </li>
                     <!-- Mobile user Icon -->
-                    <li class="dropdown hidden-sm hidden-md hidden-lg" ng-show="loginObj.user">
+                    <li class="dropdown hidden-md hidden-lg" ng-show="loginObj.user">
                       <a class="dropdown-toggle" data-toggle="dropdown" style="padding-top:10px;">
                         <img ng-src="{{profile_picture}}" style="height:25px;width:25px;margin-right:5px;" class="img-circle"> {{firstName}}
                      </a>
                     </li>
                     <!-- Desktop Upload Button -->
-                    <li ng-show="loginObj.user" class="hidden-xs">
+                    <li ng-show="loginObj.user" class="hidden-xs hidden-sm">
                         <a href="#/upload">
                             <span class="glyphicon glyphicon-cloud-upload"></span>
                             Upload
@@ -210,18 +213,18 @@
                     </li>
 
                     <!-- Mobile HR -->
-                    <li class="hidden-sm hidden-md hidden-lg"><hr style="margin-top:0px; margin-bottom:0px;border-color:#999;"></li>
+                    <li class="hidden-md hidden-lg"><hr style="margin-top:0px; margin-bottom:0px;border-color:#999;"></li>
 
                     <!-- Mobile Categories -->
-                    <li class="dropdown hidden-sm hidden-md hidden-lg"><a href="/#/featured/">Featured</a></li>
-                    <li class="dropdown hidden-sm hidden-md hidden-lg"><a href="/#/recent/">Recent</a></li>
-                    <li class="dropdown hidden-sm hidden-md hidden-lg"><a href="/#/popular/">Popular</a></li>
+                    <li class="dropdown hidden-md hidden-lg"><a href="/#/featured/">Featured</a></li>
+                    <li class="dropdown hidden-md hidden-lg"><a href="/#/recent/">Recent</a></li>
+                    <li class="dropdown hidden-md hidden-lg"><a href="/#/popular/">Popular</a></li>
 
                     <!-- Mobile HR -->
-                    <li class="hidden-sm hidden-md hidden-lg"><hr style="margin-top:0px; margin-bottom:0px;border-color:#999;"></li>
+                    <li class="hidden-md hidden-lg"><hr style="margin-top:0px; margin-bottom:0px;border-color:#999;"></li>
 
                     <!-- Mobile Logout Button -->
-                    <li class="hidden-sm hidden-md hidden-lg"><a href="" ng-click="logout()">Logout</a></li>
+                    <li class="hidden-md hidden-lg"><a href="" ng-click="logout()">Logout</a></li>
 
                 </ul>
             </div>

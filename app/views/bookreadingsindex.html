@@ -1,6 +1,6 @@
 <div class="container" ng-controller="mainPageController" style="background-color:#FFFFFF;">
-	<div class="col-sm-2" style='font-size:20px;margin-top:10px;'>
-		<div class="row hidden-xs">
+	<div class="col-md-2" style='font-size:20px;margin-top:10px;'>
+		<div class="row hidden-xs hidden-sm">
 			<div class="col-xs-12">
 				<div>
 					<h1 class="sidebar-header" ng-class="(filterByIndex==0) ? 'arrow_box' : ''"><a href="/#/featured">Featured</a></span>
@@ -17,7 +17,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-xs-12 col-sm-10" style='margin-top:10px;'>
+	<div class="col-xs-12 col-sm-12 col-md-10" style='margin-top:10px;'>
 		<!-- Bootstrap debug size
         <span class="hidden-xs hidden-sm hidden-md">large</span>
         <span class="hidden-xs hidden-sm hidden-lg">medium</span>
@@ -75,13 +75,13 @@
 			</div>
 			<div style="position:relative" class="hidden-md hidden-lg" ng-if="reading.cover_image_url">
 				<div style="position:absolute; bottom:18px;right:0;color:white;">
-					<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
+					<button ng-show="loginObj.user" type="button" class="btn btn-default btn-sm" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
 						<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }" title="Like"></span>
 					</button>
-					<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}&tag=bookreadings-20" class="btn btn-default btn-xs" title="Buy Book">
+					<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}&tag=bookreadings-20" class="btn btn-default btn-sm" title="Buy Book">
 						<span class="glyphicon glyphicon-fire"></span>
 					</a>
-					<a ng-href="{{audio_link}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs" title="Download">
+					<a ng-href="{{audio_link}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-sm" title="Download">
 						<span class="glyphicon glyphicon-save"></span>
 					</a>
 				</div>
