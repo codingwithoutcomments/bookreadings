@@ -113,7 +113,7 @@ angular.module("bookreadings")
                 }
 
                 var time;
-                if(filter == "featured") {
+                if(filter.toLowerCase() == "featured") {
 
                   time = moment(Math.abs(readingsByRef.$priority));
 

@@ -7,11 +7,24 @@ angular.module("bookreadings")
     .constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
 	.controller("bookreadingsCtrl", function ($scope, $rootScope, $firebase, $http, $location, $firebaseSimpleLogin, firebaseURL, firebaseAuthenticatedURL, likesURL, readingsURL, usersURL, readingsStatsURL) {
 
+    if($location.path() == "/" || $location.path() == "/featured/") {
 
-        //dictionary for holding reading like information: like_text and reading_liked
-        //can't add directly to reading because it's synced to the server
-        $scope.readingProperties = {};
-        $scope.randomAudioPlayerValue = 0;
+        $scope.filterByIndex = 0;
+
+    }else if($location.path() == "/popular/") {
+
+        $scope.filterByIndex = 1;
+
+    }else if($location.path() == "/recent/") {
+
+        $scope.filterByIndex = 2;
+
+    }
+
+    //dictionary for holding reading like information: like_text and reading_liked
+    //can't add directly to reading because it's synced to the server
+    $scope.readingProperties = {};
+    $scope.randomAudioPlayerValue = 0;
 
 		var firebaseRef = new Firebase(firebaseURL);
 	    $scope.loginObj = $firebaseSimpleLogin(firebaseRef);
@@ -56,6 +69,12 @@ angular.module("bookreadings")
 			}
 
 		}
+
+    $scope.changeFilterByIndex = function(index) {
+
+      $scope.filterByIndex = index;
+
+    }
 
 		$scope.socialLogin = function() {
 

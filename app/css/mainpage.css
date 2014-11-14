@@ -106,11 +106,12 @@
 .sidebar-header {
 	font-size:20px;
 	padding-top:5px;
+	padding-left:10px;
 	padding-bottom:5px;
 	margin-bottom:5px;
 	margin-top:5px;
 	font-weight:200;
-	text-align:center;
+	text-align:left;
 
 	-moz-border-radius : 5px; /* Firefox */
     -webkit-border-radius : 5px; /* Safari & Chrome */
@@ -120,6 +121,10 @@
 
 .sidebar-header a{
 	color:black;
+}
+
+.sidebar-header a:hover{
+	text-decoration:none;
 }
 
 .arrow_box {
@@ -155,4 +160,8 @@ menu_font {
     border-spacing: 0px;
     overflow: hidden;
 
+}
+
+.glyphicon-selected {
+	color:white;
 }

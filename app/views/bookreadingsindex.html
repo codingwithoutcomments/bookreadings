@@ -1,15 +1,15 @@
 <div class="container" ng-controller="mainPageController" style="background-color:#FFFFFF;">
-	<div class="col-md-2" style='font-size:20px;margin-top:10px;'>
-		<div class="row hidden-xs hidden-sm">
+	<div class="col-md-2 hidden-xs hidden-sm" style='font-size:20px;margin-top:10px;'>
+		<div class="row">
 			<div class="col-xs-12">
 				<div>
-					<h1 class="sidebar-header" ng-class="(filterByIndex==0) ? 'arrow_box' : ''"><a href="/#/featured">Featured</a></span>
+					<h1 class="sidebar-header" ng-class="(filterByIndex==0) ? 'arrow_box' : ''"><i class="glyphicon glyphicon-star" ng-class="(filterByIndex==0) ? 'glyphicon-selected' : ''"></i> <a href="/#/featured">Featured</a></span>
 				</div>
 				<div>
-					<h1 class="sidebar-header" ng-class="(filterByIndex==2) ? 'arrow_box' : ''"><a href="/#/recent/">Recent</a></span>
+					<h1 class="sidebar-header" ng-class="(filterByIndex==2) ? 'arrow_box' : ''"><i class="glyphicon glyphicon-time" ng-class="(filterByIndex==2) ? 'glyphicon-selected' : ''"></i> <a href="/#/recent/">Recent</a></span>
 				</div>
 				<div>
-					<h1 class="sidebar-header" ng-class="(filterByIndex==1) ? 'arrow_box' : ''"><a href="/#/popular">Popular</a></h1>
+					<h1 class="sidebar-header" ng-class="(filterByIndex==1) ? 'arrow_box' : ''"><i class="glyphicon glyphicon-heart" ng-class="(filterByIndex==1) ? 'glyphicon-selected' : ''"></i> <a href="/#/popular">Popular</a></h1>
 				</div>
 				<div ng-if="tag_name">
 					<h1 class="sidebar-header" ng-class="(filterByIndex==-1) ? 'arrow_box' : ''"><a href="/#/tag/{{tag_name}}">#{{tag_name}}</a></h1>
@@ -18,11 +18,22 @@
 		</div>
 	</div>
 	<div class="col-xs-12 col-sm-12 col-md-10" style='margin-top:10px;'>
-		<!-- Bootstrap debug size
-        <span class="hidden-xs hidden-sm hidden-md">large</span>
-        <span class="hidden-xs hidden-sm hidden-lg">medium</span>
-        <span class="hidden-xs hidden-md hidden-lg">small</span>
-        <span class="hidden-sm hidden-md hidden-lg">x-small</span> -->
+        <div class="row hidden-md hidden-lg" ng-if="(filterByIndex==0)">
+			<div class="col-xs-12">
+	        	<h4 style='margin-top:0px;'><i class="glyphicon glyphicon-star"></i> Featured</h4>
+	        </div>
+        </div>
+        <div class="row hidden-md hidden-lg" ng-if="(filterByIndex==2)">
+			<div class="col-xs-12">
+	        	<h4 style='margin-top:0px;'><i class="glyphicon glyphicon-time"></i> Recent</h4>
+	        </div>
+        </div>
+        <div class="row hidden-md hidden-lg" ng-if="(filterByIndex==1)">
+			<div class="col-xs-12">
+	        	<h4 style='margin-top:0px;'><i class="glyphicon glyphicon-heart"></i> Popular</h4>
+	        </div>
+        </div>
+
 		<div ng-repeat="reading in readings track by reading.$id">
 			<div class="row reading_row" ng-if="reading.cover_image_url" ng-style="{'background-image':'url({{CDNReadingsPathFP}}{{reading.cover_image_url}}/convert?w=950&h=300&fit=crop&align=top)'}" style='height:300px;background-repeat:no-repeat;background-size:cover;margin-bottom:10px;'>
 				<div class="col-xs-12" style='padding-left:0px;'>
@@ -34,7 +45,7 @@
 							<div class="row">
 								<div class="col-xs-9" style='padding-right:0px;'>
 									<div class="userCreated">
-										<span class="hidden-xs hidden-sm"><a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.created_by_name}}</span><span class="hidden-xs hidden-sm" ng-if="readingProperties[reading.$id].timesince">-</span> <span ng-if="readingProperties[reading.$id].timesince">{{readingProperties[reading.$id].timesince}}</span></a>
+										<span class="hidden-xs"><a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.created_by_name}}</span><span class="hidden-xs" ng-if="readingProperties[reading.$id].timesince">-</span> <span ng-if="readingProperties[reading.$id].timesince">{{readingProperties[reading.$id].timesince}}</span></a>
 									</div>
 								</div>
 								<div class="col-xs-3 hidden-xs hidden-sm" style='text-align:right;'>
