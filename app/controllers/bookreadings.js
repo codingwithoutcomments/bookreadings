@@ -7,7 +7,7 @@ angular.module("bookreadings")
     .constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
 	.controller("bookreadingsCtrl", function ($scope, $rootScope, $firebase, $http, $location, $firebaseSimpleLogin, firebaseURL, firebaseAuthenticatedURL, likesURL, readingsURL, usersURL, readingsStatsURL) {
 
-    if($location.path() == "/" || $location.path() == "/featured/") {
+    if($location.path() == "" || $location.path() == "/featured/") {
 
         $scope.filterByIndex = 0;
 
@@ -73,6 +73,9 @@ angular.module("bookreadings")
     $scope.changeFilterByIndex = function(index) {
 
       $scope.filterByIndex = index;
+
+      //collapse menu
+      $("#example-navbar-collapse").collapse('hide');
 
     }
 
