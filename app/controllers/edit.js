@@ -83,8 +83,18 @@ angular.module("bookreadings")
           var tags = updateReading.tags;
           var tag_array = [];
           for(var i = 0; i < tags.length; i++) {
-            tag_array.push(tags[i].text);
+            var tag_text = tags[i].text.replace('.', '').replace('#', '').replace('$', '').replace('[', '').replace(']', '');
+            tag_array.push(tag_text);
           }
+
+          //remove non-unique names
+          var uniqueNames = [];
+          $.each(tag_array, function(i, el){
+              if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+          });
+
+          tag_array = uniqueNames;
+
 
           var slug = string_manipulation.slugify(updateReading.title);
           var modified = Firebase.ServerValue.TIMESTAMP;

@@ -30,8 +30,18 @@ var app = angular.module("bookreadings")
 			var tags = newReading.tags;
 			var tag_array = [];
 			for(var i = 0; i < tags.length; i++) {
-				tag_array.push(tags[i].text);
+				var tag_text = tags[i].text.replace('.', '').replace('#', '').replace('$', '').replace('[', '').replace(']', '');
+				tag_array.push(tag_text);
 			}
+
+	          //remove non-unique names
+	          var uniqueNames = [];
+	          $.each(tag_array, function(i, el){
+	              if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+	          });
+
+	          tag_array = uniqueNames;
+	          
 			this.reading["tags"] = tag_array
 
 			this.reading["created"] = Firebase.ServerValue.TIMESTAMP;
@@ -105,11 +115,20 @@ var app = angular.module("bookreadings")
 
 								$scope.processed_tags = [];
 								var user = $scope.loginObj.user;
-								for(var i = 0; i < this.reading_tags.length; i++) {
+								if(this.reading_tags) {
 
-									//add tags to tag specific section
-									var tagsRef = getFirebaseTagNameReference(tagsURL, this.reading_tags[i]);
-									add_tags_to_tag_specific_section(tagsRef, this.reading_id, user.uid, this.reading_priority, this.reading.tags.length, this.reading_tags[i], reading.slug);
+									for(var i = 0; i < this.reading_tags.length; i++) {
+
+										//add tags to tag specific section
+										var tagsRef = getFirebaseTagNameReference(tagsURL, this.reading_tags[i]);
+										add_tags_to_tag_specific_section(tagsRef, this.reading_id, user.uid, this.reading_priority, this.reading.tags.length, this.reading_tags[i], reading.slug);
+
+									}
+
+								} else {
+
+						        	var path = "reading/" + this.reading_id + "/" + reading.slug;
+						        	$location.path(path);
 
 								}
 
