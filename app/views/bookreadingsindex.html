@@ -47,7 +47,7 @@
 							<div class="row">
 								<div class="col-xs-9" style='padding-right:0px;'>
 									<div class="userCreated">
-										<span class="hidden-xs"><a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.created_by_name}}</span><span class="hidden-xs" ng-if="readingProperties[reading.$id].timesince">-</span> <span ng-if="readingProperties[reading.$id].timesince">{{readingProperties[reading.$id].timesince}}</span></a>
+										<a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/"><span class="hidden-xs">{{reading.created_by_name}}</span><span class="hidden-sm hidden-md hidden-lg" style='font-size:12px;'>{{reading.created_by_name}}</span> <span ng-if="readingProperties[reading.$id].timesince">-</span> <span class="hidden-xs" ng-if="readingProperties[reading.$id].timesince">{{readingProperties[reading.$id].timesince}}</span><span class="hidden-sm hidden-md hidden-lg" ng-if="readingProperties[reading.$id].timesince" style='font-size:12px;'>{{readingProperties[reading.$id].timesince}}</span></a>
 									</div>
 								</div>
 								<div class="col-xs-3 hidden-xs hidden-sm" style='text-align:right;'>
