@@ -50,19 +50,6 @@
 										<a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/"><span class="hidden-xs">{{reading.created_by_name}}</span><span class="hidden-sm hidden-md hidden-lg" style='font-size:12px;'>{{reading.created_by_name}}</span> <span ng-if="readingProperties[reading.$id].timesince">-</span> <span class="hidden-xs" ng-if="readingProperties[reading.$id].timesince">{{readingProperties[reading.$id].timesince}}</span><span class="hidden-sm hidden-md hidden-lg" ng-if="readingProperties[reading.$id].timesince" style='font-size:12px;'>{{readingProperties[reading.$id].timesince}}</span></a>
 									</div>
 								</div>
-								<div class="col-xs-3 hidden-xs hidden-sm" style='text-align:right;'>
-									<div style='margin-top:17px;'>
-										<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
-											<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }" title="Like"></span>
-										</button>
-										<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}?tag=bookreadings-20" class="btn btn-default btn-xs" title="Buy Book">
-											<span class="glyphicon glyphicon-fire"></span>
-										</a>
-										<a ng-href="{{CDNReadingsPathCF}}{{reading.audio_key}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs" title="Download">
-											<span class="glyphicon glyphicon-save"></span>
-										</a>
-									</div>
-								</div>
 							</div>
 					    	<div class="readingTitle hidden-xs hidden-sm">
 					    		<a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.title}}</a>
@@ -80,14 +67,29 @@
 				        </div>
 				    </div>
 			     </div>
-			</div>
-			<div class="hidden-xs hidden-sm" ng-if="reading.cover_image_url" style='position:relative'>
-				<div style="position:absolute; bottom:15px;right:0;color:white;">
-					bookreadin.gs
+			<!-- desktop buttons -->
+			<div class="hidden-xs hidden-sm" style='position:relative;' ng-if="reading.cover_image_url">
+				<div style='position:absolute;top:10px;right:10px;color:white'>
+					<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
+						<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }" title="Like"></span>
+					</button>
+					<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}?tag=bookreadings-20" class="btn btn-default btn-xs" title="Buy Book">
+						<span class="glyphicon glyphicon-fire"></span>
+					</a>
+					<a ng-href="{{CDNReadingsPathCF}}{{reading.audio_key}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs" title="Download">
+						<span class="glyphicon glyphicon-save"></span>
+					</a>
 				</div>
 			</div>
+		</div>
+		<div class="hidden-xs hidden-sm" ng-if="reading.cover_image_url" style='position:relative'>
+			<div style="position:absolute; bottom:15px;right:0;color:white;">
+				bookreadin.gs
+			</div>
+		</div>
+			<!-- mobile buttons -->
 			<div style="position:relative" class="hidden-md hidden-lg" ng-if="reading.cover_image_url">
-				<div style="position:absolute; bottom:18px;right:0;color:white;">
+				<div style="position:absolute; bottom:18px;right:0px;color:white;">
 					<button ng-show="loginObj.user" type="button" class="btn btn-default btn-sm" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
 						<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }" title="Like"></span>
 					</button>
@@ -100,11 +102,10 @@
 				</div>
 			</div>
 			<div style='position:relative' ng-if="reading.cover_image_url">
-				<div style="position:absolute; bottom:17px;left:0;color:white;background-color:black;font-size:12px;">
+				<div style="position:absolute; bottom:17px;left:0px;color:white;background-color:black;font-size:12px;">
 					<span style="background-color:black;padding:3px;"><span class="glyphicon glyphicon-play"></span> &nbsp;{{ readingProperties[reading.$id].play_count}}  | &nbsp;<span class="glyphicon glyphicon-heart"></span> &nbsp;{{readingProperties[reading.$id].like_count}} | &nbsp;<span class="glyphicon glyphicon-comment"></span> &nbsp;{{readingProperties[reading.$id].comment_count}}</span>
 				</div>
 			</div>
-		</div>
 	</div>
 </div>
 
