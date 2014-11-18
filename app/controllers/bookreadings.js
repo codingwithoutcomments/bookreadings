@@ -19,7 +19,13 @@ angular.module("bookreadings")
 
         $scope.filterByIndex = 2;
 
+    }else if($location.path().substring(0, 8) == "/search/") {
+
+        $scope.filterByIndex = 3;
+
     }
+
+    $scope.search_shown = false;
 
     //dictionary for holding reading like information: like_text and reading_liked
     //can't add directly to reading because it's synced to the server
@@ -70,9 +76,22 @@ angular.module("bookreadings")
 
 		}
 
+    $scope.showSearch = function() {
+
+      $scope.search_shown = true;
+
+    }
+
     $scope.changeFilterByIndex = function(index) {
 
       $scope.filterByIndex = index;
+
+      //collapse menu
+      $("#example-navbar-collapse").collapse('hide');
+
+    }
+
+    $scope.collapseNavbar = function(){
 
       //collapse menu
       $("#example-navbar-collapse").collapse('hide');
@@ -158,6 +177,8 @@ angular.module("bookreadings")
 		}
 
 		$scope.search = function(search){
+
+      $scope.search_shown = false;
 
 			if(search && search.hasOwnProperty("searchterm")){
 				 if(search.searchterm.length > 0) {

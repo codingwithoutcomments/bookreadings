@@ -165,30 +165,45 @@
                      <span class="icon-bar"></span>
                      <span class="icon-bar"></span>
                   </button>
-                <a class="navbar-brand" style='padding-top:6px;padding-right:0px;' href="#">
-                    <img src="/css/bookreadings_logo_513x106.png" style="width:171px; height:36px;">
-                </a>
-            </div>
-            <form class="navbar-form navbar-left hidden-sm hidden-xs" role="search" ng-submit="search(searchPageObject)">
-                <div class="form-group" style="width:380px;">
-                    <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Search" ng-model="searchPageObject.searchterm" style="width:100%;">
-                      <span ng-click="search(searchPageObject)" class="input-group-addon">
-                        <i class="glyphicon glyphicon-search"></i>
-                        </span>
-                    </div>
-                      <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+                    <a ng-if="search_shown==false" class="navbar-brand" style='padding-top:6px;padding-right:0px;margin-right:20px;' href="#">
+                        <img src="/css/bookreadings_logo_513x106.png" style="width:171px; height:36px;">
+                    </a>
+                <!-- IPAD Search -->
+                <div class="form-group hidden-xs" style="width:500px;margin-top:8px;margin-bottom:0px;">
+                    <form ng-submit="search(searchPageObject)">
+                        <div class="input-group">
+                          <input type="text" class="form-control" placeholder="Search" ng-model="searchPageObject.searchterm" style="width:100%;">
+                          <span ng-click="search(searchPageObject)" class="input-group-addon">
+                            <i class="glyphicon glyphicon-search"></i>
+                            </span>
+                        </div>
+                    </form>
                 </div>
-              </form>
+                <!-- Mobile Search -->
+                <div ng-if="search_shown==true" class="form-group hidden-md hidden-lg" style="width:240px;padding-top:7px;margin-right:10px;margin-bottom:0px;margin-left:10px;">
+                    <form ng-submit="search(searchPageObject);"
+                        <div class="input-group">
+                          <input type="text" class="form-control" placeholder="Search" ng-model="searchPageObject.searchterm" style="width:100%;">
+                          <span ng-click="search(searchPageObject)" class="input-group-addon">
+                            <i class="glyphicon glyphicon-search"></i>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
             <!-- Desktop and Mobile Menu -->
             <div class="collapse navbar-collapse" id="example-navbar-collapse">
+
                 <ul class="nav navbar-nav navbar-right">
+
+                    <!-- Login Message -->
                     <li ng-hide="loginObj.user">
                         <a ng-click="socialLogin()">
                             Login With Facebook
                         </a>
                     </li>
+
                     <!-- Desktop User Dropbown -->
                     <li class="dropdown hidden-xs hidden-sm" ng-show="loginObj.user">
                       <a class="dropdown-toggle" data-toggle="dropdown" style="padding-bottom:0px;padding-top:15px;">
@@ -198,12 +213,17 @@
                         <li><a href="" ng-click="logout()">Logout</a></li>
                       </ul>
                     </li>
+
                     <!-- Mobile user Icon -->
                     <li class="dropdown hidden-md hidden-lg" ng-show="loginObj.user">
                       <a class="dropdown-toggle" data-toggle="dropdown" style="padding-top:10px;">
                         <img ng-src="{{profile_picture}}" style="height:25px;width:25px;margin-right:5px;" class="img-circle"> {{firstName}}
                      </a>
                     </li>
+
+                    <!-- Mobile Search Icon -->
+                    <li class="hidden-md hidden-lg" ng-class="(filterByIndex==3) ? 'active' : ''"><a ng-click="showSearch();collapseNavbar();"><i class="glyphicon glyphicon-search"></i> Search</a></li>
+
                     <!-- Desktop Upload Button -->
                     <li ng-show="loginObj.user" class="hidden-xs hidden-sm">
                         <a href="#/upload">
