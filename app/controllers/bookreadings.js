@@ -3,7 +3,23 @@ angular.module("bookreadings")
     .constant("readingsURL", "/readings")
     .constant("usersURL", "/users")
     .constant("readingsStatsURL", "/readings_stats")
-	.controller("bookreadingsCtrl", function ($scope, $rootScope, $firebase, $http, $location, $firebaseSimpleLogin, likesURL, readingsURL, usersURL, readingsStatsURL, ENV) {
+    .directive('focusOn', function() {
+       return function(scope, elem, attr) {
+          scope.$on('focusOn', function(e, name) {
+            if(name === attr.focusOn) {
+              elem[0].focus();
+            }
+          });
+         };
+    })
+    .factory('focus', function ($rootScope, $timeout) {
+      return function(name) {
+        $timeout(function (){
+          $rootScope.$broadcast('focusOn', name);
+        });
+      }
+    })
+	.controller("bookreadingsCtrl", function ($scope, $rootScope, $firebase, $http, $location, $firebaseSimpleLogin, focus, likesURL, readingsURL, usersURL, readingsStatsURL, ENV) {
 
     if($location.path() == "" || $location.path() == "/featured/") {
 
@@ -77,6 +93,14 @@ angular.module("bookreadings")
     $scope.showSearch = function() {
 
       $scope.search_shown = true;
+
+      // launch focus in the search bar
+      focus('focusMe');
+    }
+
+    $scope.hideSearch = function() {
+
+      $scope.search_shown = false;
 
     }
 

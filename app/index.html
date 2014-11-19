@@ -180,11 +180,12 @@
                         </div>
                     </form>
                 </div>
+
                 <!-- Mobile Search -->
-                <div ng-if="search_shown==true" class="form-group hidden-md hidden-lg" style="width:240px;padding-top:7px;margin-right:10px;margin-bottom:0px;margin-left:10px;">
+                <div ng-if="search_shown==true" class="form-group hidden-sm hidden-md hidden-lg" style="width:240px;padding-top:7px;margin-right:10px;margin-bottom:0px;margin-left:10px;">
                     <form ng-submit="search(searchPageObject);"
                         <div class="input-group">
-                          <input type="text" class="form-control" placeholder="Search" ng-model="searchPageObject.searchterm" style="width:100%;">
+                          <input type="text" ng-blur="hideSearch();" focus-on="focusMe" class="form-control" placeholder="Search" ng-model="searchPageObject.searchterm" style="width:100%;">
                           <span ng-click="search(searchPageObject)" class="input-group-addon">
                             <i class="glyphicon glyphicon-search"></i>
                             </span>
