@@ -43,10 +43,24 @@ angular.module("bookreadings")
               $scope.updateReading.cover_image_mimetype = $scope.reading.cover_image_mimetype;
               $scope.updateReading.cover_image_size = $scope.reading.cover_image_size;
               $scope.updateReading.cover_image_key = $scope.reading.cover_image_key;
+              if(!$scope.reading.align) {
+
+                 $scope.updateReading.align = "center";
+
+              } else {
+
+                $scope.updateReading.align = $scope.reading.align;
+              }
 
             }
 
         });
+
+        $scope.toggleAlignment = function(alignment) {
+
+          $scope.updateReading.align = alignment;
+
+        }
 
         $scope.cancelEdit = function(){
         	window.history.back();
@@ -105,6 +119,7 @@ angular.module("bookreadings")
             "modified" : modified,
             "tags" : tag_array,
             "slug" : slug,
+            "align" : updateReading.align
           }
 
           if(updateReading.description) {

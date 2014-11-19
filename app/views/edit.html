@@ -41,6 +41,27 @@
 				 				</div>
 			 				</div>
 			 			</div>
+			 			<div class="form-group">
+		 					<label for="coverimage">Cover image crop alignment on homepage</label>
+		 					<div class="row">
+		 						<div class="col-xs-12">
+		 							<div class="btn-group" data-toggle="buttons">
+									  <label class="btn btn-default" ng-class="{'active': updateReading.align == 'center'}" ng-click="toggleAlignment('center');">
+									    <input type="radio" id="option1" ng-model="updateReading.align" value="center" autocomplete="off" > Center
+									  </label>
+									  <label class="btn btn-default" ng-class="{'active': updateReading.align == 'top'}" ng-click="toggleAlignment('top');">
+									    <input type="radio" id="option2" ng-model="updateReading.align" value="top" autocomplete="off"> Top
+									  </label>
+									  <label class="btn btn-default" ng-class="{'active': updateReading.align == 'bottom'}" ng-click="toggleAlignment('bottom');">
+									    <input type="radio" id="option3" ng-model="updateReading.align" value="bottom" autocomplete="off"> Bottom
+									  </label>
+									  <label class="btn btn-default" ng-class="{'active': updateReading.align == 'faces'}" ng-click="toggleAlignment('faces');">
+									    <input type="radio" id="option4" ng-model="updateReading.align" value="faces" autocomplete="off"> Faces
+									  </label>
+									</div>
+								</div>
+							</div>
+			 			</div>
 		 				<div class="form-group" ng-class="updateReadingForm.readingPurchaseLink.$invalid ? 'has-error has-feedback' : ''">
 		 					<label for="PurchaseLink">Book Purchase Link</label>
 		 					<label ng-show="updateReadingForm.readingPurchaseLink.$invalid" class="control-label">(Please provide a valid url)</label>
