@@ -1,14 +1,12 @@
 angular.module("bookreadings")
-    .constant("readingsByDateCreatedURL", "https://bookreadings.firebaseio.com/readingsByDateCreated")
-    .constant("readingsByMostPlayedURL", "https://bookreadings.firebaseio.com/readingsByMostPlayed")
-    .constant("readingsByFeaturedURL", "https://bookreadings.firebaseio.com/readingsByFeatured")
-    .constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
+    .constant("readingsByDateCreatedURL", "/readingsByDateCreated")
+    .constant("readingsByMostPlayedURL", "/readingsByMostPlayed")
+    .constant("readingsByFeaturedURL", "/readingsByFeatured")
     .constant("S3ReadingsPath", "https://s3-us-west-2.amazonaws.com/bookreadings/")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
-    .constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
-    .constant("tagURL", "https://bookreadings.firebaseio.com/tags")
-    .controller("mainPageController", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, tagURL, readingsByDateCreatedURL, readingsByFeaturedURL, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, CDNReadingsPathFP, CDNReadingsPathCF, readingsByMostPlayedURL, S3ReadingsPath, readingsStatsURL) {
+    .constant("tagURL", "/tags")
+    .controller("mainPageController", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, tagURL, readingsByDateCreatedURL, readingsByFeaturedURL, ENV, readingsURL, commentsURL, likesURL, usersURL, CDNReadingsPathFP, CDNReadingsPathCF, readingsByMostPlayedURL, S3ReadingsPath, readingsStatsURL) {
 
     	$scope.S3ReadingsPath = S3ReadingsPath;
         $scope.oldReadings = {};
@@ -18,25 +16,25 @@ angular.module("bookreadings")
 
         $scope.tag_name = $routeParams.tagname;
 
-        var ref = new Firebase(readingsByFeaturedURL);
+        var ref = new Firebase(ENV.firebase + readingsByFeaturedURL);
         $scope.filterBy ="featured";
         $scope.filterByIndex = 0;
 
         if($scope.tag_name) {
 
-            ref = new Firebase(tagURL + "/" + $scope.tag_name);
+            ref = new Firebase(ENV.firebase + tagURL + "/" + $scope.tag_name);
             $scope.filterBy = "";
             $scope.filterByIndex = -1;
 
         }else if($location.path() == "/popular/") {
 
-            ref = new Firebase(readingsByMostPlayedURL)
+            ref = new Firebase(ENV.firebase + readingsByMostPlayedURL)
             $scope.filterBy ="popular";
             $scope.filterByIndex = 1;
 
         }else if($location.path() == "/recent/") {
 
-            ref = new Firebase(readingsByDateCreatedURL);
+            ref = new Firebase(ENV.firebase + readingsByDateCreatedURL);
             $scope.filterBy ="recent";
             $scope.filterByIndex = 2;
 
@@ -58,7 +56,7 @@ angular.module("bookreadings")
 
                 for(var i = 0; i < readings.length; i++) {
 
-                    var readingRef = new Firebase(readingsURL + "/" + readings[i].reading_id);
+                    var readingRef = new Firebase(ENV.firebase + readingsURL + "/" + readings[i].reading_id);
                     var _readingObject = $firebase(readingRef).$asObject();
 
                     if(!(_readingObject.$id in $scope.oldReadings)) {
@@ -70,7 +68,7 @@ angular.module("bookreadings")
 
                         calculateTheCreatedTimeForReading(_readingObject, readings[i], $scope.filterBy);
 
-                        var readingStatsRef = new Firebase(readingsStatsURL + "/" + readings[i].reading_id);
+                        var readingStatsRef = new Firebase(ENV.firebase + readingsStatsURL + "/" + readings[i].reading_id);
                         var _readingStatsObject = $firebase(readingStatsRef).$asObject();
 
                         getLikePlayCommentCounts(_readingObject, _readingStatsObject);

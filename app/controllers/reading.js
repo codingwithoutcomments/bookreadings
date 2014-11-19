@@ -1,15 +1,10 @@
 angular.module("bookreadings")
-    .constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
-    .constant("commentsURL", "https://bookreadings.firebaseio.com/comments")
-    .constant("likesURL", "https://bookreadings.firebaseio.com/likes")
-    .constant("usersURL", "https://bookreadings.firebaseio.com/users")
-    .constant("firebaseURL", "https://bookreadings.firebaseio.com")
+    .constant("commentsURL", "/comments")
     .constant("S3ReadingsPath", "https://s3-us-west-2.amazonaws.com/bookreadings/")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
-    .constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
-    .constant("tagsURL", "https://bookreadings.firebaseio.com/tagsURL")
-    .controller("readingCtrl", function ($scope, $rootScope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, tagsURL, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP, readingsStatsURL) {
+    .constant("tagsURL", "/tagsURL")
+    .controller("readingCtrl", function ($scope, $rootScope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, ENV, tagsURL, readingsURL, commentsURL, usersURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP, readingsStatsURL) {
 
         threeSixtyPlayer.init();
 
@@ -21,7 +16,7 @@ angular.module("bookreadings")
         $scope.comment_properties = {};
         $scope.CDNReadingsPathCF = CDNReadingsPathCF;
 
-        var readingFirebase = new Firebase(readingsURL + "/" + $scope.reading_id);
+        var readingFirebase = new Firebase(ENV.firebase + readingsURL + "/" + $scope.reading_id);
         $scope.readingRef = $firebase(readingFirebase);
 
         var readingRecord = $scope.readingRef.$asObject();
@@ -49,7 +44,7 @@ angular.module("bookreadings")
               $scope.readingProperties[$scope.reading.$id].cover_image_url_converted = CDNReadingsPathFP + $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
 
               //pull the reading stats 
-              var readingStatsRef = new Firebase(readingsStatsURL + "/" + $scope.reading_id);
+              var readingStatsRef = new Firebase(ENV.firebase + readingsStatsURL + "/" + $scope.reading_id);
               var _readingStatsRef = $firebase(readingStatsRef);
               var reading_stats_record = _readingStatsRef.$asObject();
               reading_stats_record.$loaded().then(function(){
@@ -79,10 +74,10 @@ angular.module("bookreadings")
         });
 
         //populate the comments on the page
-        var commentsArray = getFirebaseReadingComments(readingsURL, $scope.reading_id).$asArray();
+        var commentsArray = getFirebaseReadingComments(ENV.firebase + readingsURL, $scope.reading_id).$asArray();
         commentsArray.$watch(function(event){
           if(event.event == "child_added") {
-            var commentObject = getFirebaseCommentReference(commentsURL, event.key).$asObject();
+            var commentObject = getFirebaseCommentReference(ENV.firebase + commentsURL, event.key).$asObject();
             $scope.comments.push(commentObject);
             addCommentTime(commentObject);
           }
@@ -108,7 +103,7 @@ angular.module("bookreadings")
 
           if($scope.loginObj.user){
 
-            var readingLikesByUserRef = $scope.getFirebaseReadingLikesByUserReference(readingsURL, $scope.reading_id, $scope.loginObj.user.uid);
+            var readingLikesByUserRef = $scope.getFirebaseReadingLikesByUserReference(ENV.firebase + readingsURL, $scope.reading_id, $scope.loginObj.user.uid);
             var userRecord = readingLikesByUserRef.$asObject();
             userRecord.$loaded().then(function(data){
 
@@ -202,11 +197,11 @@ angular.module("bookreadings")
                 for(var key in $scope.reading.tag_locations) {
 
                   //remove from tags
-                  var tagReadingRef = getFirebaseTagReadingReference(tagsURL, key, $scope.reading.tag_locations[key]);
+                  var tagReadingRef = getFirebaseTagReadingReference(ENV.firebase + tagsURL, key, $scope.reading.tag_locations[key]);
                   tagReadingRef.$remove();
 
                   //remove from reading object tag locations
-                  getFirebaseReadingTagLocation(readingsURL, $scope.reading.$id, key).$remove();
+                  getFirebaseReadingTagLocation(ENV.firebase + readingsURL, $scope.reading.$id, key).$remove();
 
                 }
 
@@ -345,7 +340,7 @@ angular.module("bookreadings")
 
         $scope.commentOnReading = function(comment, reading_id) {
 
-          var commentsFirebase = new Firebase(commentsURL);
+          var commentsFirebase = new Firebase(ENV.firebase + commentsURL);
           var commentsRef = $firebase(commentsFirebase);
 
           var user = $scope.loginObj.user;
@@ -368,11 +363,11 @@ angular.module("bookreadings")
 
               //add comment to reading
               var comment_name = ref.name();
-              var reading_comment_ref = getFirebaseReadingCommentRefernece(readingsURL, reading_id, comment_name);
+              var reading_comment_ref = getFirebaseReadingCommentRefernece(ENV.firebase + readingsURL, reading_id, comment_name);
               reading_comment_ref.$set(true);
 
               //add comment event
-              var commentReference = getFirebaseCommentReference(commentsURL, ref.name());
+              var commentReference = getFirebaseCommentReference(ENV.firebase + commentsURL, ref.name());
               var commentReferenceObject = commentReference.$asObject();
               commentReferenceObject.$loaded().then(function(){
 
@@ -383,7 +378,7 @@ angular.module("bookreadings")
                 event_object["object_id"] = ref.name();
                 event_object["$priority"] = -commentReferenceObject.created;
                 //set the priority to the negative timestamp
-                var userEventsRef = getFirebaseUserEventsReference(usersURL, $scope.loginObj.user.uid).$asArray();
+                var userEventsRef = getFirebaseUserEventsReference(ENV.firebase + usersURL, $scope.loginObj.user.uid).$asArray();
                 userEventsRef.$add(event_object).then(function(ref){
 
                   var update_dict = {};
@@ -397,7 +392,7 @@ angular.module("bookreadings")
               });
 
               //increment counter
-              var commentCount = getFirebaseReadingCommentCounterReference(readingsStatsURL, reading_id);
+              var commentCount = getFirebaseReadingCommentCounterReference(ENV.firebase + readingsStatsURL, reading_id);
               commentCount.$transaction(function(currentCount) {
                 if (!currentCount) return 1;   // Initial value for counter.
                 if (currentCount < 0) return;  // Return undefined to abort transaction.

@@ -21,6 +21,7 @@
     <!-- <script type="text/javascript" src="script/index-rollup.js"></script> -->
     <script type="text/javascript" src="script/berniecode-animator.js"></script>
     <script type="text/javascript" src="script/360player.js"></script>
+    <script type="text/javascript" src="script/config.js"></script>
 
 
     <!-- sound manager 2 -->
@@ -42,7 +43,7 @@
     <link href="css/mainpage.css" rel="stylesheet" />
 
     <script>
-        angular.module("bookreadings", ["firebase", "ng", "ngRoute", "string_manipulation", "ngTagsInput"])
+        angular.module("bookreadings", ["firebase", "ng", "ngRoute", "string_manipulation", "ngTagsInput", "config"])
         .config(function($routeProvider) {
 
             $routeProvider.when("/upload/", {

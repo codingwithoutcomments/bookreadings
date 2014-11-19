@@ -1,9 +1,7 @@
-var app = angular.module("bookreadings")
-	.constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
-	.constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
-	.constant("tagsURL", "https://bookreadings.firebaseio.com/tags")
+angular.module("bookreadings")
+	.constant("tagsURL", "/tags")
     .constant("CDNReadingsPath", "https://d1onveq9178bu8.cloudfront.net")
-	.controller("uploadCtrl", function ($scope, $rootScope, $firebase, $http, $location, readingsURL, tagsURL, string_manipulation, CDNReadingsPath, readingsStatsURL) {
+	.controller("uploadCtrl", function ($scope, $rootScope, $firebase, $http, $location, ENV, readingsURL, tagsURL, string_manipulation, CDNReadingsPath, readingsStatsURL) {
 
 		filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
@@ -56,7 +54,7 @@ var app = angular.module("bookreadings")
 			this.reading["$priority"] = Firebase.ServerValue.TIMESTAMP
 
 
-			var readingsRef = new Firebase(readingsURL);
+			var readingsRef = new Firebase(ENV.firebase + readingsURL);
 			var _readingRef = $firebase(readingsRef).$asArray();
 			_readingRef.$add(reading).then(function(ref){
 
@@ -65,12 +63,12 @@ var app = angular.module("bookreadings")
 				reading_stats["like_count"] = 0
 				reading_stats["play_count"] = 0
 				reading_stats["comment_count"] = 0
-				var readingStatsRef = new Firebase(readingsStatsURL);
+				var readingStatsRef = new Firebase(ENV.firebase + readingsStatsURL);
 				var _readingStatsRef = $firebase(readingStatsRef);
 				_readingStatsRef.$set(ref.name(), reading_stats);
 
 				//update created by 
-				var singleReadingRef = new Firebase(readingsURL + "/" + ref.name());
+				var singleReadingRef = new Firebase(ENV.firebase + readingsURL + "/" + ref.name());
 				var _singleReadingRef = $firebase(singleReadingRef).$asObject();
 				_singleReadingRef.$loaded().then(function() {
 
@@ -120,7 +118,7 @@ var app = angular.module("bookreadings")
 									for(var i = 0; i < this.reading_tags.length; i++) {
 
 										//add tags to tag specific section
-										var tagsRef = getFirebaseTagNameReference(tagsURL, this.reading_tags[i]);
+										var tagsRef = getFirebaseTagNameReference(ENV.firebase + tagsURL, this.reading_tags[i]);
 										add_tags_to_tag_specific_section(tagsRef, this.reading_id, user.uid, this.reading_priority, this.reading.tags.length, this.reading_tags[i], reading.slug);
 
 									}
@@ -157,7 +155,7 @@ var app = angular.module("bookreadings")
 			tagsRefArray.$add(data).then(function(ref){
 
 				//save the id back to reading
-				var singleReadingTagRef = new Firebase(readingsURL + "/" + reading_id + "/" + "tag_locations");
+				var singleReadingTagRef = new Firebase(ENV.firebase + readingsURL + "/" + reading_id + "/" + "tag_locations");
 				var _singleReadingTagRef = $firebase(singleReadingTagRef);
 
 				_singleReadingTagRef.$set(tag_name, ref.name()).then(function(){

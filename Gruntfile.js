@@ -7,7 +7,7 @@ module.exports = function(grunt) {
     ngconstant: {
     options: {
       name: 'config',
-      dest: 'config.js',
+      dest: 'app/script/config.js',
       //constants: {
       //  package: grunt.file.readJSON('package.json')
       //},
@@ -19,7 +19,7 @@ module.exports = function(grunt) {
         constants: {
             ENV: {
             name: 'development',
-            apiEndpoint: 'https://bookreadings-staging.firebaseio.com'
+            firebase: 'https://bookreadings-staging.firebaseio.com'
           }
         }
     },
@@ -27,7 +27,7 @@ module.exports = function(grunt) {
         constants: {
             ENV: {
             name: 'production',
-            apiEndpoint: 'https://bookreadings.firebaseio.com'
+            firebase: 'https://bookreadings.firebaseio.com'
           }
         }
     }
@@ -35,8 +35,19 @@ module.exports = function(grunt) {
   },
   });
 
-  grunt.task.run([
-    'ngconstant:development',
-  ]);
+  grunt.registerTask('default', function (target) {
+
+    grunt.task.run([
+      'ngconstant:development',
+    ]);
+
+  });
+
+  grunt.registerTask('release', function (target) {
+
+    grunt.task.run([
+      'ngconstant:production', // ADD THIS
+    ]);
+  });
 
 };

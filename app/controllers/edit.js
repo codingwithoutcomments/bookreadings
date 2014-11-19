@@ -1,14 +1,9 @@
 angular.module("bookreadings")
-    .constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
-    .constant("commentsURL", "https://bookreadings.firebaseio.com/comments")
-    .constant("likesURL", "https://bookreadings.firebaseio.com/likes")
-    .constant("usersURL", "https://bookreadings.firebaseio.com/users")
-    .constant("tagsURL", "https://bookreadings.firebaseio.com/tagsURL")
-    .constant("firebaseURL", "https://bookreadings.firebaseio.com")
+    .constant("tagsURL", "/tagsURL")
     .constant("S3ReadingsPath", "https://s3-us-west-2.amazonaws.com/bookreadings/")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
-    .controller("editCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, tagsURL, readingsURL, commentsURL, likesURL, usersURL, firebaseURL, S3ReadingsPath, string_manipulation, CDNReadingsPathCF, CDNReadingsPathFP) {
+    .controller("editCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, ENV, tagsURL, readingsURL, S3ReadingsPath, string_manipulation, CDNReadingsPathCF, CDNReadingsPathFP) {
 
       filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
@@ -17,7 +12,7 @@ angular.module("bookreadings")
         $scope.reading_deleted = false;
         $scope.CDNReadingsPathFP = CDNReadingsPathFP;
 
-        var readingFirebase = new Firebase(readingsURL + "/" + $scope.reading_id);
+        var readingFirebase = new Firebase(ENV.firebase + readingsURL + "/" + $scope.reading_id);
         $scope.readingRef = $firebase(readingFirebase);
 
         var readingRecord = $scope.readingRef.$asObject();
@@ -146,13 +141,13 @@ angular.module("bookreadings")
                   if(reading_object.tag_locations) {
 
                     //remove from tags
-                    var tagReadingRef = getFirebaseTagReadingReference(tagsURL, old_tags[i], reading_object.tag_locations[old_tags[i]]);
+                    var tagReadingRef = getFirebaseTagReadingReference(ENV.firebase + tagsURL, old_tags[i], reading_object.tag_locations[old_tags[i]]);
                     tagReadingRef.$remove();
 
                   }
 
                   //remove from reading object tag locations
-                  getFirebaseReadingTagLocation(readingsURL, reading_object.$id, old_tags[i]).$remove();
+                  getFirebaseReadingTagLocation(ENV.firebase + readingsURL, reading_object.$id, old_tags[i]).$remove();
 
                 }
 
@@ -175,7 +170,7 @@ angular.module("bookreadings")
                 if($.inArray(tag, old_tags) == -1) {
 
                   //add from reading object / tags
-                  var tagsRef = getFirebaseTagNameReference(tagsURL, tag);
+                  var tagsRef = getFirebaseTagNameReference(ENV.firebase + tagsURL, tag);
                   add_tags_to_tag_specific_section(tagsRef, reading_object.$id, user.uid, -reading_object.$priority, new_tags.length, tag, reading_object.slug);
 
                 } else {
@@ -212,7 +207,7 @@ angular.module("bookreadings")
           tagsRefArray.$add(data).then(function(ref){
 
             //save the id back to reading
-            var singleReadingTagRef = new Firebase(readingsURL + "/" + reading_id + "/" + "tag_locations");
+            var singleReadingTagRef = new Firebase(ENV.firebase + readingsURL + "/" + reading_id + "/" + "tag_locations");
             var _singleReadingTagRef = $firebase(singleReadingTagRef);
 
             _singleReadingTagRef.$set(tag_name, ref.name()).then(function(){

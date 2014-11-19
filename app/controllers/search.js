@@ -1,9 +1,7 @@
 angular.module("bookreadings")
-    .constant("readingsURL", "https://bookreadings.firebaseio.com/readings")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
-    .constant("readingsStatsURL", "https://bookreadings.firebaseio.com/readings_stats")
-    .controller("searchCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, readingsStatsURL, readingsURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP) {
+    .controller("searchCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, ENV, readingsStatsURL, readingsURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP) {
 
     	$scope.searchObject = {}
 
@@ -101,13 +99,13 @@ angular.module("bookreadings")
 		        if( data.hits ) {
 		           data.hits.forEach(function(hit) {
 
-				        var readingFirebase = new Firebase(readingsURL + "/" + hit._id);
+				        var readingFirebase = new Firebase(ENV.firebase + readingsURL + "/" + hit._id);
 				        var readingRef = $firebase(readingFirebase);
 
 				        var readingRecord = readingRef.$asObject();
 				        add_reading_to_page(readingRecord);
 
-                        var readingStatsRef = new Firebase(readingsStatsURL + "/" + readingRecord.$id);
+                        var readingStatsRef = new Firebase(ENV.firebase + readingsStatsURL + "/" + readingRecord.$id);
                         var _readingStatsObject = $firebase(readingStatsRef).$asObject();
 
                         getLikePlayCommmentCounts(readingRecord, _readingStatsObject);
