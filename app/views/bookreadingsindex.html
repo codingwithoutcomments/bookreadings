@@ -57,9 +57,10 @@
 					    	<div class="readingTitleMobile hidden-md hidden-lg">
 					    		<a ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/">{{reading.title}}</a>
 						    </div>
-						    <div class="row hidden-xs hidden-sm">
+						    <!-- Remove tags from main page -->
+						    <div class="row hidden-xs hidden-sm hidden-md hidden-lg">
 							    <div class="col-md-12" style='margin-top:3px;'>
-									<a ng-repeat="tag in reading.tags" href="/#/tag/{{tag}}/" type="button" class="btn btn-xs" style="margin-right:4px;background-color:black;color:#999;">
+									<a ng-repeat="tag in reading.tags" href="/#/tag/{{tag}}/" type="button" class="btn btn-xs" style="margin-right:4px;background-color:#262626;color:#999;">
 										#{{tag}}
 									</a>
 							    </div>

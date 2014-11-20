@@ -3,11 +3,20 @@
 <div class="container" ng-controller="readingCtrl" style="background-color:#FFFFFF;margin-bottom:20px;">
 	<div>
 		<div class="row">
+			<div class="col-xs-12" style="padding:0px;">
+				<img class="center-block img-responsive" ng-if="readingProperties[reading.$id].cover_image_url_mobile_converted" ng-src="{{readingProperties[reading.$id].cover_image_url_mobile_converted}}">
+			</div>
+		</div>
+		<div class="row">
 			<div class="col-xs-6 reading-header reading-header-username">
 				Posted by {{reading.created_by_name }}
 			</div>
-			<div class="col-xs-6 reading-header" style="text-align:right;">
+			<div class="col-xs-6 reading-header hidden-xs" style="text-align:right;">
 				{{ reading.time_since }}
+			</div>
+			<!-- iPAD Stats -->
+			<div class="col-xs-6 reading-stats hidden-sm hidden-md hidden-lg" >
+				<span><span class="glyphicon glyphicon-play"></span> {{ reading_stats.play_count }} | <span class="glyphicon glyphicon-heart"></span> {{reading_stats.like_count}} | <span class="glyphicon glyphicon-comment"></span> {{reading_stats.comment_count}}</span>
 			</div>
 		</div>
 		<div class="row">
@@ -21,7 +30,32 @@
 			</div>
 		</div>
 		<div class="row" style="margin-top:20px;">
-			<div class="col-xs-6">
+
+		    <!-- Mobile Buttons -->	
+			<div class="col-xs-12 hidden-sm hidden-md hidden-lg">
+				<button ng-show="loginObj.user" type="button" class="btn btn-default" ng-click="likeReading(reading_id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
+					<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }"></span> {{readingProperties[reading.$id].like_text}}
+				</button>
+				<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}?tag=bookreadings-20" class="btn btn-default">
+					<span class="glyphicon glyphicon-fire"></span> Buy Book
+				</a>
+				<a ng-href="{{CDNReadingsPathCF}}{{reading.audio_key}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default">
+					<span class="glyphicon glyphicon-save"></span> Download
+				</a>
+				<div class="btn-group" ng-show="user.admin || readingProperties[reading.$id].reading_created_by_logged_in_user">
+				  <button type="button" class="btn btn-default dropdown-toggle mobile-action-buttons" data-toggle="dropdown">
+				    <span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu" role="menu">
+				    <li><a ng-click="edit()"><span class="glyphicon glyphicon-edit"></span> Edit</a></li>
+				    <li><a ng-click="delete()" ng-show="readingProperties[reading.$id].reading_created_by_logged_in_user"><span class="glyphicon glyphicon-remove"></span> Delete</a></li>
+				    <li><a ng-click="feature()" ng-show="user.admin"><span class="glyphicon glyphicon-star"></span> Feature</a></li>
+				  </ul>
+				</div>
+			</div>
+
+			<!-- iPAD Buttons -->
+			<div class="col-xs-6 hidden-xs">
 				<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading_id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
 					<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }"></span> {{readingProperties[reading.$id].like_text}}
 				</button>
@@ -42,20 +76,25 @@
 				  </ul>
 				</div>
 			</div>
-			<div class="col-xs-6 reading-stats">
+
+			<!-- iPAD Stats -->
+			<div class="col-xs-6 reading-stats hidden-xs">
 				<span><span class="glyphicon glyphicon-play"></span> {{ reading_stats.play_count }} | <span class="glyphicon glyphicon-heart"></span> {{reading_stats.like_count}} | <span class="glyphicon glyphicon-comment"></span> {{reading_stats.comment_count}}</span>
 			</div>
 		</div>
+
 		<div class="row">
 			<div class="col-xs-12">
-				<hr style='margin-top:0px;'>
+				<hr class="hidden-xs" style='margin-top:0px;'>
+				<hr class="hidden-sm hidden-md hidden-lg">
 			</div>
 		</div>
+
 		<div class="row" style="padding-bottom:20px;">
-			<div class="col-xs-4">
+			<div class="col-sm-4 hidden-xs">
 				<a href="{{reading.purchaseLink}}&tag=bookreadings-20" target="_blank"><img class="center-block img-responsive img-thumbnail" ng-if="readingProperties[reading.$id].cover_image_url_converted" ng-src="{{readingProperties[reading.$id].cover_image_url_converted}}"></a>
 			</div>
-			<div class="col-xs-8">
+			<div class="col-xs-12 col-sm-8">
 				<div class="row">
 					<div class="col-xs-12">
 						<p>{{reading.description}}</p>
@@ -63,13 +102,16 @@
 				</div>
 				<div class="row">
 					<div class="col-xs-12">
-						<a ng-repeat="tag in reading.tags" href="/#/tag/{{tag}}/" type="button" class="btn btn-primary btn-xs" style="margin-right:4px;">
+						<a ng-repeat="tag in reading.tags" href="/#/tag/{{tag}}/" type="button" class="btn btn-primary btn-xs hidden-xs" style="margin:2px;margin-left:0px;">
+							#{{tag}}
+						</a>
+						<a ng-repeat="tag in reading.tags" href="/#/tag/{{tag}}/" type="button" class="btn btn-primary btn-sm hidden-sm hidden-md hidden-lg" style="margin:4px;margin-left:0px;">
 							#{{tag}}
 						</a>
 					</div>
 				</div>
 				<div class="row reading-comment-header">
-					<div class="col-xs-9">
+					<div class="col-xs-12">
 						<span class="glyphicon glyphicon-comment"></span> {{reading_stats.comment_count}} Comments
 						<hr style='margin-top:0px;'>
 						<div ng-show='showTopCommentBox()' style="overflow:hidden;">

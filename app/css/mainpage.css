@@ -12,7 +12,7 @@
 .userCreated a {
 
 	color:#999;
-	background-color: black;
+	background-color: #262626;
 	font-size:15px;
 	padding:3px;
 
@@ -33,7 +33,7 @@
 
 .readingTitleMobile a {
 	color:white;
-	background-color: black;
+	background-color: #262626;
 	font-size:20px;
 	padding:3px;
 }
@@ -60,7 +60,7 @@
 
 .readingTitle a {
 	color:white;
-	background-color: black;
+	background-color: #262626;
 	font-size:30px;
 	padding:3px;
 }

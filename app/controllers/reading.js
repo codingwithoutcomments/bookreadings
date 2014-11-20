@@ -15,6 +15,7 @@ angular.module("bookreadings")
         $scope.reading_deleted = false;
         $scope.comment_properties = {};
         $scope.CDNReadingsPathCF = CDNReadingsPathCF;
+        $scope.CDNReadingsPathFP = CDNReadingsPathFP;
 
         var readingFirebase = new Firebase(ENV.firebase + readingsURL + "/" + $scope.reading_id);
         $scope.readingRef = $firebase(readingFirebase);
@@ -42,6 +43,11 @@ angular.module("bookreadings")
               }
               $scope.readingProperties[$scope.reading.$id].like_text = "Like";
               $scope.readingProperties[$scope.reading.$id].cover_image_url_converted = CDNReadingsPathFP + $scope.reading["cover_image_url"] + "/convert?w=950&height=950"
+              var alignment = $scope.reading["align"];
+              if(!alignment) {
+                alignment = "center";
+              }
+              $scope.readingProperties[$scope.reading.$id].cover_image_url_mobile_converted = CDNReadingsPathFP + $scope.reading["cover_image_url"] + "/convert?w=1170&h=300&fit=crop&align=" + alignment;
 
               //pull the reading stats 
               var readingStatsRef = new Firebase(ENV.firebase + readingsStatsURL + "/" + $scope.reading_id);
