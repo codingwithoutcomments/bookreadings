@@ -50,6 +50,7 @@ angular.module("bookreadings")
 			this.reading["created_by"] = user.uid;
 			this.reading["created_by_id"] = user.id;
 			this.reading["created_by_name"] = userObject.displayName;
+			this.reading["align"] = "center";
 
 			this.reading["$priority"] = Firebase.ServerValue.TIMESTAMP
 
