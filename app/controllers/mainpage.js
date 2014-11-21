@@ -14,6 +14,64 @@ angular.module("bookreadings")
         $scope.CDNReadingsPathCF = CDNReadingsPathCF;
         $scope.CDNReadingsPathFP = CDNReadingsPathFP;
 
+        //script to move all of the tags to sub reading level
+        /*var tagRef = new Firebase(ENV.firebase + tagURL);
+        tagArray = $firebase(tagRef).$asArray();
+        tagArray.$loaded(function(){
+
+            var tags_by_popularity = new Firebase(ENV.firebase + "/tags_by_popularity");
+            var _tags_by_popularity = $firebase(tags_by_popularity).$asArray();
+
+            for(var i = 0; i < tagArray.length; i++) {
+                console.log(tagArray[i]);
+                var keys = Object.keys(tagArray[i]);
+
+                var tagObject = new Firebase(ENV.firebase + tagURL + "/" + tagArray[i].$id);
+                var _tagObject = $firebase(tagObject);
+
+                var number_of_tags = 0;
+                for(var j = 0; j < keys.length; j++) {
+                    if(keys[j] != "$id" && keys[j] != "$priority") {
+                        number_of_tags = number_of_tags + 1;
+                        console.log(tagArray[i][keys[j]]);
+                        var tagRefReadings = new Firebase(ENV.firebase + tagURL + "/" + tagArray[i].$id + "/readings");
+                        var _tagRefReadings = $firebase(tagRefReadings);
+
+                        _tagRefReadings.$set(keys[j], tagArray[i][keys[j]]);
+
+                        _tagObject.$remove(keys[j]);
+                    }
+
+                }
+
+                _tagObject.$set("tag_count", number_of_tags);
+
+                //create tag by popularity object
+                var tags_by_popularity = {};
+                tags_by_popularity["count"] = number_of_tags;
+                tags_by_popularity["tag_name"] = tagArray[i].$id;
+                tags_by_popularity["$priority"] = -number_of_tags;
+
+                var tag_name = tagArray[i].$id;
+
+                addTagsByPopulatiry(_tags_by_popularity, tags_by_popularity, tag_name);
+
+            }
+        });
+
+        function addTagsByPopulatiry(tags_by_popularity_ref, tags_by_popularity_object, tag_name) {
+
+            tags_by_popularity_ref.$add(tags_by_popularity_object).then(function(ref){
+
+                var tagObject = new Firebase(ENV.firebase + tagURL + "/" + tag_name);
+                var _tagObject = $firebase(tagObject);
+
+                _tagObject.$set("tags_by_popularity_location", ref.name());
+
+            });
+
+        } */
+
         $scope.tag_name = $routeParams.tagname;
 
         var ref = new Firebase(ENV.firebase + readingsByFeaturedURL);
@@ -22,7 +80,7 @@ angular.module("bookreadings")
 
         if($scope.tag_name) {
 
-            ref = new Firebase(ENV.firebase + tagURL + "/" + $scope.tag_name);
+            ref = new Firebase(ENV.firebase + tagURL + "/" + $scope.tag_name );
             $scope.filterBy = "";
             $scope.filterByIndex = -1;
 
@@ -58,11 +116,10 @@ angular.module("bookreadings")
 
                     var readingRef = new Firebase(ENV.firebase + readingsURL + "/" + readings[i].reading_id);
                     var _readingObject = $firebase(readingRef).$asObject();
+                    console.log(_readingObject);
 
                     if(!(_readingObject.$id in $scope.oldReadings)) {
 
-                        console.log("Adding reading: " + _readingObject.$id);
-                        console.log(_readingObject);
                         $scope.readings.push(_readingObject);
                         $scope.oldReadings[_readingObject.$id] = true;
 
@@ -81,8 +138,6 @@ angular.module("bookreadings")
                 populateLikesOnPage();
 
             });
-
-            console.log("load next page");
 
 		};
 
@@ -153,7 +208,6 @@ angular.module("bookreadings")
 
 		                $scope.readingProperties[reading.$id].reading_liked = true;
 		                $scope.readingProperties[reading.$id].like_text = "Unlike"
-		                console.log("Like Exists");
 		              }
 
 		              $scope.populatedLikes[reading.$id] = true;
