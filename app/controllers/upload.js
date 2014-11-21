@@ -1,7 +1,7 @@
 angular.module("bookreadings")
 	.constant("tagsURL", "/tags")
     .constant("CDNReadingsPath", "https://d1onveq9178bu8.cloudfront.net")
-	.controller("uploadCtrl", function ($scope, $rootScope, $firebase, $http, $location, ENV, readingsURL, tagsURL, string_manipulation, CDNReadingsPath, readingsStatsURL) {
+	.controller("uploadCtrl", function ($scope, $rootScope, $firebase, $http, $location, ENV, readingsURL, tagsURL, string_manipulation, CDNReadingsPath, readingsStatsURL, readingsByDateCreatedURL, readingsByMostPlayedURL) {
 
 		filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
@@ -73,7 +73,7 @@ angular.module("bookreadings")
 				var _singleReadingRef = $firebase(singleReadingRef).$asObject();
 				_singleReadingRef.$loaded().then(function() {
 
-					var readingsByDateCreatedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByDateCreated");
+					var readingsByDateCreatedRef = new Firebase(ENV.firebase + readingsByDateCreatedURL);
 					var _readingsByDateCreatedRef = $firebase(readingsByDateCreatedRef).$asArray();
 
 					var data = {}
@@ -90,7 +90,7 @@ angular.module("bookreadings")
 
 						this.readingsByDateCreatedId = ref.name();
 
-						var readingsByMostPlayedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByMostPlayed");
+						var readingsByMostPlayedRef = new Firebase(ENV.firebase + readingsByMostPlayedURL);
 						var _readingsByMostPlayedRef = $firebase(readingsByMostPlayedRef).$asArray();
 
 						var data = {}

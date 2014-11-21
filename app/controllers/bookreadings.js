@@ -3,6 +3,9 @@ angular.module("bookreadings")
     .constant("readingsURL", "/readings")
     .constant("usersURL", "/users")
     .constant("readingsStatsURL", "/readings_stats")
+    .constant("readingsByMostPlayedURL", "/readingsByMostPlayed")
+    .constant("readingsByDateCreatedURL", "/readingsByDateCreated")
+    .constant("readingsByFeaturedURL", "/readingsByFeatured")
     .directive('focusOn', function() {
        return function(scope, elem, attr) {
           scope.$on('focusOn', function(e, name) {
@@ -19,7 +22,7 @@ angular.module("bookreadings")
         });
       }
     })
-	.controller("bookreadingsCtrl", function ($scope, $rootScope, $firebase, $http, $location, $firebaseSimpleLogin, focus, likesURL, readingsURL, usersURL, readingsStatsURL, ENV) {
+	.controller("bookreadingsCtrl", function ($scope, $rootScope, $firebase, $http, $location, $firebaseSimpleLogin, focus, likesURL, readingsURL, usersURL, readingsStatsURL, ENV, readingsByDateCreatedURL, readingsByMostPlayedURL, readingsByFeaturedURL) {
 
     if($location.path() == "" || $location.path() == "/featured/") {
 
@@ -432,7 +435,7 @@ angular.module("bookreadings")
               } else {
 
                 //increment priority of readings by most played
-        				var readingsByMostPlayedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByMostPlayed/" + readingsByMostPlayedId + "/");
+        				var readingsByMostPlayedRef = new Firebase(ENV.firebase + readingsByMostPlayedURL + "/" + readingsByMostPlayedId + "/");
         				_readingByMostPlayedRef = $firebase(readingsByMostPlayedRef).$asObject();
         				_readingByMostPlayedRef.$loaded().then(function(){
 

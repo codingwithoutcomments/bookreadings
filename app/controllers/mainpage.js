@@ -14,50 +14,73 @@ angular.module("bookreadings")
         $scope.CDNReadingsPathCF = CDNReadingsPathCF;
         $scope.CDNReadingsPathFP = CDNReadingsPathFP;
 
-        //script to move all of the tags to sub reading level
-        /*var tagRef = new Firebase(ENV.firebase + tagURL);
-        tagArray = $firebase(tagRef).$asArray();
-        tagArray.$loaded(function(){
+        $scope.runScript = function() {
 
-            var tags_by_popularity = new Firebase(ENV.firebase + "/tags_by_popularity");
-            var _tags_by_popularity = $firebase(tags_by_popularity).$asArray();
+            //var specificTagReadingRef = new Firebase(ENV.firebase + tagURL + "/" + tagArray[i].$id + "/" + keys[j]);
+            //var _specificTagReadingRef = $firebase(specificTagReadingRef).$asObject(;
 
-            for(var i = 0; i < tagArray.length; i++) {
-                console.log(tagArray[i]);
-                var keys = Object.keys(tagArray[i]);
+            //var tagObject = new Firebase(ENV.firebase + tagURL + "/" + "A-Br");
+            //var _tagObject = $firebase(tagObject);
 
-                var tagObject = new Firebase(ENV.firebase + tagURL + "/" + tagArray[i].$id);
-                var _tagObject = $firebase(tagObject);
 
-                var number_of_tags = 0;
-                for(var j = 0; j < keys.length; j++) {
-                    if(keys[j] != "$id" && keys[j] != "$priority") {
-                        number_of_tags = number_of_tags + 1;
-                        console.log(tagArray[i][keys[j]]);
-                        var tagRefReadings = new Firebase(ENV.firebase + tagURL + "/" + tagArray[i].$id + "/readings");
-                        var _tagRefReadings = $firebase(tagRefReadings);
+            //script to move all of the tags to sub reading level
+            var tagRef = new Firebase(ENV.firebase + tagURL);
+            tagArray = $firebase(tagRef).$asArray();
+            tagArray.$loaded(function(){
 
-                        _tagRefReadings.$set(keys[j], tagArray[i][keys[j]]);
-
-                        _tagObject.$remove(keys[j]);
+                for(var i = 0; i < tagArray.length; i++) {
+                    console.log(tagArray[i]);
+                    var keys = Object.keys(tagArray[i]);
+                    if(keys.length > 3) {
+                        keys = keys.reverse();
                     }
 
+                    var tagObject = new Firebase(ENV.firebase + tagURL + "/" + tagArray[i].$id);
+                    var _tagObject = $firebase(tagObject);
+
+                    move_tags_to_new_location(_tagObject, tagArray[i].$id);
+
                 }
+            });
 
-                _tagObject.$set("tag_count", number_of_tags);
+        };
 
-                //create tag by popularity object
-                var tags_by_popularity = {};
-                tags_by_popularity["count"] = number_of_tags;
-                tags_by_popularity["tag_name"] = tagArray[i].$id;
-                tags_by_popularity["$priority"] = -number_of_tags;
+        function move_tags_to_new_location(_tagObject, tag_name) {
 
-                var tag_name = tagArray[i].$id;
+                var tags_by_popularity = new Firebase(ENV.firebase + "/tags_by_popularity");
+                var _tags_by_popularity = $firebase(tags_by_popularity).$asArray();
 
-                addTagsByPopulatiry(_tags_by_popularity, tags_by_popularity, tag_name);
+                var tagObjectArray = _tagObject.$asArray();
+                tagObjectArray.$loaded().then(function(){
 
-            }
-        });
+                    var number_of_tags = tagObjectArray.length;
+                    for(var j = 0; j < tagObjectArray.length; j++) {
+
+                            var tagRefReadings = new Firebase(ENV.firebase + tagURL + "/" + tag_name + "/readings/" + tagObjectArray[j].$id);
+
+                            var data_to_add = {};
+                            data_to_add["created_by"] = tagObjectArray[j].created_by;
+                            data_to_add["reading_id"] = tagObjectArray[j].reading_id;
+                            var priority = tagObjectArray[j].$priority;
+
+                            tagRefReadings.setWithPriority(data_to_add, tagObjectArray[j].$priority);
+
+                            _tagObject.$remove(tagObjectArray[j].$id);
+                    }
+
+                    _tagObject.$set("tag_count", number_of_tags);
+
+                    //create tag by popularity object
+                    var tags_by_popularity = {};
+                    tags_by_popularity["count"] = number_of_tags;
+                    tags_by_popularity["tag_name"] = tag_name
+                    tags_by_popularity["$priority"] = -number_of_tags;
+
+                    addTagsByPopulatiry(_tags_by_popularity, tags_by_popularity, tag_name);
+
+                });
+
+        }
 
         function addTagsByPopulatiry(tags_by_popularity_ref, tags_by_popularity_object, tag_name) {
 
@@ -70,7 +93,7 @@ angular.module("bookreadings")
 
             });
 
-        } */
+        } 
 
         $scope.tag_name = $routeParams.tagname;
 
@@ -80,7 +103,8 @@ angular.module("bookreadings")
 
         if($scope.tag_name) {
 
-            ref = new Firebase(ENV.firebase + tagURL + "/" + $scope.tag_name );
+            ref = new Firebase(ENV.firebase + tagURL + "/" + $scope.tag_name + "/readings");
+            //ref = new Firebase(ENV.firebase + tagURL + "/" + $scope.tag_name);
             $scope.filterBy = "";
             $scope.filterByIndex = -1;
 

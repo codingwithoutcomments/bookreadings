@@ -4,7 +4,7 @@ angular.module("bookreadings")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
     .constant("tagsURL", "/tagsURL")
-    .controller("readingCtrl", function ($scope, $rootScope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, ENV, tagsURL, readingsURL, commentsURL, usersURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP, readingsStatsURL) {
+    .controller("readingCtrl", function ($scope, $rootScope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, ENV, tagsURL, readingsURL, commentsURL, usersURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP, readingsStatsURL, readingsByDateCreatedURL, readingsByMostPlayedURL, readingsByFeaturedURL) {
 
         threeSixtyPlayer.init();
 
@@ -191,10 +191,10 @@ angular.module("bookreadings")
 
                 //delete all the instances of the reading 
 
-                var readingsByDateCreatedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByDateCreated/" + $scope.reading.readingsByDateCreatedId);
+                var readingsByDateCreatedRef = new Firebase(ENV.firebase + readingsByDateCreatedURL + "/" + $scope.reading.readingsByDateCreatedId);
                 $firebase(readingsByDateCreatedRef).$remove();
 
-                var readingsByMostPlayedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByMostPlayed/" + $scope.reading.readingsByMostPlayedId);
+                var readingsByMostPlayedRef = new Firebase(ENV.firebase + readingsByMostPlayedURL + "/" + $scope.reading.readingsByMostPlayedId);
                 $firebase(readingsByMostPlayedRef).$remove();
 
                 getFirebaseReadingsByFeaturedReference($scope.reading.readingsByFeaturedId).$remove();
@@ -245,7 +245,7 @@ angular.module("bookreadings")
 
           if($scope.userIsAdmin()) {
 
-              var readingsByFeaturedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByFeatured");
+              var readingsByFeaturedRef = new Firebase(ENV.firebase + readingsByFeaturedURL);
               var _readingsByFeaturedRef = $firebase(readingsByFeaturedRef).$asArray();
 
               var data = {}
@@ -297,7 +297,7 @@ angular.module("bookreadings")
 
         function getFirebaseReadingsByFeaturedReference(id) {
 
-            var readingsByFeaturedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByFeatured/" + id);
+            var readingsByFeaturedRef = new Firebase(ENV.firebase + readingsByFeaturedURL + "/" + id);
             return $firebase(readingsByFeaturedRef);
 
         }
