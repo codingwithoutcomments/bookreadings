@@ -177,7 +177,7 @@ angular.module("bookreadings")
               }
 
               //now deal with adding the new tags
-              $scope.processed_tags = [];
+              var processed_tags = [];
               for(var i = 0; i < new_tags.length; i++) {
 
                 var tag = new_tags[i];
@@ -185,16 +185,16 @@ angular.module("bookreadings")
                 if($.inArray(tag, old_tags) == -1) {
 
                   //add from reading object / tags
-                  var tagsRef = getFirebaseTagNameReference(ENV.firebase + tagsURL, tag);
-                  add_tags_to_tag_specific_section(tagsRef, reading_object.$id, user.uid, -reading_object.$priority, new_tags.length, tag, reading_object.slug);
+                    var tagsRef = $scope.getFirebaseTagNameListReference(ENV.firebase + tagsURL, tag);
+                    $scope.add_tags_to_tag_specific_section(tagsRef, reading_object.$id, user.uid, -reading_object.$priority, new_tags.length, tag, reading_object.slug, processed_tags);
 
                 } else {
 
-                  $scope.processed_tags.push(new_tags[i]);
+                  processed_tags.push(new_tags[i]);
 
                 }
 
-                if($scope.processed_tags.length == new_tags.length) {
+                if(processed_tags.length == new_tags.length) {
 
                   var path = "reading/" + ref.name() + "/" + slug;
                   $location.path(path);
@@ -204,41 +204,6 @@ angular.module("bookreadings")
               }
 
             });
-
-        }
-
-
-        function add_tags_to_tag_specific_section(tagsRef, reading_id, user_id, reading_priority, number_of_tags, tag_name, reading_slug) {
-
-          var data = {};
-          data["created_by"] = user_id;
-          data["reading_id"] = reading_id;
-          data["$priority"] = reading_priority;
-
-          var tagsRefArray = tagsRef.$asArray();
-
-          //save tag to list
-            //set the priority  
-          tagsRefArray.$add(data).then(function(ref){
-
-            //save the id back to reading
-            var singleReadingTagRef = new Firebase(ENV.firebase + readingsURL + "/" + reading_id + "/" + "tag_locations");
-            var _singleReadingTagRef = $firebase(singleReadingTagRef);
-
-            _singleReadingTagRef.$set(tag_name, ref.name()).then(function(){
-
-              $scope.processed_tags.push(tag_name);
-
-              if($scope.processed_tags.length == number_of_tags) {
-
-                    var path = "reading/" + reading_id + "/" + reading_slug;
-                    $location.path(path);
-                  }
-
-            });
-
-
-          });
 
         }
 

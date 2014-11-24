@@ -562,7 +562,7 @@ angular.module("bookreadings")
                               tagsByPopularityObject.$save();
 
                               //at the end, load new page
-                              add_tags_to_processed_load_reading_page(tag_name, number_of_tags, reading_slug, processed_tags);
+                              add_tags_to_processed_load_reading_page(tag_name, number_of_tags, reading_slug, processed_tags, reading_id);
 
 
                             });
@@ -589,7 +589,7 @@ angular.module("bookreadings")
                                 tag_name_reference["tags_by_popularity_location"] = location;
                                 tag_name_reference.$save().then(function(){
 
-                                  add_tags_to_processed_load_reading_page(tag_name, number_of_tags, reading_slug, processed_tags);
+                                  add_tags_to_processed_load_reading_page(tag_name, number_of_tags, reading_slug, processed_tags, reading_id);
 
                                 });
 
@@ -613,7 +613,7 @@ angular.module("bookreadings")
 
       }
 
-      function add_tags_to_processed_load_reading_page(tag_name, number_of_tags, reading_slug, processed_tags) {
+      function add_tags_to_processed_load_reading_page(tag_name, number_of_tags, reading_slug, processed_tags, reading_id) {
 
         processed_tags.push(tag_name);
         if(processed_tags.length == number_of_tags) {
