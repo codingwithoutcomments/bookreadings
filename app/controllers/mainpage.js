@@ -6,7 +6,7 @@ angular.module("bookreadings")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
     .constant("tagURL", "/tags")
-    .controller("mainPageController", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, tagURL, readingsByDateCreatedURL, readingsByFeaturedURL, ENV, readingsURL, commentsURL, likesURL, usersURL, CDNReadingsPathFP, CDNReadingsPathCF, readingsByMostPlayedURL, S3ReadingsPath, readingsStatsURL) {
+    .controller("mainPageController", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, tagURL, tagsByPopularityURL, readingsByDateCreatedURL, readingsByFeaturedURL, ENV, readingsURL, commentsURL, likesURL, usersURL, CDNReadingsPathFP, CDNReadingsPathCF, readingsByMostPlayedURL, S3ReadingsPath, readingsStatsURL) {
 
     	$scope.S3ReadingsPath = S3ReadingsPath;
         $scope.oldReadings = {};
@@ -125,6 +125,11 @@ angular.module("bookreadings")
     	var count = 0, pageSize = 5;
 
         threeSixtyPlayer.init();
+
+        //load tag counts
+        var tags_by_popularity_ref = new Firebase(ENV.firebase + tagsByPopularityURL);
+        var tags_by_popularity = $firebase(tags_by_popularity_ref.startAt().limit(10));
+        $scope.tags_by_popularity = tags_by_popularity.$asArray();
 
     	$scope.loadNextPage = function () {
 

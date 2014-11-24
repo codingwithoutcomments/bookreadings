@@ -1,7 +1,7 @@
 angular.module("bookreadings")
 	.constant("tagsURL", "/tags")
     .constant("CDNReadingsPath", "https://d1onveq9178bu8.cloudfront.net")
-	.controller("uploadCtrl", function ($scope, $rootScope, $firebase, $http, $location, ENV, readingsURL, tagsURL, string_manipulation, CDNReadingsPath, readingsStatsURL, readingsByDateCreatedURL, readingsByMostPlayedURL) {
+	.controller("uploadCtrl", function ($scope, $rootScope, $firebase, $http, $location, ENV, readingsURL, tagsURL, string_manipulation, CDNReadingsPath, readingsStatsURL, readingsByDateCreatedURL, readingsByMostPlayedURL, tagsByPopularityURL) {
 
 		filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
@@ -119,7 +119,7 @@ angular.module("bookreadings")
 									for(var i = 0; i < this.reading_tags.length; i++) {
 
 										//add tags to tag specific section
-										var tagsRef = getFirebaseTagNameReference(ENV.firebase + tagsURL, this.reading_tags[i]);
+										var tagsRef = getFirebaseTagNameListReference(ENV.firebase + tagsURL, this.reading_tags[i]);
 										add_tags_to_tag_specific_section(tagsRef, this.reading_id, user.uid, this.reading_priority, this.reading.tags.length, this.reading_tags[i], reading.slug);
 
 									}
@@ -151,7 +151,7 @@ angular.module("bookreadings")
 
 			var tagsRefArray = tagsRef.$asArray();
 
-			//save tag to list
+			//save tag to list under /readings
 		    //set the priority	
 			tagsRefArray.$add(data).then(function(ref){
 
@@ -161,18 +161,98 @@ angular.module("bookreadings")
 
 				_singleReadingTagRef.$set(tag_name, ref.name()).then(function(){
 
-					$scope.processed_tags.push(tag_name);
+					//increment the tag count
+					var tagCount = getFirebaseTagCountReference(ENV.firebase + tagsURL, tag_name);
+	                tagCount.$transaction(function(currentCount) {
 
-					if($scope.processed_tags.length == number_of_tags) {
+	                  if (!currentCount) return 1;   // Initial value for counter.
+	                  if (currentCount < 0) return;  // Return undefined to abort transaction.
+	                  return currentCount + 1;       // Decrement the current counter by 1
 
-			        	var path = "reading/" + reading_id + "/" + reading_slug;
-			        	$location.path(path);
-			        }
+	                }).then(function(snapshot) {
+
+	                  if (!snapshot) {
+	                    // Handle aborted transaction.
+
+	                  } else {
+
+	                  	//see if tags by popularity exists
+	                  	var _tags_by_popularity_location_object = getFirebaseTagsByPopularityReference(ENV.firebase + tagsURL, tag_name).$asObject();
+	                  	_tags_by_popularity_location_object.$loaded(function(){
+
+	                  		var tags_by_popularity_location = _tags_by_popularity_location_object.$value;
+
+		                  	if(tags_by_popularity_location != null) {
+
+			                  	//if it does, go to the object and increment the count and the priority
+		                  		var tagsByPopularityObject = getFirebaseTagsByPopularityObjectReference(ENV.firebase + tagsByPopularityURL, tags_by_popularity_location).$asObject();
+		                  		tagsByPopularityObject.$loaded(function(){
+
+		                  			var new_count = tagsByPopularityObject["count"] + 1;
+		                  			tagsByPopularityObject["count"] = tagsByPopularityObject["count"] + 1;
+		                  			tagsByPopularityObject["$priority"] = -new_count;
+		                  			tagsByPopularityObject.$save();
+
+				                  	//at the end, load new page
+		                  			add_tags_to_processed_load_reading_page(tag_name, number_of_tags, reading_slug);
+
+
+		                  		});
+
+
+		                  	} else {
+
+		                  		var tagsByPopularity =  new Firebase(ENV.firebase + tagsByPopularityURL);
+		                  		var tagsByPopularityArray = $firebase(tagsByPopularity).$asArray();
+
+			                  	//if it doesn't exist, create new object to push onto tags_by_popularity with tag name, count of 1, and priority of -1
+		                  		var popularity_object = {};
+		                  		popularity_object["count"] = 1;
+		                  		popularity_object["tag_name"] = tag_name;
+		                  		popularity_object["$priority"] = -1;
+		                  		tagsByPopularityArray.$add(popularity_object).then(function(ref){
+
+		                  			var location = ref.name();
+
+		                  			//update the popularity location	
+		                  			var tag_name_reference = getFirebaseTagsByTagNameReference(ENV.firebase + tagsURL, tag_name).$asObject();
+		                  			tag_name_reference.$loaded().then(function(){
+
+		                  				tag_name_reference["tags_by_popularity_location"] = location;
+		                  				tag_name_reference.$save().then(function(){
+
+				                  			add_tags_to_processed_load_reading_page(tag_name, number_of_tags, reading_slug);
+
+		                  				});
+
+		                  			});
+
+		                  		});
+		                  	}
+
+		                 });
+
+	                  }
+	                }, function(err) {
+	                  // Handle the error condition.
+	                });
+
 
 				});
 
 
 			});
+
+		}
+
+		function add_tags_to_processed_load_reading_page(tag_name, number_of_tags, reading_slug) {
+
+			$scope.processed_tags.push(tag_name);
+			if($scope.processed_tags.length == number_of_tags) {
+
+	        	var path = "reading/" + reading_id + "/" + reading_slug;
+	        	$location.path(path);
+	        }
 
 		}
 		
@@ -181,16 +261,37 @@ angular.module("bookreadings")
 		  return url.split("?")[0];
 		}
 
-        function getFirebaseTagIDReference(tagsURL, tag_name, tag_id) {
+        function getFirebaseTagNameListReference(tagsURL, tag_name) {
 
-          var tagFirebase = new Firebase(tagsURL + "/" + tag_name + "/" + tag_id);
+          var tagFirebase = new Firebase(tagsURL + "/" + tag_name + "/readings");
           return $firebase(tagFirebase);
 
         }
 
-        function getFirebaseTagNameReference(tagsURL, tag_name) {
+        function getFirebaseTagCountReference(tagsURL, tag_name) {
+
+          var tagFirebase = new Firebase(tagsURL + "/" + tag_name + "/tag_count");
+          return $firebase(tagFirebase);
+
+        }
+
+        function getFirebaseTagsByPopularityReference(tagsURL, tag_name) {
+
+          var tagFirebase = new Firebase(tagsURL + "/" + tag_name + "/tags_by_popularity_location");
+          return $firebase(tagFirebase);
+
+        }
+
+        function getFirebaseTagsByTagNameReference(tagsURL, tag_name) {
 
           var tagFirebase = new Firebase(tagsURL + "/" + tag_name);
+          return $firebase(tagFirebase);
+
+        }
+
+        function getFirebaseTagsByPopularityObjectReference(tagsByPopularityURL, tag_location) {
+
+          var tagFirebase = new Firebase(tagsByPopularityURL + "/" + tag_location);
           return $firebase(tagFirebase);
 
         }

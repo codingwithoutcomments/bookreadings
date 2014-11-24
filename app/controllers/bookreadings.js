@@ -6,6 +6,7 @@ angular.module("bookreadings")
     .constant("readingsByMostPlayedURL", "/readingsByMostPlayed")
     .constant("readingsByDateCreatedURL", "/readingsByDateCreated")
     .constant("readingsByFeaturedURL", "/readingsByFeatured")
+    .constant("tagsByPopularityURL", "/tags_by_popularity")
     .directive('focusOn', function() {
        return function(scope, elem, attr) {
           scope.$on('focusOn', function(e, name) {
