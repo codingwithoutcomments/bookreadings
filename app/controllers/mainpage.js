@@ -14,7 +14,7 @@ angular.module("bookreadings")
         $scope.CDNReadingsPathCF = CDNReadingsPathCF;
         $scope.CDNReadingsPathFP = CDNReadingsPathFP;
 
-        $scope.runScript = function() {
+        /*$scope.runScript = function() {
 
             //var specificTagReadingRef = new Firebase(ENV.firebase + tagURL + "/" + tagArray[i].$id + "/" + keys[j]);
             //var _specificTagReadingRef = $firebase(specificTagReadingRef).$asObject(;
@@ -93,7 +93,7 @@ angular.module("bookreadings")
 
             });
 
-        } 
+        } */
 
         $scope.tag_name = $routeParams.tagname;
 
