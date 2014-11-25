@@ -531,79 +531,79 @@ angular.module("bookreadings")
 
             //increment the tag count
             var tagCount = $scope.getFirebaseTagCountReference(ENV.firebase + tagsURL, tag_name);
-                    tagCount.$transaction(function(currentCount) {
+            tagCount.$transaction(function(currentCount) {
 
-                      if (!currentCount) return 1;   // Initial value for counter.
-                      if (currentCount < 0) return;  // Return undefined to abort transaction.
-                      return currentCount + 1;       // Decrement the current counter by 1
+              if (!currentCount) return 1;   // Initial value for counter.
+              if (currentCount < 0) return;  // Return undefined to abort transaction.
+              return currentCount + 1;       // Decrement the current counter by 1
 
-                    }).then(function(snapshot) {
+            }).then(function(snapshot) {
 
-                      if (!snapshot) {
-                        // Handle aborted transaction.
+              if (!snapshot) {
+                // Handle aborted transaction.
 
-                      } else {
+              } else {
 
-                        //see if tags by popularity exists
-                        var _tags_by_popularity_location_object = $scope.getFirebaseTagsByPopularityReference(ENV.firebase + tagsURL, tag_name).$asObject();
-                        _tags_by_popularity_location_object.$loaded(function(){
+                //see if tags by popularity exists
+                var _tags_by_popularity_location_object = $scope.getFirebaseTagsByPopularityReference(ENV.firebase + tagsURL, tag_name).$asObject();
+                _tags_by_popularity_location_object.$loaded(function(){
 
-                          var tags_by_popularity_location = _tags_by_popularity_location_object.$value;
+                  var tags_by_popularity_location = _tags_by_popularity_location_object.$value;
 
-                          if(tags_by_popularity_location != null) {
+                  if(tags_by_popularity_location != null) {
 
-                            //if it does, go to the object and increment the count and the priority
-                            var tagsByPopularityObject = $scope.getFirebaseTagsByPopularityObjectReference(ENV.firebase + tagsByPopularityURL, tags_by_popularity_location).$asObject();
-                            tagsByPopularityObject.$loaded(function(){
+                    //if it does, go to the object and increment the count and the priority
+                    var tagsByPopularityObject = $scope.getFirebaseTagsByPopularityObjectReference(ENV.firebase + tagsByPopularityURL, tags_by_popularity_location).$asObject();
+                    tagsByPopularityObject.$loaded(function(){
 
-                              var new_count = tagsByPopularityObject["count"] + 1;
-                              tagsByPopularityObject["count"] = tagsByPopularityObject["count"] + 1;
-                              tagsByPopularityObject["$priority"] = -new_count;
-                              tagsByPopularityObject.$save();
+                      var new_count = tagsByPopularityObject["count"] + 1;
+                      tagsByPopularityObject["count"] = tagsByPopularityObject["count"] + 1;
+                      tagsByPopularityObject["$priority"] = -new_count;
+                      tagsByPopularityObject.$save();
 
-                              //at the end, load new page
-                              add_tags_to_processed_load_reading_page(tag_name, number_of_tags, reading_slug, processed_tags, reading_id);
-
-
-                            });
+                      //at the end, load new page
+                      add_tags_to_processed_load_reading_page(tag_name, number_of_tags, reading_slug, processed_tags, reading_id);
 
 
-                          } else {
-
-                            var tagsByPopularity =  new Firebase(ENV.firebase + tagsByPopularityURL);
-                            var tagsByPopularityArray = $firebase(tagsByPopularity).$asArray();
-
-                            //if it doesn't exist, create new object to push onto tags_by_popularity with tag name, count of 1, and priority of -1
-                            var popularity_object = {};
-                            popularity_object["count"] = 1;
-                            popularity_object["tag_name"] = tag_name;
-                            popularity_object["$priority"] = -1;
-                            tagsByPopularityArray.$add(popularity_object).then(function(ref){
-
-                              var location = ref.name();
-
-                              //update the popularity location  
-                              var tag_name_reference = $scope.getFirebaseTagsByTagNameReference(ENV.firebase + tagsURL, tag_name).$asObject();
-                              tag_name_reference.$loaded().then(function(){
-
-                                tag_name_reference["tags_by_popularity_location"] = location;
-                                tag_name_reference.$save().then(function(){
-
-                                  add_tags_to_processed_load_reading_page(tag_name, number_of_tags, reading_slug, processed_tags, reading_id);
-
-                                });
-
-                              });
-
-                            });
-                          }
-
-                       });
-
-                      }
-                    }, function(err) {
-                      // Handle the error condition.
                     });
+
+
+                  } else {
+
+                    var tagsByPopularity =  new Firebase(ENV.firebase + tagsByPopularityURL);
+                    var tagsByPopularityArray = $firebase(tagsByPopularity).$asArray();
+
+                    //if it doesn't exist, create new object to push onto tags_by_popularity with tag name, count of 1, and priority of -1
+                    var popularity_object = {};
+                    popularity_object["count"] = 1;
+                    popularity_object["tag_name"] = tag_name;
+                    popularity_object["$priority"] = -1;
+                    tagsByPopularityArray.$add(popularity_object).then(function(ref){
+
+                      var location = ref.name();
+
+                      //update the popularity location  
+                      var tag_name_reference = $scope.getFirebaseTagsByTagNameReference(ENV.firebase + tagsURL, tag_name).$asObject();
+                      tag_name_reference.$loaded().then(function(){
+
+                        tag_name_reference["tags_by_popularity_location"] = location;
+                        tag_name_reference.$save().then(function(){
+
+                          add_tags_to_processed_load_reading_page(tag_name, number_of_tags, reading_slug, processed_tags, reading_id);
+
+                        });
+
+                      });
+
+                    });
+                  }
+
+               });
+
+              }
+            }, function(err) {
+              // Handle the error condition.
+            });
 
 
           });
