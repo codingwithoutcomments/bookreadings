@@ -8,14 +8,14 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-6 reading-header reading-header-username">
+			<div class="col-xs-8 col-sm-6 reading-header reading-header-username">
 				Posted by {{reading.created_by_name }}
 			</div>
-			<div class="col-xs-6 reading-header hidden-xs" style="text-align:right;">
+			<div class="col-xs-3 col-sm-6 reading-header hidden-xs" style="text-align:right;">
 				{{ reading.time_since }}
 			</div>
 			<!-- iPAD Stats -->
-			<div class="col-xs-6 reading-stats hidden-sm hidden-md hidden-lg" >
+			<div class="col-xs-4 reading-stats hidden-sm hidden-md hidden-lg" style='margin-top:5px;'>
 				<span><span class="glyphicon glyphicon-play"></span> {{ reading_stats.play_count }} | <span class="glyphicon glyphicon-heart"></span> {{reading_stats.like_count}} | <span class="glyphicon glyphicon-comment"></span> {{reading_stats.comment_count}}</span>
 			</div>
 		</div>
@@ -24,8 +24,11 @@
 			    <div class="ui360 sm2_playing ui360reading" ng-click="readingPlayed(reading_id, reading.readingsByMostPlayedId)">
 			     	<a ng-href="{{CDNReadingsPathCF}}{{reading.audio_key}}?s={{randomAudioPlayerValue}}" class="norewrite exclude button-exclude inline-exclude"></a>
 			    </div>
-			    <div class="readingTitle">
-			    	<h1 style="">{{reading.title}}</h1>
+			    <div class="readingTitle hidden-xs hidden-sm">
+			    	<h1>{{reading.title}}</h1>
+			    </div>
+			    <div class="readingTitle hidden-md hidden-lg" style='margin-top:0px;'>
+			    	<h3 style='color:black;'>{{reading.title}}</h3>
 			    </div>
 			</div>
 		</div>
