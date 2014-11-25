@@ -1,7 +1,6 @@
 angular.module("bookreadings")
-	.constant("tagsURL", "/tags")
     .constant("CDNReadingsPath", "https://d1onveq9178bu8.cloudfront.net")
-	.controller("uploadCtrl", function ($scope, $rootScope, $firebase, $http, $location, ENV, readingsURL, tagsURL, string_manipulation, CDNReadingsPath, readingsStatsURL) {
+	.controller("uploadCtrl", function ($scope, $rootScope, $firebase, $http, $location, ENV, readingsURL, tagsURL, string_manipulation, CDNReadingsPath, readingsStatsURL, readingsByDateCreatedURL, readingsByMostPlayedURL, tagsByPopularityURL) {
 
 		filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
@@ -73,7 +72,7 @@ angular.module("bookreadings")
 				var _singleReadingRef = $firebase(singleReadingRef).$asObject();
 				_singleReadingRef.$loaded().then(function() {
 
-					var readingsByDateCreatedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByDateCreated");
+					var readingsByDateCreatedRef = new Firebase(ENV.firebase + readingsByDateCreatedURL);
 					var _readingsByDateCreatedRef = $firebase(readingsByDateCreatedRef).$asArray();
 
 					var data = {}
@@ -90,7 +89,7 @@ angular.module("bookreadings")
 
 						this.readingsByDateCreatedId = ref.name();
 
-						var readingsByMostPlayedRef = new Firebase("https://bookreadings.firebaseio.com/readingsByMostPlayed");
+						var readingsByMostPlayedRef = new Firebase(ENV.firebase + readingsByMostPlayedURL);
 						var _readingsByMostPlayedRef = $firebase(readingsByMostPlayedRef).$asArray();
 
 						var data = {}
@@ -112,15 +111,15 @@ angular.module("bookreadings")
 							update_dictionary["readingsByMostPlayedId"] = readingByMostPlayedId;
 							$firebase(singleReadingRef).$update(update_dictionary).then(function(){
 
-								$scope.processed_tags = [];
+								var processed_tags = [];
 								var user = $scope.loginObj.user;
 								if(this.reading_tags) {
 
 									for(var i = 0; i < this.reading_tags.length; i++) {
 
 										//add tags to tag specific section
-										var tagsRef = getFirebaseTagNameReference(ENV.firebase + tagsURL, this.reading_tags[i]);
-										add_tags_to_tag_specific_section(tagsRef, this.reading_id, user.uid, this.reading_priority, this.reading.tags.length, this.reading_tags[i], reading.slug);
+										var tagsRef = $scope.getFirebaseTagNameListReference(ENV.firebase + tagsURL, this.reading_tags[i]);
+										$scope.add_tags_to_tag_specific_section(tagsRef, this.reading_id, user.uid, this.reading_priority, this.reading.tags.length, this.reading_tags[i], reading.slug, processed_tags);
 
 									}
 
@@ -141,59 +140,11 @@ angular.module("bookreadings")
 
 			});
 		}
-
-		function add_tags_to_tag_specific_section(tagsRef, reading_id, user_id, reading_priority, number_of_tags, tag_name, reading_slug) {
-
-			var data = {};
-			data["created_by"] = user_id;
-			data["reading_id"] = reading_id;
-			data["$priority"] = reading_priority;
-
-			var tagsRefArray = tagsRef.$asArray();
-
-			//save tag to list
-		    //set the priority	
-			tagsRefArray.$add(data).then(function(ref){
-
-				//save the id back to reading
-				var singleReadingTagRef = new Firebase(ENV.firebase + readingsURL + "/" + reading_id + "/" + "tag_locations");
-				var _singleReadingTagRef = $firebase(singleReadingTagRef);
-
-				_singleReadingTagRef.$set(tag_name, ref.name()).then(function(){
-
-					$scope.processed_tags.push(tag_name);
-
-					if($scope.processed_tags.length == number_of_tags) {
-
-			        	var path = "reading/" + reading_id + "/" + reading_slug;
-			        	$location.path(path);
-			        }
-
-				});
-
-
-			});
-
-		}
 		
 
 		function getPathFromUrl(url) {
 		  return url.split("?")[0];
 		}
-
-        function getFirebaseTagIDReference(tagsURL, tag_name, tag_id) {
-
-          var tagFirebase = new Firebase(tagsURL + "/" + tag_name + "/" + tag_id);
-          return $firebase(tagFirebase);
-
-        }
-
-        function getFirebaseTagNameReference(tagsURL, tag_name) {
-
-          var tagFirebase = new Firebase(tagsURL + "/" + tag_name);
-          return $firebase(tagFirebase);
-
-        }
 
 		$scope.upload_audio_file = function(){
 

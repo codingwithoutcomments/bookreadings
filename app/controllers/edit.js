@@ -3,7 +3,7 @@ angular.module("bookreadings")
     .constant("S3ReadingsPath", "https://s3-us-west-2.amazonaws.com/bookreadings/")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
-    .controller("editCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, ENV, tagsURL, readingsURL, S3ReadingsPath, string_manipulation, CDNReadingsPathCF, CDNReadingsPathFP) {
+    .controller("editCtrl", function ($scope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, ENV, tagsURL, readingsURL, S3ReadingsPath, string_manipulation, CDNReadingsPathCF, CDNReadingsPathFP, tagsByPopularityURL) {
 
       filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
@@ -75,7 +75,7 @@ angular.module("bookreadings")
 
         function getFirebaseTagReadingReference(tagsURL, tag_name, reading_id) {
 
-          var tagFirebase = new Firebase(tagsURL + "/" + tag_name + "/" + reading_id);
+          var tagFirebase = new Firebase(tagsURL + "/" + tag_name + "/readings/" + reading_id);
           return $firebase(tagFirebase);
 
         }
@@ -88,6 +88,8 @@ angular.module("bookreadings")
         }
 
         $scope.updateReadingInformation = function(updateReading, readingRef) {
+
+          $scope.disableSaveButton = true;
 
           var tags = updateReading.tags;
           var tag_array = [];
@@ -146,6 +148,7 @@ angular.module("bookreadings")
               //update tag locations
               var old_tags = $scope.old_tags;
               var new_tags = tag_array;
+              var processed_old_tags = [];
               for(var i = 0; i < old_tags.length; i++) {
 
                 var tag = old_tags[i];
@@ -156,17 +159,95 @@ angular.module("bookreadings")
                   if(reading_object.tag_locations) {
 
                     //remove from tags
-                    var tagReadingRef = getFirebaseTagReadingReference(ENV.firebase + tagsURL, old_tags[i], reading_object.tag_locations[old_tags[i]]);
+                    var tagReadingRef = getFirebaseTagReadingReference(ENV.firebase + tagsURL, tag, reading_object.tag_locations[tag]);
                     tagReadingRef.$remove();
+
+                    //remove from reading object tag locations
+                    getFirebaseReadingTagLocation(ENV.firebase + readingsURL, reading_object.$id, old_tags[i]).$remove();
+
+                    //decrement count on tag object
+                    decrement_tag_count(tagsURL, tag, tagsByPopularityURL, old_tags, processed_old_tags, new_tags, reading_object, user);
+
+                  } else {
+
+                    determine_if_new_tags_can_be_processed(tag, processed_old_tags, old_tags, tagsURL, new_tags, reading_object, user);
 
                   }
 
-                  //remove from reading object tag locations
-                  getFirebaseReadingTagLocation(ENV.firebase + readingsURL, reading_object.$id, old_tags[i]).$remove();
+                } else {
+
+                  determine_if_new_tags_can_be_processed(tag, processed_old_tags, old_tags, tagsURL, new_tags, reading_object, user);
+
 
                 }
 
               }
+
+            });
+
+        }
+
+        function determine_if_new_tags_can_be_processed(tag_name, processed_old_tags, old_tags, tagsURL, new_tags, reading_object, user) {
+
+            processed_old_tags.push(tag_name);
+            if(processed_old_tags.length == old_tags.length) {
+
+                process_new_tags(tagsURL, new_tags, reading_object, user, old_tags);
+
+            }
+
+        }
+
+        function decrement_tag_count(tagsURL, tag_name, tagsByPopularityURL, old_tags, processed_old_tags, new_tags, reading_object, user) {
+
+            //increment the tag count
+            var tagCount = $scope.getFirebaseTagCountReference(ENV.firebase + tagsURL, tag_name);
+            tagCount.$transaction(function(currentCount) {
+
+              if (!currentCount) return 1;   // Initial value for counter.
+              if (currentCount < 0) return;  // Return undefined to abort transaction.
+              return currentCount - 1;       // Decrement the current counter by 1
+
+            }).then(function(){
+
+                //grab tag popularity id and decrement count and priority on tag popularity object
+                decrement_tag_popularity(tagsURL, tag_name, tagsByPopularityURL, old_tags, processed_old_tags, new_tags, reading_object, user);
+
+            });
+        }
+
+        function decrement_tag_popularity(tagsURL, tag_name, tagsByPopularityURL, old_tags, processed_old_tags, new_tags, reading_object, user) {
+
+              //see if tags by popularity exists
+              var _tags_by_popularity_location_object = $scope.getFirebaseTagsByPopularityReference(ENV.firebase + tagsURL, tag_name).$asObject();
+              _tags_by_popularity_location_object.$loaded(function(){
+
+                var tags_by_popularity_location = _tags_by_popularity_location_object.$value;
+
+                if(tags_by_popularity_location != null) {
+
+                  //if it does, go to the object and increment the count and the priority
+                  var tagsByPopularityObject = $scope.getFirebaseTagsByPopularityObjectReference(ENV.firebase + tagsByPopularityURL, tags_by_popularity_location).$asObject();
+                  tagsByPopularityObject.$loaded(function(){
+
+                    var new_count = tagsByPopularityObject["count"] - 1;
+                    tagsByPopularityObject["count"] = new_count;
+                    tagsByPopularityObject["$priority"] = -new_count;
+                    tagsByPopularityObject.$save().then(function(){
+
+                      determine_if_new_tags_can_be_processed(tag_name, processed_old_tags, old_tags, tagsURL, new_tags, reading_object, user);
+
+                    });
+
+                  });
+
+
+                }
+
+              });
+        }
+
+        function process_new_tags(tagsURL, new_tags, reading_object, user, old_tags){
 
               //if no new tags just go directly to page
               if(new_tags.length == 0) {
@@ -177,7 +258,7 @@ angular.module("bookreadings")
               }
 
               //now deal with adding the new tags
-              $scope.processed_tags = [];
+              var processed_tags = [];
               for(var i = 0; i < new_tags.length; i++) {
 
                 var tag = new_tags[i];
@@ -185,60 +266,23 @@ angular.module("bookreadings")
                 if($.inArray(tag, old_tags) == -1) {
 
                   //add from reading object / tags
-                  var tagsRef = getFirebaseTagNameReference(ENV.firebase + tagsURL, tag);
-                  add_tags_to_tag_specific_section(tagsRef, reading_object.$id, user.uid, -reading_object.$priority, new_tags.length, tag, reading_object.slug);
+                    var tagsRef = $scope.getFirebaseTagNameListReference(ENV.firebase + tagsURL, tag);
+                    $scope.add_tags_to_tag_specific_section(tagsRef, reading_object.$id, user.uid, -reading_object.$priority, new_tags.length, tag, reading_object.slug, processed_tags);
 
                 } else {
 
-                  $scope.processed_tags.push(new_tags[i]);
+                  processed_tags.push(new_tags[i]);
 
                 }
 
-                if($scope.processed_tags.length == new_tags.length) {
+                if(processed_tags.length == new_tags.length) {
 
-                  var path = "reading/" + ref.name() + "/" + slug;
+                  var path = "reading/" + reading_object.$id + "/" + reading_object.slug;
                   $location.path(path);
 
                 }
 
               }
-
-            });
-
-        }
-
-
-        function add_tags_to_tag_specific_section(tagsRef, reading_id, user_id, reading_priority, number_of_tags, tag_name, reading_slug) {
-
-          var data = {};
-          data["created_by"] = user_id;
-          data["reading_id"] = reading_id;
-          data["$priority"] = reading_priority;
-
-          var tagsRefArray = tagsRef.$asArray();
-
-          //save tag to list
-            //set the priority  
-          tagsRefArray.$add(data).then(function(ref){
-
-            //save the id back to reading
-            var singleReadingTagRef = new Firebase(ENV.firebase + readingsURL + "/" + reading_id + "/" + "tag_locations");
-            var _singleReadingTagRef = $firebase(singleReadingTagRef);
-
-            _singleReadingTagRef.$set(tag_name, ref.name()).then(function(){
-
-              $scope.processed_tags.push(tag_name);
-
-              if($scope.processed_tags.length == number_of_tags) {
-
-                    var path = "reading/" + reading_id + "/" + reading_slug;
-                    $location.path(path);
-                  }
-
-            });
-
-
-          });
 
         }
 
