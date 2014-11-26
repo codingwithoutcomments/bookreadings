@@ -200,7 +200,7 @@
 
                     <!-- Login Message -->
                     <li ng-hide="loginObj.user">
-                        <a ng-click="socialLogin()">
+                        <a ng-click="socialLogin(false)" style="cursor:pointer;">
                             Login With Facebook
                         </a>
                     </li>
@@ -226,8 +226,8 @@
                     <li class="hidden-md hidden-lg" ng-class="(filterByIndex==3) ? 'active' : ''"><a ng-click="showSearch();collapseNavbar();"><i class="glyphicon glyphicon-search"></i> Search</a></li>
 
                     <!-- Desktop Upload Button -->
-                    <li ng-show="loginObj.user" class="hidden-xs hidden-sm">
-                        <a href="#/upload">
+                    <li class="hidden-xs hidden-sm">
+                        <a style="cursor:pointer;" ng-click="upload()">
                             <span class="glyphicon glyphicon-cloud-upload"></span>
                             Upload
                         </a>

@@ -125,14 +125,24 @@ angular.module("bookreadings")
 
     }
 
-		$scope.socialLogin = function() {
+    $scope.upload = function(){
+
+      if($scope.loginObj.user) {
+        $location.path("/upload");
+      } else {
+        $scope.socialLogin(true);
+      }
+
+    }
+
+		$scope.socialLogin = function(fromUpload) {
 
 			$scope.loginObj.$login("facebook", {
 				rememberMe: true,
 				scope: 'email'
 			}).then(function(user) {
 
-    				var userFirebase = new Firebase(env.firebase + "/users/" + user.uid);
+    				var userFirebase = new Firebase(ENV.firebase + "/users/" + user.uid);
 		        var userRef = $firebase(userFirebase);
 
 		        this.userRef = userRef;
@@ -144,6 +154,10 @@ angular.module("bookreadings")
 
 				    	//user exists
 				    	setUser(userRecord);
+
+              if(fromUpload) {
+                $location.path("/upload");
+              }
 
            //new user
 					 } else {
@@ -160,8 +174,13 @@ angular.module("bookreadings")
                 newUserInfo["email"] = user.thirdPartyUserData.email;
                 var userInfoFirebase = new Firebase(env.firebase + "/user_info/" + user.uid);
                 var userInfoRef = $firebase(userInfoFirebase);
-                userInfoRef.$set(newUserInfo);
+                userInfoRef.$set(newUserInfo).then(function(){
 
+                  if(fromUpload) {
+                    $location.path("/upload");
+                  }
+
+                });
 
 					    });
 					 }

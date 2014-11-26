@@ -13,6 +13,7 @@ angular.module("bookreadings")
         $scope.populatedLikes = {};
         $scope.CDNReadingsPathCF = CDNReadingsPathCF;
         $scope.CDNReadingsPathFP = CDNReadingsPathFP;
+        $scope.loading = false;
 
         /*$scope.runScript = function() {
 
@@ -164,6 +165,8 @@ angular.module("bookreadings")
 
                 }
 
+                $scope.loading = false;
+
                 populateLikesOnPage();
 
             });
@@ -256,7 +259,10 @@ angular.module("bookreadings")
 
 	    $(window).scroll(function() {
 			if (window.scrollY == document.body.scrollHeight - window.innerHeight) {
-			  $scope.loadNextPage();
+              if($scope.loading == false) {
+                  $scope.loading = true;
+    			  $scope.loadNextPage();
+              }
 			}
 		});
 
