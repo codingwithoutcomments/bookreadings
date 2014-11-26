@@ -4,7 +4,7 @@ angular.module("bookreadings")
     .constant("CDNReadingsPathCF", "https://d3e04w4j2r2rn6.cloudfront.net/")
     .constant("CDNReadingsPathFP", "https://d1onveq9178bu8.cloudfront.net")
     .constant("tagsURL", "/tagsURL")
-    .controller("readingCtrl", function ($scope, $rootScope, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, ENV, tagsURL, readingsURL, commentsURL, usersURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP, readingsStatsURL, readingsByDateCreatedURL, readingsByMostPlayedURL, readingsByFeaturedURL) {
+    .controller("readingCtrl", function ($scope, $rootScope, $sce, $firebase, $firebaseSimpleLogin, $http, $location, $routeParams, ENV, tagsURL, readingsURL, commentsURL, usersURL, S3ReadingsPath, CDNReadingsPathCF, CDNReadingsPathFP, readingsStatsURL, readingsByDateCreatedURL, readingsByMostPlayedURL, readingsByFeaturedURL) {
 
         threeSixtyPlayer.init();
 
@@ -421,6 +421,11 @@ angular.module("bookreadings")
           }
 
         }
+
+        $scope.renderHtml = function(html_code)
+        {
+            return $sce.trustAsHtml(html_code);
+        };
 
         var hasRegistered = false;
         $scope.$watch(function() {
