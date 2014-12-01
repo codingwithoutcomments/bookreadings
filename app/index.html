@@ -2,6 +2,7 @@
 <html ng-app="bookreadings">
 <head>
     <title>bookreadin.gs</title>
+    <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- favicon -->
     <link rel="shortcut icon" href="favicon.ico" />
@@ -45,7 +46,7 @@
 
     <script>
         angular.module("bookreadings", ["firebase", "ng", "ngRoute", "string_manipulation", "ngTagsInput", "config"])
-        .config(function($routeProvider) {
+        .config(function($routeProvider, $locationProvider) {
 
             $routeProvider.when("/upload/", {
                 templateUrl: "/views/upload.html",
@@ -116,6 +117,9 @@
                   return true
                 }
             });
+
+            // use the HTML5 History API
+            $locationProvider.html5Mode(true);
 
         })
         .run(function ($rootScope, $location) {
