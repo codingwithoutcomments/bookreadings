@@ -2,7 +2,8 @@
 <html ng-app="bookreadings">
 <head>
     <title>bookreadin.gs</title>
-    <base href="/">
+    <base href="/"></base>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- favicon -->
     <link rel="shortcut icon" href="favicon.ico" />
@@ -120,6 +121,7 @@
 
             // use the HTML5 History API
             $locationProvider.html5Mode(true);
+
 
         })
         .run(function ($rootScope, $location) {
