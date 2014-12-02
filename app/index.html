@@ -47,7 +47,7 @@
 
     <script>
         angular.module("bookreadings", ["firebase", "ng", "ngRoute", "string_manipulation", "ngTagsInput", "config"])
-        .config(function($routeProvider, $locationProvider) {
+        .config(function($routeProvider, $locationProvider, ENV) {
 
             $routeProvider.when("/upload/", {
                 templateUrl: "/views/upload.html",
@@ -119,9 +119,10 @@
                 }
             });
 
-            // use the HTML5 History API
-            $locationProvider.html5Mode(true);
-
+            if(ENV.html5routing == "true") {
+                // use the HTML5 History API
+                $locationProvider.html5Mode(true);
+            }
 
         })
         .run(function ($rootScope, $location) {
@@ -260,7 +261,5 @@
     </nav>
     <ng-view />
 </body>
-
-<button type="button" ng-click="runScript()"></button>
 
 </html>

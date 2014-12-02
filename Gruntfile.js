@@ -19,7 +19,8 @@ module.exports = function(grunt) {
         constants: {
             ENV: {
             name: 'development',
-            firebase: 'https://bookreadings-staging.firebaseio.com'
+            firebase: 'https://bookreadings-staging.firebaseio.com',
+            html5routing: 'false'
           }
         }
     },
@@ -27,7 +28,8 @@ module.exports = function(grunt) {
         constants: {
             ENV: {
             name: 'production',
-            firebase: 'https://bookreadings.firebaseio.com'
+            firebase: 'https://bookreadings.firebaseio.com',
+            html5routing: 'true'
           }
         }
     }
