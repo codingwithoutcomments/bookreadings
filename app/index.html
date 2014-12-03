@@ -113,7 +113,7 @@
             });
 
             $routeProvider.otherwise({
-                templateUrl: "/views/bookreadingsindex.html",
+                templateUrl: "/views/carousel.html",
                 auth: function (user) {
                   return true
                 }
@@ -141,6 +141,7 @@
     <script src="controllers/reading.js"></script>
     <script src="controllers/mainpage.js"></script>
     <script src="controllers/edit.js"></script>
+    <script src="controllers/carousel.js"></script>
     <script src="components/string/string_manipulation.js"></script>
     <script src="ngmodules/angular-route.min.js"></script>
     <script src="ngmodules/angular-resource.min.js"></script>
