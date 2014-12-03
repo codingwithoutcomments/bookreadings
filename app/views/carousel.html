@@ -12,7 +12,7 @@
           <div class="container">
             <div class="carousel-caption">
               <h1>{{reading.title}}</h1>
-              <p><a class="btn btn-lg btn-primary" href="#" role="button">Listen Now</a></p>
+              <p><a class="btn btn-lg btn-primary" ng-href="/#/reading/{{reading.$id}}/{{reading.slug}}/" role="button">Listen Now</a></p>
             </div>
           </div>
         </div>
@@ -40,13 +40,13 @@
           <img class="img-circle" src="images/headphones.png" alt="Generic placeholder image" style="width: 140px; height: 140px;">
           <h2>Listen</h2>
           <p>Tons of book readings with more added everyday from the best book stores and libraries in the world.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <p><a class="btn btn-default" href="/#/readings/" role="button">Start Listening Now &raquo;</a></p>
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-4">
           <img class="img-circle" src="images/book.svg" alt="Generic placeholder image" style="width: 140px; height: 140px;">
           <h2>Read</h2>
-          <p>Not able to listen?  Many of our talks are transcribed for easy consumption.</p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <p>Not able to listen?  Many of our talks that are featured are transcribed for easy consumption.</p>
+          <p><a class="btn btn-default" href="/#/readings/" role="button">Start Reading Now &raquo;</a></p>
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-4">
           <img class="img-circle" src="images/upload.png" alt="Generic placeholder image" style="width: 140px; height: 140px;">
@@ -64,26 +64,26 @@
       <div class="row featurette">
         <div class="col-md-7">
           <h2 class="featurette-heading">Created for book lovers <span class="text-muted">by a book lover.</span></h2>
-          <p class="lead">We love book readings.  We find them fascinating.  We were becoming increasingly frustrated by combing the corners of the internet to find readings on obscure websites in terrible formats.  We thought they were much too important.  We designed a place for all of them to live together.</p>
+          <p class="lead">We love book readings.  We find them fascinating.  We were becoming increasingly frustrated by combing the corners of the internet to find readings on obscure websites in terrible formats.  We thought they were much too important.  We designed a place for all of them to live together.  We would love if you would help us achieve this dream!</p>
         </div>
         <div class="col-md-5">
-          <img class="featurette-image img-responsive" src="images/mic.svg" alt="Generic placeholder image" style='text-align:center;'>
+          <img class="featurette-image img-responsive center-block" src="images/logo4.png" alt="Generic placeholder image">
         </div>
       </div>
 
       <hr class="featurette-divider">
 
-      <div class="row featurette">
+      <!-- <div class="row featurette">
         <div class="col-md-5">
-          <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+          <img class="featurette-image img-responsive" src="https://cdn0.iconfinder.com/data/icons/lightly-icons/30/hashtag-480.png" alt="Generic placeholder image">
         </div>
         <div class="col-md-7">
-          <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
-          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+          <h2 class="featurette-heading">Completely searchable. <span class="text-muted">See for yourself.</span></h2>
+          <p class="lead">We use Amazon Elasticsearch which makes searching for a reading a cinch.  Search by Author, Book Title, Bookstore, or #Tag.  Whenever you see a Tag that you are interested in, click it to see similiar readings.</p>
         </div>
       </div>
 
-      <hr class="featurette-divider">
+      <!--<hr class="featurette-divider">
 
       <div class="row featurette">
         <div class="col-md-7">
@@ -95,15 +95,14 @@
         </div>
       </div>
 
-      <hr class="featurette-divider">
+      <hr class="featurette-divider"> -->
 
       <!-- /END THE FEATURETTES -->
 
 
       <!-- FOOTER -->
       <footer>
-        <p class="pull-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2014 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        <p>&copy; 2014 Bookreadin.gs, Inc. <!--&middot; <a href="#">About</a>--> &middot; <a href="mailto:chris@bookreadin.gs">Contact</a></p>
       </footer>
 
     </div>

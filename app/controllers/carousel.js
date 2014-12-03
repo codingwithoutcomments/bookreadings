@@ -35,14 +35,7 @@ angular.module("bookreadings")
 
         window.onresize = function(event) {
 
-	        $scope.screen_width = $(window).width();
-	        $scope.image_height = 290;
-	        if($scope.screen_width > 1250) {
-	        	$scope.screen_width = 1250;
-	        }
-	        if($scope.screen_width < 748) {
-	        	$scope.image_height = $scope.screen_width;
-	        }
+        	resize_graphics();
 
 	        $scope.$digest();
 
@@ -56,7 +49,11 @@ angular.module("bookreadings")
 	        	$scope.screen_width = 1250;
 	        }
 	        if($scope.screen_width < 748) {
-	        	$scope.image_height = $scope.screen_width;
+	        	var height = $scope.screen_width;
+	        	if(height < 500) {
+	        		height = 500;
+	        	}
+	        	$scope.image_height = height;
 	        }
 		}
 
