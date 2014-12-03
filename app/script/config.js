@@ -1,5 +1,5 @@
 angular.module('config', [])
 
-.constant('ENV', {name:'production',firebase:'https://bookreadings.firebaseio.com'})
+.constant('ENV', {name:'development',firebase:'https://bookreadings-staging.firebaseio.com',html5routing:'false'})
 
 ;

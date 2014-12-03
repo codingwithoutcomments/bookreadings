@@ -84,6 +84,13 @@
                 }
             });
 
+            $routeProvider.when("/readings/", {
+                templateUrl: "/views/bookreadingsindex.html",
+                auth: function (user) {
+                  return true
+                }
+            });
+
             $routeProvider.when("/featured/", {
                 templateUrl: "/views/bookreadingsindex.html",
                 auth: function (user) {
@@ -113,7 +120,7 @@
             });
 
             $routeProvider.otherwise({
-                templateUrl: "/views/bookreadingsindex.html",
+                templateUrl: "/views/carousel.html",
                 auth: function (user) {
                   return true
                 }
@@ -141,6 +148,7 @@
     <script src="controllers/reading.js"></script>
     <script src="controllers/mainpage.js"></script>
     <script src="controllers/edit.js"></script>
+    <script src="controllers/carousel.js"></script>
     <script src="components/string/string_manipulation.js"></script>
     <script src="ngmodules/angular-route.min.js"></script>
     <script src="ngmodules/angular-resource.min.js"></script>
@@ -174,7 +182,7 @@
                      <span class="icon-bar"></span>
                      <span class="icon-bar"></span>
                   </button>
-                    <a ng-if="search_shown==false" class="navbar-brand" style='padding-top:6px;padding-right:0px;margin-right:20px;' href="/">
+                    <a ng-if="search_shown==false" class="navbar-brand" style='padding-top:6px;padding-right:0px;margin-right:20px;' href="/#/readings/">
                         <img src="/css/bookreadings_logo_513x106.png" style="width:171px; height:36px;">
                     </a>
                 <!-- IPAD Search -->
@@ -252,8 +260,10 @@
                     <!-- Mobile HR -->
                     <li class="hidden-md hidden-lg"><hr style="margin-top:0px; margin-bottom:0px;border-color:#999;"></li>
 
+                    <li class="hidden-md hidden-lg"><a href="/" ng-click="collapseNavbar();">About Bookreadin.gs</a></li>
+
                     <!-- Mobile Logout Button -->
-                    <li class="hidden-md hidden-lg"><a href="" ng-click="logout()">Logout</a></li>
+                    <li class="hidden-md hidden-lg" ng-if="loginObj.user"><a ng-click="logout();collapseNavbar();">Logout</a></li>
 
                 </ul>
             </div>
