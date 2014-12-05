@@ -4,8 +4,6 @@ angular.module("bookreadings")
 
 		filepicker.setKey("AnUQHeKNRfmAfXkR3vaRpz");
 
-		$scope.reading_cover_photo = "http://placehold.it/950/950"
-
 		$scope.addReading = function(newReading, reading) {
 
 			this.reading["title"] = newReading.title
