@@ -84,7 +84,7 @@
 					<button ng-show="loginObj.user" type="button" class="btn btn-default btn-xs" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
 						<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }" title="Like"></span>
 					</button>
-					<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}?tag=bookreadings-20" class="btn btn-default btn-xs" title="Buy Book">
+					<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}" class="btn btn-default btn-xs" title="Buy Book">
 						<span class="glyphicon glyphicon-book"></span>
 					</a>
 					<a ng-href="{{CDNReadingsPathCF}}{{reading.audio_key}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-xs" title="Download">
@@ -104,7 +104,7 @@
 					<button ng-show="loginObj.user" type="button" class="btn btn-default btn-sm" ng-click="likeReading(reading.$id)" ng-class="{ 'active' : readingProperties[reading.$id].reading_liked }">
 						<span class="glyphicon glyphicon-heart" ng-class="{ 'red' : readingProperties[reading.$id].reading_liked }" title="Like"></span>
 					</button>
-					<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}&tag=bookreadings-20" class="btn btn-default btn-sm" title="Buy Book">
+					<a role="button" ng-show="reading.purchaseLink" target="_blank" href="{{reading.purchaseLink}}" class="btn btn-default btn-sm" title="Buy Book">
 						<span class="glyphicon glyphicon-book"></span>
 					</a>
 					<a ng-href="{{audio_link}}" download="{{reading.audio_filename}}" role="button" class="btn btn-default btn-sm" title="Download">
