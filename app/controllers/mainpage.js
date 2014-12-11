@@ -28,6 +28,9 @@ angular.module("bookreadings")
             $scope.filterBy = "";
             $scope.filterByIndex = -1;
 
+            var tagCount = $scope.getFirebaseTagCountReference(ENV.firebase + tagURL, $scope.tag_name).$asObject();
+            $scope.tag_count = tagCount;
+
         }else if($location.path() == "/popular/") {
 
             ref = new Firebase(ENV.firebase + readingsByMostPlayedURL)

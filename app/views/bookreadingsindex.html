@@ -43,7 +43,7 @@
         </div>
 		<div class="row" ng-if="tag_name">
 			<div class="col-xs-12" style="padding-left:0px;padding-right:0px;">
-				<h2 style="margin-top:0px;"><span class="label label-primary" style="display:block;background-color:#262626;"><a href="/#/tag/{{tag_name}}" style="color:white;">#{{tag_name}}</a></h2>
+				<h2 style="margin-top:0px;"><span class="label label-primary" style="display:block;background-color:#262626;"><a href="/#/tag/{{tag_name}}" style="color:white;">#{{tag_name}} ({{tag_count.$value}})</a></h2>
 			</div>
 		</div>
 		<div ng-repeat="reading in readings track by reading.$id">
