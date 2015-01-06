@@ -459,39 +459,48 @@ angular.module("bookreadings")
 
           //get the length of the music playing and populate the length
           var durationEstimate = threeSixtyPlayer.lastSound.durationEstimate / 1000;
-          var slider_max = durationEstimate | 0;
-          var minutes = pad(Math.floor(durationEstimate / 60), 2);
-          var seconds = durationEstimate - minutes * 60;
-          seconds = seconds | 0;
-          $("#playerTotalTime").html(minutes + ":" + pad(seconds, 2));
 
-          //show the player on the bottom of the screen
-          $scope.musicPlayerShown = true;
+          if(durationEstimate != 0) {
 
-          $scope.$digest();
+            var slider_max = durationEstimate | 0;
+            var minutes = pad(Math.floor(durationEstimate / 60), 2);
+            var seconds = durationEstimate - minutes * 60;
+            seconds = seconds | 0;
+            $("#playerTotalTime").html(minutes + ":" + pad(seconds, 2));
 
-          var slider_html = "<input id='music-player' data-slider-tooltip='hide' data-slider-id='music-player' type='text' data-slider-min='0' data-slider-max='" + slider_max + "' data-slider-step='1' data-slider-value='0' style='width:100%;'/>"
+            //show the player on the bottom of the screen
+            $scope.musicPlayerShown = true;
 
-          $("#music-player-insert").html(slider_html);
+            $scope.$digest();
 
-          $scope.slider = $('#music-player').slider()
-                                            .on('slide', function(slideEvt){
+            var slider_html = "<input id='music-player' data-slider-tooltip='hide' data-slider-id='music-player' type='text' data-slider-min='0' data-slider-max='" + slider_max + "' data-slider-step='1' data-slider-value='0' style='width:100%;'/>"
 
-                                              clearTimeout($scope.seekToPositionInterval);
+            $("#music-player-insert").html(slider_html);
 
-                                              //clear the timer
-                                              clearInterval($scope.playerRefreshInterval);
+            $scope.slider = $('#music-player').slider()
+                                              .on('slide', function(slideEvt){
 
-                                              //get the current value and populate the slider
-                                              var currentValue = slideEvt.value;
-                                              var elapsedTimeString = calculateElapsedTimeString(currentValue);
-                                              $("#playerElapsedTime").html(elapsedTimeString);
+                                                clearTimeout($scope.seekToPositionInterval);
 
-                                              $scope.seekToPositionInterval = setTimeout(seekToPosition, 1000, currentValue);
+                                                //clear the timer
+                                                clearInterval($scope.playerRefreshInterval);
 
-                                            });
+                                                //get the current value and populate the slider
+                                                var currentValue = slideEvt.value;
+                                                var elapsedTimeString = calculateElapsedTimeString(currentValue);
+                                                $("#playerElapsedTime").html(elapsedTimeString);
 
-          $scope.playerRefreshInterval = setInterval(refreshPlayer, 250);
+                                                $scope.seekToPositionInterval = setTimeout(seekToPosition, 1000, currentValue);
+
+                                              });
+
+            $scope.playerRefreshInterval = setInterval(refreshPlayer, 250);
+
+          } else {
+
+            setTimeout(populateSlider, 1000);
+
+          }
 
         } 
 
@@ -564,7 +573,7 @@ angular.module("bookreadings")
             clearTimeout(populateSlider);
             clearInterval($scope.playerRefreshInterval);
             clearTimeout($scope.seekToPositionInterval);
-            setTimeout(populateSlider, 5000);
+            setTimeout(populateSlider, 1);
             $scope.random = randomAudioPlayerValue + reading_id;
             $scope.last_reading_id = reading_id;
           }
