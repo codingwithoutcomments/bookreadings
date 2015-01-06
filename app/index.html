@@ -219,7 +219,7 @@
             <nav ng-show="musicPlayerShown" class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
               <div class="container">
                 <div class="row">
-                  <div class="col-xs-2">
+                  <div class="col-xs-2" style="padding-left:10px;padding-right:10px;">
                     <button type="button" class="btn btn-default btn-block navbar-btn" ng-click="playerButtonClicked()">
                       <i class="glyphicon glyphicon-pause" ng-class="(playerPaused) ? 'glyphicon-pause' : 'glyphicon-play'"></i>
                     </button>
@@ -227,10 +227,10 @@
                   <div id="playerElapsedTime" class="col-xs-1" style='text-align:right;margin-top:15px;color:white;padding:0px;'>
                     0:00 
                   </div>
-                  <div id="music-player-insert" class="col-xs-8" style='margin-top:15px;'>
+                  <div id="music-player-insert" class="col-xs-8" style='margin-top:15px;padding-right:30px;'>
                     <input id="music-player" data-slider-tooltip="hide" data-slider-id='music-player' type="text" data-slider-min="0" data-slider-max="{{slider_max}}" data-slider-step="1" data-slider-value="0" style='width:100%;'/>
                   </div>
-                  <div id="playerTotalTime" class="col-xs-1" style='text-align:left;margin-top:15px;padding:0px;color:white;'>
+                  <div id="playerTotalTime" class="col-xs-1" style='text-align:left;margin-top:15px;margin-left:-17px;padding:0px;color:white;'>
                     0:00
                   </div>
                 </div>

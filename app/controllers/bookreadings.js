@@ -564,8 +564,9 @@ angular.module("bookreadings")
             clearTimeout(populateSlider);
             clearInterval($scope.playerRefreshInterval);
             clearTimeout($scope.seekToPositionInterval);
-            setTimeout(populateSlider, 1000);
+            setTimeout(populateSlider, 5000);
             $scope.random = randomAudioPlayerValue + reading_id;
+            $scope.last_reading_id = reading_id;
           }
 
 
