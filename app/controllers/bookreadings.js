@@ -45,6 +45,9 @@ angular.module("bookreadings")
     })
 	.controller("bookreadingsCtrl", function ($scope, $rootScope, $firebase, $http, $location, $firebaseSimpleLogin, focus, tagsByPopularityURL, likesURL, tagsURL, readingsURL, usersURL, readingsStatsURL, ENV, readingsByDateCreatedURL, readingsByMostPlayedURL, readingsByFeaturedURL) {
 
+      $scope.musicPlayerShown = false;
+      $scope.playerPaused = true;
+
     if($location.path() == "" || $location.path() == "/featured/") {
 
         $scope.filterByIndex = 0;
@@ -452,7 +455,119 @@ angular.module("bookreadings")
           }
         }
 
-        $scope.readingPlayed = function(reading_id, readingsByMostPlayedId) {
+        function populateSlider(){
+
+          //get the length of the music playing and populate the length
+          var durationEstimate = threeSixtyPlayer.lastSound.durationEstimate / 1000;
+          var slider_max = durationEstimate | 0;
+          var minutes = pad(Math.floor(durationEstimate / 60), 2);
+          var seconds = durationEstimate - minutes * 60;
+          seconds = seconds | 0;
+          $("#playerTotalTime").html(minutes + ":" + pad(seconds, 2));
+
+          //show the player on the bottom of the screen
+          $scope.musicPlayerShown = true;
+
+          $scope.$digest();
+
+          var slider_html = "<input id='music-player' data-slider-tooltip='hide' data-slider-id='music-player' type='text' data-slider-min='0' data-slider-max='" + slider_max + "' data-slider-step='1' data-slider-value='0' style='width:100%;'/>"
+
+          $("#music-player-insert").html(slider_html);
+
+          $scope.slider = $('#music-player').slider()
+                                            .on('slide', function(slideEvt){
+
+                                              clearTimeout($scope.seekToPositionInterval);
+
+                                              //clear the timer
+                                              clearInterval($scope.playerRefreshInterval);
+
+                                              //get the current value and populate the slider
+                                              var currentValue = slideEvt.value;
+                                              var elapsedTimeString = calculateElapsedTimeString(currentValue);
+                                              $("#playerElapsedTime").html(elapsedTimeString);
+
+                                              $scope.seekToPositionInterval = setTimeout(seekToPosition, 1000, currentValue);
+
+                                            });
+
+          $scope.playerRefreshInterval = setInterval(refreshPlayer, 250);
+
+        } 
+
+        function seekToPosition(currentValue){
+
+          threeSixtyPlayer.lastSound.setPosition(currentValue * 1000);
+          $scope.playerRefreshInterval = setInterval(refreshPlayer, 250);
+
+        }
+
+        function calculateElapsedTimeString(position) {
+
+          var minutes = Math.floor(position / 60);
+          var seconds = position - minutes * 60;
+          return minutes + ":" + pad((seconds | 0), 2);
+
+        }
+
+        function pad(n, width, z) {
+          z = z || '0';
+          n = n + '';
+          return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+        }
+
+        function refreshPlayer(){
+
+          var position = threeSixtyPlayer.lastSound.position / 1000;
+          $scope.slider.slider('setValue', position);
+
+          var elapsedTimeString = calculateElapsedTimeString(position);
+
+          $("#playerElapsedTime").html(elapsedTimeString);
+
+        }
+
+        $scope.playerButtonClicked = function() {
+
+            togglePlayerButton();
+
+            var target = $("." + $scope.last_reading_id);
+            target = target.children(".sm2-360ui");
+            target = target.get(0).nextSibling;
+
+            threeSixtyPlayer.handleClick({"target":target});
+
+        }
+
+        function togglePlayerButton(){
+
+            if($scope.playerPaused == true) {
+              $scope.playerPaused = false;
+            } else {
+              $scope.playerPaused = true;
+            }
+
+        }
+
+        $scope.readingPlayed = function(reading_id, readingsByMostPlayedId, randomAudioPlayerValue) {
+
+          //second time played
+          if($scope.random == randomAudioPlayerValue + reading_id) {
+
+            togglePlayerButton();
+
+          //first time played
+          } else {
+
+            $scope.musicPlayerShown = false;
+            $scope.playerPaused = true;
+            clearTimeout(populateSlider);
+            clearInterval($scope.playerRefreshInterval);
+            clearTimeout($scope.seekToPositionInterval);
+            setTimeout(populateSlider, 1000);
+            $scope.random = randomAudioPlayerValue + reading_id;
+          }
+
 
 	        if($scope.readingProperties[reading_id] == null) {
 	          $scope.readingProperties[reading_id] = {};

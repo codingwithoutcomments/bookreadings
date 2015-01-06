@@ -21,7 +21,7 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12" style="overflow:hidden;padding-left:5px;">
-			    <div class="ui360 sm2_playing ui360reading" ng-click="readingPlayed(reading_id, reading.readingsByMostPlayedId)">
+			    <div class="ui360 sm2_playing ui360reading" ng-class="reading_id" ng-click="readingPlayed(reading_id, reading.readingsByMostPlayedId, randomAudioPlayerValue);">
 			     	<a ng-href="{{CDNReadingsPathCF}}{{reading.audio_key}}?s={{randomAudioPlayerValue}}" class="norewrite exclude button-exclude inline-exclude"></a>
 			    </div>
 			    <div class="readingTitle hidden-xs hidden-sm">
