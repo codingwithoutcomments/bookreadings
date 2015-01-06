@@ -59,20 +59,6 @@ angular.module("bookreadings")
 
               });
 
-
-              $scope.$watch('reading', function(newValue, oldValue){
-
-                soundManager.setup({
-                  url: 'sfw/',
-                  onready: function() {
-                    threeSixtyPlayer.init();
-                  },
-                  ontimeout: function() {
-                    // Hrmm, SM2 could not start. Missing SWF? Flash blocked? Show an error, etc.?
-                  }
-                });
-
-              });
             }
 
         }, function (errorObject) {
@@ -438,7 +424,9 @@ angular.module("bookreadings")
                 soundManager.setup({
                   url: 'sfw/',
                   onready: function() {
+
                     threeSixtyPlayer.init();
+
                   },
                   ontimeout: function() {
                     // Hrmm, SM2 could not start. Missing SWF? Flash blocked? Show an error, etc.?

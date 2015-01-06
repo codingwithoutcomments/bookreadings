@@ -214,7 +214,7 @@ left:52%;
 }
 
 .ui360 .sm2-360ui.sm2_playing .sm2-timing {
- visibility:visible;
+ visibility:hidden;
 }
 
 .ui360 .sm2-360ui.sm2_buffering .sm2-timing {
@@ -230,7 +230,7 @@ left:52%;
 .ui360 .sm2-360ui.sm2_dragging .sm2-timing,
 .ui360 .sm2-360ui.sm2_dragging .sm2-360btn:hover + .sm2-timing {
  /* paused + dragging */
- visibility:visible;
+ visibility:hidden;
 }
 
 .ui360 .sm2-360ui.sm2_playing .sm2-360btn,
@@ -238,8 +238,10 @@ left:52%;
 .ui360 .sm2-360ui.sm2_dragging .sm2-360btn:hover,
 .ui360 .sm2-360ui.sm2_dragging .sm2-360btn-playing:hover {
  /* don't let pause button show on hover when dragging (or paused and dragging) */
- background:transparent;
- cursor:auto;
+ background:transparent url(glyphicons_174_pause.png) no-repeat 50% 50%;
+ _background:transparent url(glyphicons_174_pause.gif) no-repeat 50% 50%;
+ cursor:pointer;
+ left:50%;
 }
 
 .ui360 .sm2-360ui.sm2_buffering .sm2-360btn,
