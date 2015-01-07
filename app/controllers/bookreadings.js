@@ -550,6 +550,7 @@ angular.module("bookreadings")
         function seekToPosition(currentValue){
 
           threeSixtyPlayer.lastSound.setPosition(currentValue * 1000);
+          clearInterval($scope.playerRefreshInterval);
           $scope.playerRefreshInterval = setInterval(refreshPlayer, 250);
 
         }
