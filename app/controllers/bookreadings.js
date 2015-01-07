@@ -273,6 +273,13 @@ angular.module("bookreadings")
 
         }
 
+        function getFirebaseUserReadingPositionReference(usersURL, user_id, reading_id) {
+
+          var usersReadingPositionFirebase = new Firebase(usersURL + "/" + user_id + "/reading_positions/" + reading_id);
+          return $firebase(usersReadingPositionFirebase);
+
+        }
+
         function getFirebaseUserLikesReference(usersURL, user_id, like_name) {
 
           var usersLikesFirebase = new Firebase(usersURL + "/" + user_id + "/likes/" + like_name);
@@ -496,13 +503,49 @@ angular.module("bookreadings")
 
             $scope.playerRefreshInterval = setInterval(refreshPlayer, 250);
 
+            //try to retrieve position
+            //if doesn't exist, then just start saving
+            //if it does exist, set to position then start saving
+            if($scope.loginObj.user) {
+
+              var reading_id = $scope.last_reading_id;
+              var ref = getFirebaseUserReadingPositionReference(ENV.firebase + usersURL, $scope.loginObj.user.uid, reading_id);
+              var positionObject = ref.$asObject();
+              positionObject.$loaded().then(function(){
+
+                if(positionObject.reading_position != null){
+
+                  seekToPosition(positionObject.reading_position);
+                } 
+
+                $scope.saveReadingPositionInterval = setInterval(saveReadingPosition, 5000);
+
+              });
+            }
+
           } else {
 
-            setTimeout(populateSlider, 1000);
+            setTimeout(populateSlider, 500);
 
           }
 
         } 
+
+        function saveReadingPosition(){
+
+          var user = $scope.loginObj.user;
+
+          //only save position if logged in 
+          if(user) {
+            var reading_id = $scope.last_reading_id;
+            var ref = getFirebaseUserReadingPositionReference(ENV.firebase + usersURL, $scope.loginObj.user.uid, reading_id);
+            var position = threeSixtyPlayer.lastSound.position / 1000;
+            ref.$set("reading_position", position).then(function(ref){
+            },function(error) {
+              console.log("Error:", error);
+            });
+          }
+        }
 
         function seekToPosition(currentValue){
 
@@ -552,8 +595,10 @@ angular.module("bookreadings")
 
             if($scope.playerPaused == true) {
               $scope.playerPaused = false;
+              clearInterval($scope.saveReadingPositionInterval);
             } else {
               $scope.playerPaused = true;
+              $scope.saveReadingPositionInterval = setInterval(saveReadingPosition, 5000);
             }
 
         }
@@ -570,10 +615,14 @@ angular.module("bookreadings")
 
             $scope.musicPlayerShown = false;
             $scope.playerPaused = true;
+
+            //clear all the timeouts
             clearTimeout(populateSlider);
             clearInterval($scope.playerRefreshInterval);
+            clearInterval($scope.saveReadingPositionInterval);
             clearTimeout($scope.seekToPositionInterval);
             setTimeout(populateSlider, 1);
+
             $scope.random = randomAudioPlayerValue + reading_id;
             $scope.last_reading_id = reading_id;
           }
