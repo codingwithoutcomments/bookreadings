@@ -597,6 +597,7 @@ angular.module("bookreadings")
             if($scope.playerPaused == true) {
               $scope.playerPaused = false;
               clearInterval($scope.saveReadingPositionInterval);
+              saveReadingPosition();
             } else {
               $scope.playerPaused = true;
               $scope.saveReadingPositionInterval = setInterval(saveReadingPosition, 5000);
