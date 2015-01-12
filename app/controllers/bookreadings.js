@@ -838,4 +838,18 @@ angular.module("bookreadings")
 
       }
 
+      //on route change pause the player and hide the player
+      $scope.$on('$locationChangeStart', function(event) {
+
+        $scope.musicPlayerShown = false;
+        if(threeSixtyPlayer.lastSound) {
+          clearInterval($scope.playerRefreshInterval);
+          clearInterval($scope.saveReadingPositionInterval);
+          clearTimeout($scope.seekToPositionInterval);
+          saveReadingPosition();
+          threeSixtyPlayer.stopSound(threeSixtyPlayer.lastSound);
+        }
+
+      });
+
 	});

@@ -145,6 +145,7 @@
               var user = $rootScope.user
               var auth = next.$$route.auth
               if (auth && !auth(user)) { $location.path('/') }
+
             }
           });
         });
