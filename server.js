@@ -1,7 +1,7 @@
-var static = require('node-static');
+var express = require('express');
+var app = express();
 
-var file = new static.Server('./app');
+app.use(express.static(__dirname + '/app'));
+app.use(require('prerender-node').set('prerenderToken', 'bJ0gTGu5UrNSqqO6mkH8'));
 
-require('http').createServer(function (request, response) {
-    file.serve(request, response);
-}).listen(process.env.PORT || 5000);
+app.listen(process.env.PORT || 5000);
