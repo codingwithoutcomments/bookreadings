@@ -43,6 +43,11 @@ angular.module("bookreadings")
             $scope.filterBy ="recent";
             $scope.filterByIndex = 2;
 
+        } else if($location.path() == "/listened/" && $scope.loginObj.user){
+
+            ref = new Firebase(ENV.firebase + usersURL + "/" + $scope.loginObj.user.uid + "/readingsByListened")
+            $scope.filterBy ="listened";
+            $scope.filterByIndex = 4;
         }
 
     	var count = 0, pageSize = 5;

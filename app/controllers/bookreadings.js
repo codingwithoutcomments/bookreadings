@@ -64,7 +64,10 @@ angular.module("bookreadings")
 
         $scope.filterByIndex = 3;
 
-    }
+    }else if($location.path() == "/listened/") {
+
+        $scope.filterByIndex = 4;
+   } 
 
     $scope.search_shown = false;
 
@@ -266,6 +269,13 @@ angular.module("bookreadings")
 
         }
 
+        $scope.getFirebaseReadingListensByUserList = function(readingsURL, reading_id, user_id){
+
+          var readingListensByUserFirebase = new Firebase(readingsURL + "/" + reading_id + "/listens_by_user/" + user_id);
+          return $firebase(readingListensByUserFirebase);
+
+        }
+
         function getFirebaseReadingLikeRef(readingsURL, reading_id, like_name) {
 
           var readingFirebase = new Firebase(readingsURL + "/" + reading_id + "/likes/" + like_name);
@@ -277,6 +287,27 @@ angular.module("bookreadings")
 
           var usersReadingPositionFirebase = new Firebase(usersURL + "/" + user_id + "/reading_positions/" + reading_id);
           return $firebase(usersReadingPositionFirebase);
+
+        }
+
+        $scope.getFirebaseUserListenedListReference = function(usersURL, user_id) {
+
+          var userListenedObjectFirebase = new Firebase(usersURL + "/" + user_id + "/readingsByListened/");
+          return $firebase(userListenedObjectFirebase);
+
+        }
+
+        $scope.getFirebaseUserListenedListIdReference = function(usersURL, user_id, id) {
+
+          var userListenedObjectFirebase = new Firebase(usersURL + "/" + user_id + "/readingsByListened/" + id);
+          return $firebase(userListenedObjectFirebase);
+
+        }
+
+        $scope.getFirebaseUserListenedObjectReference = function(usersURL, user_id, object_id) {
+
+          var userListenedObjectFirebase = new Firebase(usersURL + "/" + user_id + "/listened/" + object_id);
+          return $firebase(userListenedObjectFirebase);
 
         }
 
@@ -627,8 +658,70 @@ angular.module("bookreadings")
 
             $scope.random = randomAudioPlayerValue + reading_id;
             $scope.last_reading_id = reading_id;
-          }
 
+            //add to "listened" list
+            if($scope.loginObj.user) {
+              var ref = $scope.getFirebaseReadingListensByUserList(ENV.firebase + readingsURL, reading_id, $scope.loginObj.user.uid);
+              var readingListensByUserObject = ref.$asObject();
+              readingListensByUserObject.$loaded(function(){
+
+                //check to see if key exists
+                //if it does, grab key and update priority
+                if(readingListensByUserObject.readingsByListenedId != null) {
+
+                  var readingListIdObject = $scope.getFirebaseUserListenedListIdReference(ENV.firebase + usersURL, $scope.loginObj.user.uid, readingListensByUserObject.readingsByListenedId).$asObject();
+                  readingListIdObject.$loaded().then(function() {
+
+                      readingListIdObject["$priority"] = Firebase.ServerValue.TIMESTAMP;
+                      readingListIdObject.$save().then(function(ref) {
+
+                        var readingListIdObject = $scope.getFirebaseUserListenedListIdReference(ENV.firebase + usersURL, $scope.loginObj.user.uid, readingListensByUserObject.readingsByListenedId).$asObject();
+                        readingListIdObject.$loaded().then(function() {
+
+                          readingListIdObject["$priority"] = -readingListIdObject.$priority;
+                          readingListIdObject.$save();
+
+                        });
+                      });
+
+                  });
+
+                //key doesn't exist
+                //so create and save to reading object
+                } else {
+
+                  var ref = $scope.getFirebaseUserListenedListReference(ENV.firebase + usersURL, $scope.loginObj.user.uid);
+                  var userListenedArray = ref.$asArray();
+                  var readingObject = {};
+                  readingObject["reading_id"] = reading_id;
+                  readingObject.$priority = Firebase.ServerValue.TIMESTAMP; 
+                  this.readingListensByUserObject = readingListensByUserObject;
+                  userListenedArray.$add(readingObject).then(function(ref){
+
+                    //add reference to reading object
+                    var id = ref.name();
+                    readingListensByUserObject["readingsByListenedId"] = id;
+                    readingListensByUserObject.$save();
+
+                    //update the priority
+                    var readingListIdObject = $scope.getFirebaseUserListenedListIdReference(ENV.firebase + usersURL, $scope.loginObj.user.uid, ref.name()).$asObject();
+                    readingListIdObject.$loaded().then(function() {
+
+                      readingListIdObject["$priority"] = -readingListIdObject.$priority;
+                      readingListIdObject.$save();
+
+                    });
+
+                  });
+
+                }
+
+              });
+            }
+
+
+
+          }
 
 	        if($scope.readingProperties[reading_id] == null) {
 	          $scope.readingProperties[reading_id] = {};
