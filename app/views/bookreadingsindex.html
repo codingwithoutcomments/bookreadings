@@ -11,6 +11,9 @@
 				<div>
 					<h1 class="sidebar-header" ng-class="(filterByIndex==1) ? 'arrow_box' : ''"><i class="glyphicon glyphicon-heart" ng-class="(filterByIndex==1) ? 'glyphicon-selected' : ''"></i> <a href="/#/popular">Popular</a></h1>
 				</div>
+				<div ng-show="loginObj.user">
+					<h1 class="sidebar-header" ng-class="(filterByIndex==4) ? 'arrow_box' : ''"><i class="glyphicon glyphicon-headphones" ng-class="(filterByIndex==4) ? 'glyphicon-selected' : ''"></i> <a href="/#/listened">Listened</a></h1>
+				</div>
 				<div style='margin-top:50px;'>
 					<h5>Popular Tags</h5>
 				</div>
@@ -41,12 +44,17 @@
 	        	<h2 style="margin-top:0px;margin-bottom:0px;"><span class="label label-primary" style="display:block;background-color:#262626;"><i class="glyphicon glyphicon-heart"></i> Popular</h2>
 	        </div>
         </div>
+        <div class="row hidden-md hidden-lg" ng-if="(filterByIndex==4)" style='margin-bottom:5px;'>
+			<div class="col-xs-12 shown_row">
+	        	<h2 style="margin-top:0px;margin-bottom:0px;"><span class="label label-primary" style="display:block;background-color:#262626;"><i class="glyphicon glyphicon-headphones"></i> Listened</h2>
+	        </div>
+        </div>
 		<div class="row" ng-if="tag_name">
 			<div class="col-xs-12" style="padding-left:0px;padding-right:0px;">
 				<h2 style="margin-top:0px;"><span class="label label-primary" style="display:block;background-color:#262626;"><a href="/#/tag/{{tag_name}}" style="color:white;">#{{tag_name}} ({{tag_count.$value}})</a></h2>
 			</div>
 		</div>
-		<div ng-repeat="reading in readings track by reading.$id">
+		<div ng-repeat="reading in readings track by reading.$id" ng-hide="reading.deleted">
 			<div class="row reading_row" ng-if="reading.cover_image_url" ng-style="{'background-image':'url({{CDNReadingsPathFP}}{{reading.cover_image_url}}/convert?w=950&h=300&fit=crop&align={{reading.align}})'}" style='height:300px;background-repeat:no-repeat;background-size:cover;margin-bottom:10px;'>
 				<div class="col-xs-12" style='padding-left:0px;'>
 			        <div class="media" >

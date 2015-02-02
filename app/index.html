@@ -119,6 +119,13 @@
                 }
             });
 
+            $routeProvider.when("/listened/", {
+                templateUrl: "/views/bookreadingsindex.html",
+                auth: function (user) {
+                  return true
+                }
+            });
+
             $routeProvider.when("/search/:searchterm/", {
                 templateUrl: "/views/search.html",
                 auth: function (user) {
@@ -285,6 +292,7 @@
                     <li class="hidden-md hidden-lg" ng-class="(filterByIndex==0) ? 'active' : ''" ng-click="changeFilterByIndex(0)"><a href="/#/featured/"><i class="glyphicon glyphicon-star"></i> Featured</a></li>
                     <li class="hidden-md hidden-lg" ng-class="(filterByIndex==1) ? 'active' : ''" ng-click="changeFilterByIndex(1)"><a href="/#/recent/"><i class="glyphicon glyphicon-time"></i> Recent</a></li>
                     <li class="hidden-md hidden-lg" ng-class="(filterByIndex==2) ? 'active' : ''" ng-click="changeFilterByIndex(2)"><a href="/#/popular/"><i class="glyphicon glyphicon-heart"></i> Popular</a></li>
+                    <li class="hidden-md hidden-lg" ng-class="(filterByIndex==4) ? 'active' : ''" ng-click="changeFilterByIndex(4)"><a href="/#/listened/"><i class="glyphicon glyphicon-headphones"></i> Listened</a></li>
 
                     <!-- Mobile HR -->
                     <li class="hidden-md hidden-lg"><hr style="margin-top:0px; margin-bottom:0px;border-color:#999;"></li>
